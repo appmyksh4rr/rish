@@ -1723,7 +1723,7 @@ local teks = {
 ♾️ 1 tahun
 ──────────────────────────
 📩 Hubungi Penjual:
-💬 Telegram: @a_nnour
+💬 Telegram: @Rish_07
 
 
 ]],
@@ -1752,7 +1752,7 @@ local teks = {
 ♾️ 1 YEARS Access
 ──────────────────────────
 📩 Contact The Seller:
-💬 Telegram: @a_nnour
+💬 Telegram: @Rish_07
 
 📢 Telegram Channel (Info & Updates):
 📨 ｢Rish｣ • Official Channel
@@ -19453,11 +19453,11 @@ function showContactMenu(backFunc)
             backFunc() -- balik ke menu yang dikirim
         end
     elseif pilihan == 2 then
-        gg.copyText("https://t.me/@a_nnour")
+        gg.copyText("https://t.me/@Rish_07")
         gg.toast(_ "toast_tele")
         if type(backFunc) == "function" then backFunc() end
     elseif pilihan == 3 then
-        gg.copyText("https://t.me/a_nnour")
+        gg.copyText("https://t.me/Rish_07")
         gg.toast(_ "toast_wa")
         if type(backFunc) == "function" then backFunc() end
     end
@@ -19784,7 +19784,7 @@ function exit()
     print(
         "⟣═─═─═─═─═─═─═─═─═─═─═─═─═⟢")
     print("✨ Script by : Rish Gaming ✨")
-    print("💬 Telegram Channel : @a_nnour")
+    print("💬 Telegram Channel : @Rish_07")
     print("🙏 Thanks for your support!")
     print(
         "⟣═─═─═─═─═─═─═─═─═─═─═─═─═⟢")
