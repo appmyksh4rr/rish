@@ -1717,7 +1717,7 @@ local teks = {
 • ✨ ...dan masih banyak lagi!
 ──────────────────────────
 💵 Harga:
-🇮🇩 IDR 415.000
+🇮🇩 IDR 700.000
 
 📆 Masa Aktif:
 ♾️ 1 tahun
@@ -16994,9 +16994,9 @@ function kums6()
         gg.clearResults()
         local indev = dev
         local skins = {
-            "🌃 • City Badge", "👑 • Legendary Town Badge",
-            "🏠 • Mayors Yellow House Badge",
-            "🏛️ • Purple House Badge", "🔔 • Winter Badge",
+            "🌃 • Town Badge", "👑 • Legendary Town Badge",
+            "🏠 • City Badge",
+            "🏛️ • Legendary City Badge", "🔔 • Winter Badge",
             "❄️ • Legendary Winter Badge", "🧭 • Journey Badge",
             "🗺️ • Legendary Journey Badge", "❌ • Go Back"
         }
@@ -17069,7 +17069,7 @@ end
 function badgecollect1()
     applybBadge({
         0x6461621A, 0x305F6567, 0x61625F31, 0x00006573, 0x00000000, 0x00000000
-    }, "🌃", "City Badge")
+    }, "🌃", "Town Badge")
 end
 
 function badgecollect2()
@@ -17081,13 +17081,13 @@ end
 function badgecollect3()
     applybBadge({
         0x64616220, 0x305F6567, 0x32765F31, 0x7361625F, 0x00000065, 0x00000000
-    }, "🏠", "Mayors Yellow House Badge")
+    }, "🏠", "City Badge")
 end
 
 function badgecollect4()
     applybBadge({
         0x64616222, 0x305F6567, 0x32765F31, 0x6172675F, 0x1900646E, 0x00000000
-    }, "🏛️", "Purple House Badge")
+    }, "🏛️", "Legendary City Badge")
 end
 
 function badgecollect5()
