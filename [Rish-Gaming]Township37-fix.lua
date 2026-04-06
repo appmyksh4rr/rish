@@ -15610,8 +15610,8 @@ function kums4()
     gg.clearResults()
     local indev = dev
     local skins = {
-      "🌸 • Festival Frame",
-      "🌸 • Festival Name",
+      "🌸 • Pink Frame",
+      "🌸 • Pink Name",
       "✨ • Sparkling Purple Frame",
       "❄️ • Ice Frame",
       "🐉 • CNY Frame",
