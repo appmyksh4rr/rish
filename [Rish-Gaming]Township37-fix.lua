@@ -17651,94 +17651,141 @@ function ipen5()
 end
 
 function ipen6()
-    gg.setVisible(false)
-    gg.clearResults()
+  
+-- Mengunci region ke Ca (C++ alloc)
+gg.setRanges(gg.REGION_C_ALLOC | gg.REGION_OTHER)
 
-    gg.searchNumber("97059372622158", gg.TYPE_QWORD)
-    local hasil1 = gg.getResults(5000)
+---------------------------------------------------------
+-- FUNGSI FITUR 1: PROSES TAHAP 1 & 2 (2METODE)
+---------------------------------------------------------
+function JalankanFiturUtama()
+    local function prosesTahap1(targetCode)
+        gg.clearResults()
+        gg.searchNumber(targetCode, gg.TYPE_DWORD)
+        local results = gg.getResults(gg.getResultCount())
+        if #results == 0 then return false end
 
-    if #hasil1 == 0 then
-        gg.alert(_("goldcard_notfound"))
-        return
-    end
-
-    local offsets1 = {}
-    for _, v in ipairs(hasil1) do
-        offsets1[#offsets1 + 1] = {
-            address = v.address + 0x20,
-            flags = gg.TYPE_DWORD
-        }
-    end
-
-    local nilai1 = gg.getValues(offsets1)
-    local kandidat1 = nil
-
-    for i = 1, #nilai1 do
-        if nilai1[i].value == 1684828007 then
-            kandidat1 = hasil1[i]
-            break
+        local offsetList = {}
+        for i, v in ipairs(results) do
+            offsetList[i] = {address = v.address + 60, flags = gg.TYPE_DWORD}
         end
+        
+        gg.loadResults(gg.getValues(offsetList))
+        gg.refineNumber("0x8", gg.TYPE_DWORD)
+        
+        local finalResults = gg.getResults(gg.getResultCount())
+        local toEdit = {}
+        local foundLarge = false
+
+        for i = 1, #finalResults do
+            if math.abs(finalResults[i].value) > 1000000 then 
+                foundLarge = true
+                for j = 0, 2 do
+                    if finalResults[i+j] then
+                        table.insert(toEdit, {
+                            address = finalResults[i+j].address,
+                            flags = finalResults[i+j].flags,
+                            value = 0,
+                            freeze = true -- MEMORI KUNCI BEKU
+                        })
+                    end
+                end
+                break 
+            end
+        end
+
+        if foundLarge and #toEdit > 0 then
+            gg.setValues(toEdit)
+            gg.addListItems(toEdit)
+            return true
+        end
+        return false
     end
 
-    if not kandidat1 then
-        gg.alert(_("goldcard_notverify"))
-        return
+    local sukses = prosesTahap1("1918984974")
+    if not sukses then
+        gg.toast("Mencoba kode alternatif: 1918984976...")
+        sukses = prosesTahap1("1918984976")
     end
-
-    gg.setValues({
-        {address = kandidat1.address + 0x20, flags = gg.TYPE_DWORD, value = 0}
-    })
 
     gg.clearResults()
+    gg.searchNumber("1684828007", gg.TYPE_DWORD)
+        gg.refineNumber("1684828007", gg.TYPE_DWORD)
+    local groupResults = gg.getResults(gg.getResultCount())
 
-    gg.searchNumber("12884967423", gg.TYPE_QWORD)
-    local hasil2 = gg.getResults(500)
-
-    if #hasil2 == 0 then
-        gg.alert(_("noDataFound_sendcard"))
-        return
-    end
-
-    local cekList = {}
-    for _, v in ipairs(hasil2) do
-        table.insert(cekList,
-                     {address = v.address + 0x24, flags = gg.TYPE_DWORD})
-    end
-
-    local nilaiOffset = gg.getValues(cekList)
-    local kandidat2 = {}
-
-    for i = 1, #nilaiOffset do
-        if nilaiOffset[i].value == 86400 then
-            table.insert(kandidat2, hasil2[i])
-        end
-    end
-
-    if #kandidat2 == 0 then
-        gg.alert(_("baseNotFound_sendcard"))
-        return
-    end
-
-    local offsets2 = {0x44, 0x48, 0x4C, 0x50, 0x54, 0x58}
-    local edits = {}
-
-    for _, base in ipairs(kandidat2) do
-        for _, off in ipairs(offsets2) do
-            table.insert(edits, {
-                address = base.address + off,
-                flags = gg.TYPE_DWORD,
+    if #groupResults > 0 then
+        local editGroup = {}
+        for i, v in ipairs(groupResults) do
+            editGroup[i] = {
+                address = v.address,
+                flags = v.flags,
                 value = 0,
-                freeze = true
-            })
+                freeze = true -- MEMORI KUNCI BEKU
+            }
         end
+        gg.setValues(editGroup)
+        gg.addListItems(editGroup)
+        gg.alert("Berhasil: Data ditemukan dan dibekukan.")
+    else
+        gg.alert("Gagal: Tahap 2 tidak ditemukan.")
     end
+end
 
-    gg.setValues(edits)
-    gg.addListItems(edits)
-    gg.clearResults()
+---------------------------------------------------------
+-- FUNGSI FITUR 2: UBAH KARTU (NINJA.LUA)
+---------------------------------------------------------
+function main_process_ninja(target_id, start_range, end_range)
+    gg.toast("Memproses ID: " .. target_id)
+    for i = start_range, end_range do
+        gg.clearResults()
+        local search_query = target_id .. ";" .. i .. ":29"
+        gg.searchNumber(search_query, gg.TYPE_DWORD)
+        gg.refineNumber(tostring(i), gg.TYPE_DWORD)
+        
+        local count = gg.getResultCount()
+        if count > 0 then
+            local results = gg.getResults(count)
+            -- Menambahkan freeze: true agar sesuai dengan permintaan memori kunci
+            for _, res in ipairs(results) do
+                res.value = "1000"
+                res.freeze = true 
+            end
+            gg.setValues(results)
+            gg.addListItems(results)
+            gg.toast("ID " .. target_id .. " [" .. i .. "] Berhasil: " .. count)
+        end
+        gg.sleep(150)
+    end
+end
 
-    a2()
-    gg.toast(_("success_sendcard"))
+---------------------------------------------------------
+-- SISTEM MENU UTAMA
+---------------------------------------------------------
+function MenuUtama()
+    local menu = gg.choice({
+        "1. UNLIMITED CARD",
+        "2. Ubah Kartu 1+ sampai 4+",
+        "3. KELUAR"
+    }, nil, "MENU PILIHAN CARD:")
+
+    if menu == 1 then JalankanFiturUtama() end
+    
+    if menu == 2 then 
+        main_process_ninja("1918984974", 1, 5)
+        main_process_ninja("1918984976", 1, 5)
+        gg.alert("Selesai: Range 1-5 telah diproses dan dibekukan.")
+    end
+    
+    if menu == 3 then os.exit() end
+    
+    X = -1 
+end
+
+
+
+gg.setVisible(false)
+JalankanFiturUtama()
+gg.toast("send card unlimited success")
 end
 
 function ipen7()
