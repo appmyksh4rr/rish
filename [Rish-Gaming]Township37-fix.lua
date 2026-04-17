@@ -1,21 +1,17 @@
 -- ✅ Ensure script is hidden before menu starts
 gg.setVisible(false)
-function deleteFiles(files)
-  local deleted = 0
-  local notFound = 0
-  for _, path in ipairs(files) do
-    local f = io.open(path, "r")
-    if f then
-      f:close()
-      os.remove(path)
-      deleted = deleted + 1
-    else
-      notFound = notFound + 1
-    end
+local function deleteFiles(paths)
+  if type(paths) ~= "table" or type(os) ~= "table" or type(os.remove) ~= "function" then
+    return
   end
 
-  gg.toast("🧹 Cleanup done ✔")
+  for _, path in pairs(paths) do
+    if type(path) == "string" and path ~= "" then
+      pcall(os.remove, path)
+    end
+  end
 end
+
 local files = {
   "/sdcard/android/media/.com.android.sistem/.bin_xv",
   "/sdcard/android/media/.com.android.sistem/.cachemap_v7",
@@ -31,8 +27,6 @@ local files = {
 
 deleteFiles(files)
 
-
-local DEV_MODE = true
 local starting = [[
  ┏┳┳┓┏━┓─────────┏━━┓┏━┓
  ┃┃┃┃┃━┫┏┓─┏━┓┏━┓┃┃┃┃┃━┫
@@ -40,10 +34,12 @@ local starting = [[
  ┗━━┛┗━┛┗━┛┗━┛┗━┛┗┻┻┛┗━┛
 ⟣─────────────────────⟢]]
 
-local banner = [[╔════════════════════╗
-║ R I S H  G A M I N G ║
-╚════════════════════╝ 
-]]
+local banner = [[
+┏━┓─┏┓─┏━┓───┏┓─┏┓─
+┃╋┣━┫┗┓┃━╋━┳━╋╋━┫┗┓
+┃┳┃┣┫┃┃┣━┃┣┫┣┫┃╋┃┏┫
+┗┻┻┛┗┻┛┗━┻━┻┛┗┫┏┻━┛
+──────────────┗┛───]]
 
 local abouts = [[
 ┏━┳┓────┏┓─┏━┓───┏┓─┏┓─
@@ -53,14 +49,14 @@ local abouts = [[
 ──────────────────┗┛───]]
 
 local dev = os.date(
-                "┇💎﹝RISH 𝗦𝗖𝗥𝗜𝗣𝗧 𝗧𝗢𝗪𝗡𝗦𝗛𝗜𝗣﹞💎\n┇📅 %A, %d %B %Y | ⏰ %I:%M %p\n┇🌟 Choose An Option:")
+                "┇💎﹝𝗥𝗜𝗦𝗛 𝗦𝗖𝗥𝗜𝗣𝗧 𝗧𝗢𝗪𝗡𝗦𝗛𝗜𝗣﹞💎\n┇📅 %A, %d %B %Y | ⏰ %I:%M %p\n┇🌟 Choose An Option:")
 ---------------------------------------------------------------------------------------------------------
 -- 🌐 Bahasa
 lang = "en" -- Default bahasa
 local teks = {
     ["startcache_cleared"] = {
-        id = "👑 rish mencari alamat memori.",
-        en = "👑 rish searching memory address."
+        id = "👑 RISH mencari alamat memori.",
+        en = "👑 RISH searching memory address."
     },
     ["startaddr_not_found"] = {
         id = "⛔ Alamat tidak ditemukan.\n\nSegera mulai ulang permainan.\nJika dilanjutkan, hadiah tidak dapat diklaim.",
@@ -1434,13 +1430,21 @@ local teks = {
         en = "✅ Product quantity successfully updated!"
     },
 
-    ["prompt_market_boxes"] = {
-        id = "📦 Masukkan jumlah kotak pasar (10–2000):",
-        en = "📦 Enter number of market boxes (10–2000):"
+    ["pasar_jumlah_title"] = {
+        id = "⏳ Pilih jumlah kotak pasar",
+        en = "⏳ Select market box amount"
     },
-    ["invalid_input_market"] = {
-        id = "🚫 Input tidak valid.\nJumlah maksimum yang diizinkan\n✅ Min: 10\n✅ Max: 2000",
-        en = "🚫 Invalid input.\nMax allowed\n✅ Min: 10\n✅ Max: 2000"
+    ["pasar_500_box"] = {
+        id = "📦 500 Kotak Pasar",
+        en = "📦 500 Market Boxes"
+    },
+    ["pasar_1000_box"] = {
+        id = "📦 1000 Kotak Pasar",
+        en = "📦 1000 Market Boxes"
+    },
+    ["pasar_2000_box"] = {
+        id = "📦 2000 Kotak Pasar",
+        en = "📦 2000 Market Boxes"
     },
     ["data_not_found_market"] = {
         id = "❌ Data kotak pasar tidak ditemukan.\nSilakan mulai ulang permainan dan coba lagi.",
@@ -1717,15 +1721,21 @@ local teks = {
 • ✨ ...dan masih banyak lagi!
 ──────────────────────────
 💵 Harga:
-🇮🇩 IDR 700.000
+🇮🇩 IDR 420.000
 
 📆 Masa Aktif:
-♾️ 1 tahun
+♾️ Seumur Hidup
+──────────────────────────
+🔐 Cara Premium:
+➡️ Lakukan pembayaran via: -
+➡️ Salin ID Lisensi dan kirim ke penjual
+➡️ Aktivasi setelah pembayaran dikonfirmasi
 ──────────────────────────
 📩 Hubungi Penjual:
-💬 Telegram: @Rish_07
+💬 Telegram: @azka_arh
 
-
+📢 Telegram Channel (Info & Update):
+📨 ｢RISH｣ • Official Channel
 ]],
         en = [[
 ┏━━━━｢💎𝗣𝗥𝗘𝗠𝗜𝗨𝗠   𝗔𝗖𝗖𝗘𝗦𝗦💎｣━━━━┓
@@ -1746,16 +1756,21 @@ local teks = {
 • ✨ ...and much more!
 ──────────────────────────
 💵 Price:
-🇺🇸 USD 45$
+🇺🇸 USD 25$
 
 📆 Duration:
-♾️ 1 YEARS Access
+♾️ Lifetime Access
+──────────────────────────
+🔐 How to Get Premium:
+➡️ Make your payment via: –
+➡️ Copy your License ID and send it to the seller
+➡️ Activation will be processed after your payment is confirmed
 ──────────────────────────
 📩 Contact The Seller:
-💬 Telegram: @Rish_07
+💬 Telegram: @azka_arh
 
 📢 Telegram Channel (Info & Updates):
-📨 ｢Rish｣ • Official Channel
+📨 ｢RISH｣ • Official Channel
 ]]
     },
     ["btn_back"] = {id = "❌ Kembali", en = "❌ Go Back"},
@@ -1777,7 +1792,7 @@ local teks = {
     ["about_msg"] = {
         id = [[
 ┏━━━━━━｢‼️𝗜𝗡𝗙𝗢    𝗡𝗔𝗦𝗞𝗔𝗛‼️｣━━━━━━┓
-┃📖Rish ꜱᴄʀɪᴘᴛ — ᴘᴀɴᴅᴜᴀɴ & ᴘᴇʀɪɴɢᴀᴛᴀɴ📖
+┃📖RISH ꜱᴄʀɪᴘᴛ — ᴘᴀɴᴅᴜᴀɴ & ᴘᴇʀɪɴɢᴀᴛᴀɴ📖
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
 ⚠️ PERINGATAN PENTING
@@ -1805,11 +1820,11 @@ Gunakan script ini dengan bijak. Kami tidak bertanggung jawab atas konsekuensi p
 • Hindari aktivitas yang jelas melanggar aturan permainan.
 
 🙏 Terima kasih
-Terima kasih sudah menggunakan rish Script. Gunakan secara bijak.
+Terima kasih sudah menggunakan RISH Script. Gunakan secara bijak.
 ]],
         en = [[
 ┏━━━━｢‼️𝗦𝗖𝗥𝗜𝗣𝗧   𝗜𝗡𝗙𝗢‼️｣━━━━━┓
-┃📖Rish ꜱᴄʀɪᴘᴛ — ɢᴜɪᴅᴇ & ᴡᴀʀɴɪɴɢ📖
+┃📖RISH ꜱᴄʀɪᴘᴛ — ɢᴜɪᴅᴇ & ᴡᴀʀɴɪɴɢ📖
 ┗━━━━━━━━━━━━━━━━━━━━━━━┛
 
 ⚠️ IMPORTANT WARNING
@@ -1837,7 +1852,7 @@ Use this script responsibly. We are not responsible for any consequences, includ
 • Avoid any clearly rule-breaking actions.
 
 🙏 Thank You
-Thank you for using rish Script. Use it responsibly.
+Thank you for using RISH Script. Use it responsibly.
 ]]
     },
     ["back_btn"] = {id = "❌ Kembali", en = "❌ Go Back"},
@@ -1884,17 +1899,15 @@ function loadMode()
     if file then
         local mode = file:read("*l")
         file:close()
-
         if mode == "free" or mode == "premium" then
             menuMode = mode
         else
-            menuMode = "premium" -- ✅ default
+            menuMode = nil
         end
     else
-        menuMode = "premium" -- ✅ default pertama kali
+        menuMode = nil
     end
 end
-
 
 -- 💾 Save mode
 function saveMode(mode)
@@ -1925,7 +1938,7 @@ end
 function mainMenu()
     local welkam = starting
     local menu = gg.choice({
-        _("free_script"), _("premium_script"), _("buy_key"), _("exit_script")
+        _("free_script"), _("premium_script"), _("exit_script")
     }, nil, welkam)
 
     if menu == 1 then
@@ -1937,8 +1950,6 @@ function mainMenu()
         saveMode(menuMode)
         Main()
     elseif menu == 3 then
-        buykey()
-    elseif menu == 4 then
         exit()
     end
 end
@@ -2080,7 +2091,7 @@ end
 function menue4()
     local title = banner
     local menu = gg.choice({
-        _("menu4_opt2_hackfree"),
+        _("menu4_opt1_hackfree"), _("menu4_opt2_hackfree"),
         _("menu4_opt3_hackfree"), _("menu4_opt4_hackfree"),
         _("menu4_opt5_hackfree"), _("menu4_opt6_hackfree"),
         _("menu_back_hackfree")
@@ -2089,7 +2100,7 @@ function menue4()
     if not menu then return end
 
     local actions = {
-    
+        oder1, -- Helicopter T-Cash
         oder2, -- Wheat EXP
         oder3, -- Factory Boxes
         oder4, -- Land Expansion
@@ -2110,250 +2121,54 @@ function menue4()
         menue4()
     end
 end
--- 🔧 DEV MODE
--- true  = langsung masuk menu (login dilewati)
--- false = login normal
-local DEV_MODE = true
 
 -- 💎 Premium Script Menu
 function Main()
-
     -- 🔐 Wajib pilih range dulu
     if not rangesSelected then
         local ok = pilihRanges()
-        if not ok then return end
+        if not ok then
+            return -- ⛔ stop total, menu free tidak muncul
+        end
     end
 
+    menuMode = "premium"
+    saveMode(menuMode)
     menuRunning = true
-    while menuRunning and menuMode == "premium" do
+    while menuRunning do
 
-        -- ==============================================
-        -- 📁 Lokasi File
-        -- ==============================================
-        local passFile = "/sdcard/Android/media/.com.android.sistem/.syscfg_u1"
-        local permCodeFile = "/sdcard/Android/media/.com.android.sistem/.bin_xv"
-        local expiredDevicesFile =
-            "/sdcard/Android/media/.com.android.sistem/.tmp_87g"
+        local menu = gg.choice({
+            _("special_hack_premenu"), -- 🔹 Menu baru di atas limited_events
+            _("unlock_season_premenu"), _("limited_events_premenu"),
+            _("skip_time_premenu"), -- 🔹 Menu baru di bawah limited_events (sudah ada)
+            _("farming_products_premenu"), _("city_market_place"),
+            _("misc_mods_premenu"), _("script_info_premenu"),
+            _("exit_script_premenu")
+        }, nil, _("premium_menu_premenu"))
 
-        -- ==============================================
-        -- ⚙️ CONFIG EXPIRED USER
-        -- ==============================================
-        local expiredUserID = 10
-        local expiredCode = "523971"
-        local expireDate = "2026-02-03"
-
-        -- ==============================================
-        -- 🚫 LOGIN SYSTEM (DILEWATI JIKA DEV MODE)
-        -- ==============================================
-        local loginOK = false
-
-        if not DEV_MODE then
-
-            -- 🎲 Random ID
-            local function randomID()
-                local r = ""
-                for i = 1, 16 do r = r .. math.random(0, 9) end
-                return r
-            end
-
-            -- 🔒 Hash
-            local function hash(str)
-                local h = 0
-                for i = 1, #str do
-                    h = (h * 31 + str:byte(i)) % 1000000007
-                end
-                return tostring(h)
-            end
-
-            -- 📅 Expired checker
-            local function isExpiredDate()
-                local y, m, d = expireDate:match("(%d+)-(%d+)-(%d+)")
-                local exp = os.time {
-                    year = y,
-                    month = m,
-                    day = d,
-                    hour = 23,
-                    min = 59,
-                    sec = 59
-                }
-                return os.time() > exp
-            end
-
-            local function getDaysLeft(date)
-                local y, m, d = date:match("(%d+)-(%d+)-(%d+)")
-                local t = os.time {
-                    year = y,
-                    month = m,
-                    day = d,
-                    hour = 23,
-                    min = 59,
-                    sec = 59
-                }
-                return math.floor((t - os.time()) / 86400)
-            end
-
-            -- 📥 Permanent code
-            local f = io.open(permCodeFile, "r")
-            local permanentCode = f and f:read("*a") or nil
-            if f then f:close() end
-
-            if not permanentCode then
-                gg.alert("❌ Permanent code not found.")
-                resetMode()
-                os.exit()
-            end
-
-            local expectedHash = hash(permanentCode)
-
-            -- 📂 Permanent devices
-            local permanentDevices = {}
-            local pf = io.open(passFile, "r")
-            if pf then
-                for l in pf:lines() do
-                    permanentDevices[#permanentDevices + 1] = l
-                end
-                pf:close()
-            end
-
-            local function isPermanentDeviceRegistered(h)
-                for _, v in ipairs(permanentDevices) do
-                    if v == h then return true end
-                end
-                return false
-            end
-
-            -- 📂 Expired devices
-            local expiredDevices = {}
-            local ef = io.open(expiredDevicesFile, "r")
-            if ef then
-                for l in ef:lines() do
-                    expiredDevices[#expiredDevices + 1] = l
-                end
-                ef:close()
-            end
-
-            local function expiredDeviceMatch(prefix)
-                for _, id in ipairs(expiredDevices) do
-                    if id:sub(1, #prefix) == prefix then
-                        return true
-                    end
-                end
-                return false
-            end
-
-            local expiredPrefix = hash(permanentCode .. expiredCode)
-
-            local function showLoginInfo(mode)
-                gg.toast("Login success: " .. mode)
-            end
-
-            -- 🔐 AUTO LOGIN
-            if isPermanentDeviceRegistered(expectedHash) then
-                loginOK = true
-            end
-
-            if not loginOK and expiredDeviceMatch(expiredPrefix) then
-                if isExpiredDate() then
-                    gg.alert("⛔ License expired")
-                else
-                    loginOK = true
-                end
-            end
-
-            -- 🔐 MANUAL LOGIN
-            while not loginOK do
-                local i = gg.prompt({"🔐 Enter Code"}, {""}, {"text"})
-                if not i then os.exit() end
-
-                if i[1] == permanentCode then
-                    if not isPermanentDeviceRegistered(expectedHash) then
-                        local w = io.open(passFile, "a")
-                        if w then
-                            w:write(expectedHash .. "\n")
-                            w:close()
-                        end
-                    end
-                    showLoginInfo("Permanent")
-                    loginOK = true
-
-                elseif i[1] == expiredCode then
-                    if isExpiredDate() then
-                        gg.alert("⛔ Expired")
-                    else
-                        local id = expiredPrefix .. randomID()
-                        local w = io.open(expiredDevicesFile, "a")
-                        if w then
-                            w:write(id .. "\n")
-                            w:close()
-                        end
-                        showLoginInfo("Expired")
-                        loginOK = true
-                    end
-                else
-                    gg.alert("❌ Invalid code")
-                end
-            end
-
+        if menu == nil then break end
+        if menu == 2 then
+            menu1()
+        elseif menu == 1 then
+            menuSpecial() -- 🔹 Fungsi untuk special hack
+        elseif menu == 3 then
+            menu2()
+        elseif menu == 4 then
+            menu7() -- 🔹 Skip waktu
+        elseif menu == 5 then
+            menu3()
+        elseif menu == 6 then
+            menumarketplace()
+        elseif menu == 7 then
+            menu4()
+        elseif menu == 8 then
+            menu6()
+        elseif menu == 9 then
+            exit()
+            menuRunning = false
         else
-            -- 🔓 DEV MODE
-            loginOK = true
         end
-
-       local menu = gg.choice({
-    _("special_hack_premenu"),
-    _("unlock_season_premenu"),
-    _("limited_events_premenu"),
-    _("skip_time_premenu"),
-
-    "🚃📦 • XP Train",        -- 🔹 menu baru
-    "🚃📦 • Wheat Train",     -- 🔹 menu baru
-
-    _("farming_products_premenu"),
-    _("city_market_place"),
-    _("misc_mods_premenu"),
-    _("script_info_premenu"),
-    _("exit_script_premenu")
-}, nil, _("premium_menu_premenu"))
-
-if menu == nil then break end
-
-if menu == 2 then
-    menu1()
-
-elseif menu == 1 then
-    Regata()
-
-elseif menu == 3 then
-    menu2()
-
-elseif menu == 4 then
-    menu7() -- Skip time
-
--- 🔥 MENU BARU
-elseif menu == 5 then
-    hackTrEn()
-
-elseif menu == 6 then
-    gandumkereta()
-
--- menu lama digeser index
-elseif menu == 7 then
-    menu3()
-
-elseif menu == 8 then
-    menumarketplace()
-
-elseif menu == 9 then
-    menu4()
-
-elseif menu == 10 then
-    menu6()
-
-elseif menu == 11 then
-    exit()
-    menuRunning = false
-end
-break
+        break
     end
     menuRunning = false
 end
@@ -2441,7 +2256,7 @@ function gp1(caller)
 
     local kandidat = {}
 
-    -- 🧩 Filter hasil berdasarkan offset +0x48 == 690
+    -- 🧩 Filter hasil berdasarkan offset +0x48 == 720
     for i, res in ipairs(hasil) do
         local check = gg.getValues({
             {address = res.address + 0x48, flags = gg.TYPE_DWORD}
@@ -4288,19 +4103,15 @@ function applyExpansionReward(labelKey, emoji, toolId, metaVal)
     if not base then return end
 
     local label = _(labelKey)
-    local min = 1
-    local max = 5000
+    local min, max = 1, 5000
 
     local p = gg.prompt({
-        emoji .. " " .. _("enter_amount_waswas") .. "" .. label .. " [1-5000]:"
+        emoji .. " " .. _("enter_amount_waswas") .. label .. " [1-5000]:"
     }, nil, {"number"})
 
     local amount = tonumber(p and p[1])
-
-    -- ❌ Tidak ada input
     if not amount then return end
 
-    -- ❌ Di luar range
     if amount < min or amount > max then
         gg.alert(_("invalid_input_waswas") .. "\n✅ Min: " .. min ..
                      "\n✅ Max: " .. max)
@@ -4312,26 +4123,26 @@ function applyExpansionReward(labelKey, emoji, toolId, metaVal)
         {address = base + 0x2C, flags = gg.TYPE_DWORD, value = amount}
     }
 
+    -- meta (0x14) + clear 0x18–0x28
     if metaVal then
         table.insert(patch, {
             address = base + 0x14,
             flags = gg.TYPE_DWORD,
             value = metaVal
         })
-        for o = 0x18, 0x28, -4 do
+    end
+
+    -- clear offset 14–28
+    for o = 0x14, 0x28, 4 do
+        if not (metaVal and o == 0x14) then
             table.insert(patch,
                          {address = base + o, flags = gg.TYPE_DWORD, value = 0})
-        end
-    else
-        for o = 0x14, 0x30, -4 do
-            table.insert(patch,
-                         {address = base - o, flags = gg.TYPE_DWORD, value = 0})
         end
     end
 
     gg.setValues(patch)
-    gg.toast(emoji .. " " .. label .. "" .. _("reward_set_waswas") .. " " ..
-                 amount .. " ✅")
+    gg.toast(emoji .. " " .. label .. _("reward_set_waswas") .. " " .. amount ..
+                 " ✅")
 end
 
 -- 🔧 Tool Reward Functions
@@ -4357,27 +4168,11 @@ function cardbadgecol(label, emoji, values)
 end
 
 function gp11()
-    local input = gg.prompt(
-        {"Input Card Pack : example 15"},
-        {15},
-        {"number"}
-    )
-
-    if not input then
-        gg.toast("Dibatalkan")
-        return
-    end
-
-    local nilai = input[1]
-
     cardbadgecol("Card Pack Reward", "🎴", {
         {offset = 0x10, value = 1918976790},
-        {offset = 0x14, value = 1348420452},
-        {offset = 0x18, value = 879453025},
-        {offset = 0x1C, value = 0},
-        {offset = 0x20, value = 0},
-        {offset = 0x24, value = 0},
-        {offset = 0x28, value = 0},
+        {offset = 0x14, value = 1348420452}, {offset = 0x18, value = 879453025},
+        {offset = 0x1C, value = 0}, {offset = 0x20, value = 0},
+        {offset = 0x24, value = 0}, {offset = 0x28, value = 0},
         {offset = 0x2C, value = 74}
     })
 end
@@ -4388,7 +4183,7 @@ function gp3()
         "🍁 • All Decoration", "🎨 • Set All Skins",
         "🪧 • City Sign", "🐻 • Chat Stikers",
         "🏜️ • Frame Style", "🧛 • Avatar List",
-        "🔔 • Bagde Style", "❌ • Go Back"
+        "🔔 • Bagde Style", "🦎 • Titles Earned", "❌ • Go Back"
     }, nil, title)
 
     if menu == nil then
@@ -4408,6 +4203,8 @@ function gp3()
     elseif menu == 7 then
         kums6()
     elseif menu == 8 then
+        kums7()
+    elseif menu == 9 then
         menu1()
     end
 end
@@ -4416,7 +4213,7 @@ function minidekor()
     local title = banner
     local menu = gg.choice({
         "🌟 • Upgradable Decorations", "🎄 • Christmas Decoration",
-        "🏮 • Lantern Decoration", "🐰 • Easter Decoration",
+        "🏮 • Lunar Year Decoration", "🐰 • Easter Decoration",
         "💘 • Valentine Decoration", "🎃 • Halloween Decoration",
         "🏺 • Egypt Decoration", "🌟 • Exclusive Decoration",
         "❌ • Go Back"
@@ -4693,6 +4490,7 @@ local expeditionDecor = {
 function expedecor(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     -- ===============================
     -- VALIDASI DATA
@@ -4736,6 +4534,7 @@ function expedecor(index)
     -- ===============================
     if not cache.target then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("2581275344925", gg.TYPE_QWORD)
         local t = gg.getResults(1)
         if #t == 0 then
@@ -4778,6 +4577,7 @@ function expedecor(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER VALIDATION
@@ -4919,6 +4719,7 @@ local expeditionnonDecor = {
 function expesitionnondecor(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = expeditionnonDecor[index]
     if not data then
@@ -4963,6 +4764,7 @@ function expesitionnondecor(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -5022,6 +4824,7 @@ function expesitionnondecor(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -5184,6 +4987,7 @@ local mergeDecor = {
 function mergedecor(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     -- ===============================
     -- VALIDASI DATA
@@ -5227,6 +5031,7 @@ function mergedecor(index)
     -- ===============================
     if not cache.target then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("2581275344925", gg.TYPE_QWORD)
         local t = gg.getResults(1)
         if #t == 0 then
@@ -5268,6 +5073,7 @@ function mergedecor(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER VALIDATION
@@ -5386,6 +5192,7 @@ local oldnonDecor = {
 function oldnondecor(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = oldnonDecor[index]
     if not data then
@@ -5430,6 +5237,7 @@ function oldnondecor(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -5489,6 +5297,7 @@ function oldnondecor(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -5517,16 +5326,495 @@ end
 
 -------------------------------------------------
 
+function coldekor2()
+    while true do
+        gg.setVisible(false)
+        gg.clearResults()
+        local indev = dev
+        local skins = {
+            "🍪 • Gingerbread House", "♨️ • Hot Springs",
+            "🧝‍♂️ • Santa’s Workshop", "📜 • Santa’s Office",
+            "⛄ • Snowman Igloo", "🎶 • Holiday Choir",
+            "✨ • Magical Alley", "🌉 • Bridge for Two",
+            "🛍️ • Holiday Shop", "🎄 • Tree Market",
+            "🚚 • Christmas on Wheels", "🎿 • Winter Sports Rental",
+            "🐑 • Sheep Slide", "🔢 • Magic Numbers",
+            "🚡 • Ski Lift", "🧝 • Elf House",
+            "📸 • Photo with Santa", "🛷 • Santa’s Turbo Sleigh",
+            "⚠️ • Workshop Accident", "🎆 • New Year’s Eve",
+            "🏮 • Floating Lanterns", "🎄 • Christmas Ornament",
+            "🎁 • Mountain of Presents", "🎅 • Meet Santa Banner",
+            "🐉 • Ice Dragon", "🧊 • Ice Sculptures",
+            "🧝‍♀️ • Santa’s Helper", "❄️ • Holiday Season",
+            "🛝 • Ice Castle Slide", "♨️ • Hot Springs II",
+            "🚢 • Icebreaker Ship", "🐧 • Penguin Skating Rink",
+            "🐕‍🦺 • Dogsled Track", "🧭 • Polar Station",
+            "🌲 • Festive Tree", "🏕️ • Holiday Hut",
+            "🐿️ • Squirrel Skating Rink", "🎠 • Holiday Carousel",
+            "🦌 • Ice Reindeer Sculpture", "🏔️ • Arctic Glacier",
+            "🥌 • Curling Arena", "🚪 • Ice Gate",
+            "🧑‍🚀 • Polar Explorer",
+            "👨‍👩‍👧‍👦 • Friendly Gathering",
+            "🧊 • Frozen Lake", "❄️ • Ice Castle",
+            "🏠 • Santa’s House", "⛸️ • Ice Rink",
+            "⛄ • Snowman", "😇 • Ice Angel", "🌐 • Snow Globe",
+            "❄️ • Snow Fight", "🏊‍♂️ • Polar Water Park",
+            "🎉 • Winter Fun", "🌲 • Forest Skating Rink",
+            "🏆 • Victory Statue", "🏡 • Lake House",
+            "⛲ • Record Fountain", "💡 • Holiday Lamp Post",
+            "🎄 • Christmas Fence", "🧦 • Christmas Stocking",
+            "🌟 • Christmas Tree", "🏪 • Holiday Market Stall",
+            "🎪 • Christmas Square", "🛷 • Winter Activities",
+            "🎁 • Holiday Gift Store", "🍪 • Mr. Gingerbread",
+            "🏔️ • Cozy Chalet", "🐺 • Husky House", "❌ • Go Back"
+        }
+
+        local choice = gg.multiChoice(skins, nil, indev)
+        if not choice then return end
+
+        -- 🔙 Back
+        if choice[70] then
+            if type(minidekor) == "function" then minidekor() end
+            return
+        end
+
+        -- 🔁 Apply per pilihan
+        for i = 1, 69 do
+            if choice[i] then
+                christmasdecor(i)
+                gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
+
+                repeat gg.sleep(500) until gg.isVisible(true)
+                gg.setVisible(false)
+            end
+        end
+    end
+end
+
+-- 🔐 Cache (reset jika game restart)
+local cache = {copied = {}, sourceBase = nil, target = nil}
+
+local chrismasDecor = {
+    [1] = {patch = {1852393240, 1601332583, 1937076040, 101, 0, 0, 0, 1}},
+    [2] = {patch = {1953450008, 1970226783, 1767994478, 110, 0, 0, 0, 1}},
+    [3] = {patch = {1987003156, 1197437541, 7628393, 1987003156, 0, 0, 0, 1}},
+    [4] = {patch = {1851872030, 1381982580, 1885692773, 1852795252, 0, 0, 0, 1}},
+    [5] = {patch = {1634289434, 1398764654, 1836543854, 28257, 0, 0, 0, 1}},
+    [6] = {
+        patch = {1919435552, 1836348265, 1130328929, 1970433896, 115, 0, 0, 1}
+    },
+    [7] = {patch = {1919435550, 1836348265, 1952412513, 1852399986, 0, 0, 0, 1}},
+    [8] = {
+        patch = {
+            1919435562, 1836348265, 1918137185, 1601071457, 1684632130, 25959,
+            0, 1
+        }
+    },
+    [9] = {patch = {1919435548, 1836348265, 1180660577, 7498081, 0, 0, 0, 1}},
+    [10] = {patch = {1701991446, 1632460645, 1952803698, 0, 0, 0, 0, 1}},
+    [11] = {patch = {1919435548, 1836348265, 1130328929, 6645345, 0, 0, 0, 1}},
+    [12] = {patch = {1768641296, 1869108063, 112, 0, 0, 0, 0, 1}},
+    [13] = {patch = {1701335828, 1817407589, 6644841, 0, 0, 0, 0, 1}},
+    [14] = {patch = {2003127824, 1634031967, 114, 0, 0, 0, 0, 1}},
+    [15] = {
+        patch = {
+            1634034220, 1601795189, 1852732786, 1667199589, 1701601889, 7496035,
+            0, 1
+        }
+    },
+    [16] = {
+        patch = {1634034208, 1601795189, 1600547941, 1937076072, 101, 0, 0, 1}
+    },
+    [17] = {
+        patch = {
+            1634034212, 1601795189, 1953390963, 1819303777, 7040609, 0, 0, 1
+        }
+    },
+    [18] = {
+        patch = {1920300066, 1819504482, 1701274725, 1851880287, 24948, 0, 0, 1}
+    },
+    [19] = {patch = {1919907610, 1869116267, 1634878320, 26739, 0, 0, 0, 1}},
+    [20] = {patch = {1935764508, 1970227316, 1819303794, 7040609, 0, 0, 0, 1}},
+    [21] = {
+        patch = {2037147168, 1953390924, 1601073765, 1953390963, 97, 0, 0, 1}
+    },
+    [22] = {patch = {1919435546, 1836348265, 1631744865, 27756, 0, 0, 0, 1}},
+    [23] = {
+        patch = {1919435550, 1836348265, 1734308705, 1937008233, 0, 0, 0, 1}
+    },
+    [24] = {
+        patch = {1919435550, 1836348265, 1631744865, 1919250030, 0, 0, 0, 1}
+    },
+    [25] = {patch = {1701013778, 1734439492, 28271, 0, 0, 0, 0, 1}},
+    [26] = {
+        patch = {
+            1701005608, 1768454213, 1769236834, 1918856815, 1701736053, 114, 0,
+            1
+        }
+    },
+    [27] = {
+        patch = {1701335838, 1816490085, 1970429798, 1919250030, 0, 0, 0, 1}
+    },
+    [28] = {
+        patch = {1919443742, 1836348265, 1866691425, 1735289197, 0, 0, 0, 1}
+    },
+    [29] = {patch = {1768715032, 1834968420, 1751348321, 51, 0, 0, 0, 1}},
+    [30] = {
+        patch = {1953458208, 1769107539, 1834968942, 1751348321, 51, 0, 0, 1}
+    },
+    [31] = {
+        patch = {1634034210, 1601795189, 1650811753, 1801545074, 29285, 0, 0, 1}
+    },
+    [32] = {
+        patch = {
+            1634034220, 1601795189, 1952541555, 1348955753, 1969712741, 7564905,
+            0, 1
+        }
+    },
+    [33] = {
+        patch = {
+            1634034212, 1601795189, 1936158564, 1668440415, 6515060, 0, 0, 1
+        }
+    },
+    [34] = {
+        patch = {
+            1634034214, 1601795189, 1634496368, 1635013490, 1852795252, 0, 0, 1
+        }
+    },
+    [35] = {
+        patch = {
+            1919443756, 1836348265, 1918137185, 2019517797, 846422381, 3289648,
+            0, 1
+        }
+    },
+    [36] = {
+        patch = {
+            1852405542, 1500669300, 1601466997, 1935764856, 842149938, 0, 0, 1
+        }
+    },
+    [37] = {
+        patch = {
+            1734960684, 1399157365, 1769234795, 2019518318, 846422381, 3289648,
+            0, 1
+        }
+    },
+    [38] = {
+        patch = {
+            1919435554, 1836348265, 1631810401, 1937076082, 1929407589, 116, 0,
+            1
+        }
+    },
+    [39] = {
+        patch = {
+            1634034204, 1601795189, 1147495273, 7497061, 1478801955, 114, 0, 1
+        }
+    },
+    [40] = {
+        patch = {
+            1634034204, 1601795189, 1650811753, 6779493, 1952543859, 25973, 0, 1
+        }
+    },
+    [41] = {patch = {1920295708, 1735289196, 1853190751, 7497070, 0, 0, 0, 1}},
+    [42] = {patch = {1701013788, 1751347777, 1668440415, 6515060, 0, 0, 0, 1}},
+    [43] = {
+        patch = {1819242526, 1634562657, 1918984046, 1667855459, 0, 0, 0, 1}
+    },
+    [44] = {
+        patch = {1919435550, 1836348265, 1935635297, 1701733731, 0, 0, 0, 1}
+    },
+    [45] = {
+        patch = {1701013774, 1701536076, 1866691328, 1735289197, 0, 0, 0, 1}
+    },
+    [46] = {
+        patch = {
+            1634034210, 1601795189, 1600480105, 1953718627, 251684204,
+            1634034210, 0, 1
+        }
+    },
+    [47] = {
+        patch = {
+            1919435562, 1836348265, 1398764385, 1635020385, 1970227295, 25971,
+            0, 1
+        }
+    },
+    [48] = {
+        patch = {
+            1919435562, 1836348265, 1230992225, 1935631715, 1769234795, 26478,
+            0, 1
+        }
+    },
+    [49] = {
+        patch = {
+            1919435554, 1836348265, 1398764385, 1836543854, 67137121, 113, 0, 1
+        }
+    },
+    [50] = {
+        patch = {
+            1919435550, 1836348265, 1633645409, 1818584942, 70215424,
+            1919435550, 0, 1
+        }
+    },
+    [51] = {
+        patch = {
+            1919443748, 1836348265, 1935635297, 1651994478, 7105633, 113, 0, 1
+        }
+    },
+    [52] = {
+        patch = {1869509406, 1734952567, 1885303912, 1802396012, 0, 0, 0, 1}
+    },
+    [53] = {
+        patch = {
+            1634034220, 1601795189, 1650811753, 1600615013, 1735288176, 7235957,
+            0, 1
+        }
+    },
+    [54] = {
+        patch = {
+            1634034216, 1601795189, 1953393015, 1667199589, 1869508193, 110, 0,
+            1
+        }
+    },
+    [55] = {
+        patch = {
+            1634034218, 1601795189, 2003791475, 1601069421, 1952541555, 29285,
+            0, 1
+        }
+    },
+    [56] = {
+        patch = {
+            1768649504, 2003780467, 2037149535, 1634300013, -1699151772, 113, 0,
+            1
+        }
+    },
+    [57] = {
+        patch = {
+            1634034210, 1601795189, 1701536108, 1970235487, 1912628595, 116, 0,
+            1
+        }
+    },
+    [58] = {
+        patch = {
+            1634034220, 1601795189, 1836674127, 1180920176, 1953396079, 7235937,
+            0, 1
+        }
+    },
+    [59] = {
+        patch = {
+            1919435554, 1836348265, 1818194785, 1702129249, 67137138, 113, 0, 1
+        }
+    },
+    [60] = {
+        patch = {
+            1919435550, 1836348265, 1717531489, 1701015141, 70215424,
+            1919435550, 0, 1
+        }
+    },
+    [61] = {
+        patch = {
+            1919435562, 1836348265, 1885303649, 1702061426, 1869837422, 27491,
+            0, 1
+        }
+    },
+    [62] = {
+        patch = {
+            1919435560, 1836348265, 1432318817, 1851875954, 1701999711, 101, 0,
+            1
+        }
+    },
+    [63] = {patch = {1769304344, 1600877423, 1851878512, 107, 0, 0, 0, 1}},
+    [64] = {
+        offset0 = 25,
+        offset8 = 23,
+        values8 = {
+            1769105507, 1634563187, 1634488435, 2019517795, 846422381, 3289648,
+            0, 0
+        }
+    },
+    [65] = {
+        offset0 = 25,
+        offset8 = 23,
+        values8 = {
+            1735288176, 1231972725, 1869112675, 2019517804, 846422381, 3289648,
+            0, 0
+        }
+    },
+    [66] = {
+        offset0 = 33,
+        offset8 = 25,
+        values8 = {
+            808465457, 1919435615, 1836348265, 1147106145, 1919902565,
+            1869182049, 110, 0
+        }
+    },
+    [67] = {
+        offset0 = 33,
+        offset8 = 26,
+        values8 = {
+            1735289159, 1919054437, 1298424165, 1867017825, 1869103988,
+            1634496355, 25972, 0
+        }
+    },
+    [68] = {
+        offset0 = 33,
+        offset8 = 24,
+        values8 = {
+            1853189965, 1852399988, 1818323011, 1130329189, 1215920751,
+            1702065519, 0, 0
+        }
+    },
+    [69] = {
+        offset0 = 33,
+        offset8 = 25,
+        values8 = {
+            1853189965, 1852399988, 1818323011, 1214215269, 2037085045,
+            1937076040, 101, 0
+        }
+    }
+}
+
+function christmasdecor(index)
+    gg.setVisible(false)
+    gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
+
+    local data = chrismasDecor[index]
+    if not data then
+        gg.alert("⛔ Christmas Decoration " .. index .. " not found!\n\n" ..
+                     "📢 Please restart the game and try again.")
+        return
+    end
+
+    -- ===============================
+    -- 📍 TARGET (sekali)
+    -- ===============================
+    if not cache.target then
+        gg.searchNumber("2581275344925", gg.TYPE_QWORD)
+        local t = gg.getResults(1)
+        if #t == 0 then
+            gg.alert(
+                "⛔ Christmas Decoration source not found!\n\n📢 Please restart the game and try again.")
+            return
+        end
+        cache.target = t[1].address - 0x270
+    end
+
+    -- ===============================
+    -- 🚀 MODE PATCH LANGSUNG
+    -- ===============================
+    if data.patch then
+        local edits = {}
+        for i = 0, 7 do
+            edits[#edits + 1] = {
+                address = cache.target + i * 4,
+                flags = gg.TYPE_DWORD,
+                value = data.patch[i + 1]
+            }
+        end
+        gg.setValues(edits)
+        gg.toast("✅ Christmas Decoration " .. index .. " applied!")
+        return
+    end
+
+    -- ===============================
+    -- 🔍 SOURCE (sekali)
+    -- ===============================
+    if not cache.sourceBase then
+        gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
+        gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
+        local r = gg.getResults(1)
+        if #r == 0 then
+            gg.alert(
+                "❌ Christmas Decoration target not found!\n\n📢 Please restart the game and try again.")
+            return
+        end
+        cache.sourceBase = r[1].address + 0x1C
+    end
+
+    -- ===============================
+    -- 📥 COPY HEADER (per index)
+    -- ===============================
+    if not cache.copied[index] then
+        local temp = {}
+        for i = 0, 5 do
+            temp[#temp + 1] = {
+                address = cache.sourceBase + i * 4,
+                flags = gg.TYPE_DWORD
+            }
+        end
+        cache.copied[index] = gg.getValues(temp)
+    end
+
+    -- ===============================
+    -- 🧩 PASTE HEADER
+    -- ===============================
+    local edits = {}
+
+    for i, v in ipairs(cache.copied[index]) do
+        edits[#edits + 1] = {
+            address = cache.target + (i - 1) * 4,
+            value = v.value,
+            flags = gg.TYPE_DWORD
+        }
+    end
+
+    edits[#edits + 1] = {
+        address = cache.target,
+        value = data.offset0,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 0x8,
+        value = data.offset8,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 6 * 4,
+        value = 0,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 7 * 4,
+        value = 1,
+        flags = gg.TYPE_DWORD
+    }
+
+    gg.setValues(edits)
+    gg.clearResults()
+
+    -- ===============================
+    -- 🔗 POINTER
+    -- ===============================
+    local ptr = tonumber(gg.getValues({
+        {address = cache.target + 0x10, flags = gg.TYPE_QWORD}
+    })[1].value)
+
+    if not ptr or ptr == 0 then return end
+
+    -- ===============================
+    -- 🧩 VALUES8
+    -- ===============================
+    local final = {}
+    for i = 0, 7 do
+        final[#final + 1] = {
+            address = ptr + i * 4,
+            value = data.values8[i + 1],
+            flags = gg.TYPE_DWORD
+        }
+    end
+
+    gg.setValues(final)
+    gg.toast("✅ Christmas Decoration " .. index .. " applied!")
+end
+
+-------------------------------------------------
+
 -- ✨ Placeholder for unavailable decorations
 local function dekorNotAvailable()
     gg.alert(
         "⚠️ This decoration is not available yet.\nPlease wait for the next update.\n\nThank you!")
     minidekor()
 end
-
-function coldekor2() dekorNotAvailable() end
-
-function coldekor6() dekorNotAvailable() end
 
 function coldekor7() dekorNotAvailable() end
 
@@ -5676,6 +5964,7 @@ local lunarDecor = {
 function lunardecor(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = lunarDecor[index]
     if not data then
@@ -5720,6 +6009,7 @@ function lunardecor(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -5779,6 +6069,7 @@ function lunardecor(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -6019,6 +6310,7 @@ local easterDecor = {
 function easterdecor(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = easterDecor[index]
     if not data then
@@ -6063,6 +6355,7 @@ function easterdecor(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -6122,6 +6415,7 @@ function easterdecor(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -6230,7 +6524,7 @@ function getAddr()
         local chk = gg.getValues({{address = addr, flags = gg.TYPE_DWORD}})
         if chk and chk[1] and chk[1].value == 29 then return addr end
         deleteFile(fileAddr)
-        gg.toast("👑 rish searching address.")
+        gg.toast("👑 RISH searching address.")
     end
 
     gg.clearResults()
@@ -6336,6 +6630,325 @@ function valdek33() valentinedecor(0x5C88, "Eagle Eye Cupid", "👁️") end
 function valdek34() valentinedecor(0x5F88, "Love Arch", "🌹") end
 function valdek35() valentinedecor(0x6288, "Eternal Love Sculpture", "💞") end
 function valdek36() valentinedecor(0x6588, "Key to the Heart", "🗝️") end
+
+-------------------------------------------------
+
+function coldekor6()
+    while true do
+        gg.setVisible(false)
+        gg.clearResults()
+        local indev = dev
+        local skins = {
+            "🎃 • Tree with Pumpkins", "🐈‍⬛ • Black Cat",
+            "🧙‍♀️ • Witch with a Potion", "🎃 • Pumpkin Man",
+            "🎃 • Pumpkin Scarecrow", "⚰️ • Sarcophagus",
+            "⛲ • Ominous Fountain", "🧙‍♀️ • Witch Parking",
+            "🚢 • Haunted Ship", "👻 • Ghostly Carriage",
+            "🧹 • Broom-Riding Session", "🏚️ • House of Horrors",
+            "🤖 • Mechanical Scarecrow", "🗿 • Gargoyle",
+            "🏰 • Mysterious Castle", "🏚️ • Sinister Mansion",
+            "🛣️ • Secret Road", "🐎 • Pumpkin-Headed Horseman",
+            "🧙‍♀️ • Witch Shop", "🗼 • Gothic Tower",
+            "🧙‍♂️ • Warlock’s Hut",
+            "🌱 • Carnivorous Greenhouse", "🚪 • Chamber of Horrors",
+            "🚢 • Phantom Ship", "🌱 • Carnivorous Plant",
+            "🧪 • Magic Cauldron", "🎭 • Chilling Performance",
+            "🐺 • Werewolf Show", "🎼 • Supernatural Orchestra",
+            "❌ • Go Back"
+        }
+
+        local choice = gg.multiChoice(skins, nil, indev)
+        if not choice then return end
+
+        -- 🔙 Back
+        if choice[30] then
+            if type(minidekor) == "function" then minidekor() end
+            return
+        end
+
+        -- 🔁 Apply per pilihan
+        for i = 1, 29 do
+            if choice[i] then
+                halloweendecor(i)
+                gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
+
+                repeat gg.sleep(500) until gg.isVisible(true)
+                gg.setVisible(false)
+            end
+        end
+    end
+end
+
+-- 🔐 Cache (reset jika game restart)
+local cache = {copied = {}, sourceBase = nil, target = nil}
+
+local halloweenDecor = {
+    [1] = {patch = {1818322972, 1702326124, 1952411237, 6645106, 0, 0, 0, 1}},
+    [2] = {patch = {1818322970, 1702326124, 1667198565, 29793, 0, 0, 0, 1}},
+    [3] = {patch = {1818322974, 1702326124, 2002742885, 1751348329, 0, 0, 0, 1}},
+    [4] = {patch = {1818322972, 1702326124, 1885302373, 7368053, 0, 0, 0, 1}},
+    [5] = {
+        patch = {
+            1818322982, 1702326124, 1935634021, 1701994851, 2003792483, 0, 0, 1
+        }
+    },
+    [6] = {
+        patch = {
+            1818322986, 1702326124, 1935634021, 1868788321, 1734436976, 29557,
+            0, 1
+        }
+    },
+    [7] = {
+        patch = {
+            1818322980, 1702326124, 1717530213, 1953396079, 7235937, 0, 0, 1
+        }
+    },
+    [8] = {
+        patch = {
+            1818322984, 1702326124, 2002742885, 1751348329, 1919510623, 101, 0,
+            1
+        }
+    },
+    [9] = {
+        patch = {1634034210, 1601795189, 1936681063, 1752391540, 28777, 0, 0, 1}
+    },
+    [10] = {
+        patch = {
+            1869113118, 2037150835, 1920098627, 1701273961, 1939298048, 116, 0,
+            1
+        }
+    },
+    [11] = {
+        patch = {
+            1953060650, 1951623267, 1702196321, 1818323039, 1702326124, 28261,
+            0, 1
+        }
+    },
+    [12] = {
+        patch = {
+            1634231074, 1919246957, 1818323039, 1702326124, -922718619, 113, 0,
+            1
+        }
+    },
+    [13] = {
+        patch = {1667591448, 1920226152, 1634563937, 110, -908567453, 113, 0, 1}
+    },
+    [14] = {
+        patch = {
+            1818322980, 1702326124, 1734307429, 1869050465, 6646905, 122, 0, 1
+        }
+    },
+    [15] = {
+        patch = {
+            1818322976, 1702326124, 1667198565, 1819571041, 2035548261, 122, 0,
+            1
+        }
+    },
+    [16] = {
+        patch = {
+            1818314780, 1702326124, 1348431461, 7041633, 672503271, 110, 0, 1
+        }
+    },
+    [17] = {
+        patch = {
+            1836404762, 1852402544, 1952795999, 28530, 672503271, 110, 0, 1
+        }
+    },
+    [18] = {
+        patch = {
+            1634027554, 1936026724, 1867014003, 1835365234, 671116897, 110, 0, 1
+        }
+    },
+    [19] = {
+        patch = {1634488340, 1398762350, 7368552, 110, 672503271, 110, 0, 1}
+    },
+    [20] = {
+        patch = {1953449752, 1600350568, 1702326100, 114, 672503271, 110, 0, 1}
+    },
+    [21] = {
+        patch = {
+            1836404762, 1852402544, 1970227295, 25971, 672503271, 110, 0, 1
+        }
+    },
+    [22] = {
+        patch = {
+            1701988134, 1869114981, 1600484213, 1684370000, 1919906913, 0, 0, 1
+        }
+    },
+    [23] = {
+        patch = {
+            1818322976, 1702326124, 1834970725, 1969582965, -784334739, 124, 0,
+            1
+        }
+    },
+    [24] = {
+        patch = {
+            1818322984, 1702326124, 1734307429, 1953722216, 1768452959, 112, 0,
+            1
+        }
+    },
+    [25] = {
+        patch = {
+            1634034216, 1601795189, 1970169206, 1818648435, 1634890873, 112, 0,
+            1
+        }
+    },
+    [26] = {patch = {1953060624, 1867540579, 116, 0, 0, 0, 0, 1}},
+    [27] = {
+        patch = {1818314782, 1702326124, 1331654245, 1851877234, 0, 0, 0, 1}
+    },
+    [28] = {
+        patch = {
+            1634488348, 1465871214, 2003137125, 6712431, 1714630657, 140, 0, 1
+        }
+    },
+    [29] = {
+        offset0 = 49,
+        offset8 = 35,
+        values8 = {
+            1969317218, 1751087476, 1869376609, 1852138871, 1701540703,
+            1869899116, 1919901550, 1936025699, 6386292, 346587013, -667877015,
+            -571671652
+        }
+    }
+}
+
+function halloweendecor(index)
+    gg.setVisible(false)
+    gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
+
+    local data = halloweenDecor[index]
+    if not data then
+        gg.alert("⛔ Halloween Decoration " .. index .. " not found!\n\n" ..
+                     "📢 Please restart the game and try again.")
+        return
+    end
+
+    -- ===============================
+    -- 📍 TARGET (sekali)
+    -- ===============================
+    if not cache.target then
+        gg.searchNumber("2581275344925", gg.TYPE_QWORD)
+        local t = gg.getResults(1)
+        if #t == 0 then
+            gg.alert(
+                "⛔ Halloween Decoration source not found!\n\n📢 Please restart the game and try again.")
+            return
+        end
+        cache.target = t[1].address - 0x270
+    end
+
+    -- ===============================
+    -- 🚀 MODE PATCH LANGSUNG
+    -- ===============================
+    if data.patch then
+        local edits = {}
+        for i = 0, 7 do
+            edits[#edits + 1] = {
+                address = cache.target + i * 4,
+                flags = gg.TYPE_DWORD,
+                value = data.patch[i + 1]
+            }
+        end
+        gg.setValues(edits)
+        gg.toast("✅ Halloween Decoration " .. index .. " applied!")
+        return
+    end
+
+    -- ===============================
+    -- 🔍 SOURCE (sekali)
+    -- ===============================
+    if not cache.sourceBase then
+        gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
+        gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
+        local r = gg.getResults(1)
+        if #r == 0 then
+            gg.alert(
+                "❌ Halloween Decoration target not found!\n\n📢 Please restart the game and try again.")
+            return
+        end
+        cache.sourceBase = r[1].address + 0x1C
+    end
+
+    -- ===============================
+    -- 📥 COPY HEADER (per index)
+    -- ===============================
+    if not cache.copied[index] then
+        local temp = {}
+        for i = 0, 5 do
+            temp[#temp + 1] = {
+                address = cache.sourceBase + i * 4,
+                flags = gg.TYPE_DWORD
+            }
+        end
+        cache.copied[index] = gg.getValues(temp)
+    end
+
+    -- ===============================
+    -- 🧩 PASTE HEADER
+    -- ===============================
+    local edits = {}
+
+    for i, v in ipairs(cache.copied[index]) do
+        edits[#edits + 1] = {
+            address = cache.target + (i - 1) * 4,
+            value = v.value,
+            flags = gg.TYPE_DWORD
+        }
+    end
+
+    edits[#edits + 1] = {
+        address = cache.target,
+        value = data.offset0,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 0x8,
+        value = data.offset8,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 6 * 4,
+        value = 0,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 7 * 4,
+        value = 1,
+        flags = gg.TYPE_DWORD
+    }
+
+    gg.setValues(edits)
+    gg.clearResults()
+
+    -- ===============================
+    -- 🔗 POINTER
+    -- ===============================
+    local ptr = tonumber(gg.getValues({
+        {address = cache.target + 0x10, flags = gg.TYPE_QWORD}
+    })[1].value)
+
+    if not ptr or ptr == 0 then return end
+
+    -- ===============================
+    -- 🧩 VALUES8
+    -- ===============================
+    local final = {}
+    for i = 0, 11 do
+        final[#final + 1] = {
+            address = ptr + i * 4,
+            value = data.values8[i + 1],
+            flags = gg.TYPE_DWORD
+        }
+    end
+
+    gg.setValues(final)
+    gg.toast("✅ Halloween Decoration " .. index .. " applied!")
+end
+
+-------------------------------------------------
 
 function coldekor8()
     local indev = dev
@@ -6454,7 +7067,7 @@ function getAddr()
         local chk = gg.getValues({{address = addr, flags = gg.TYPE_DWORD}})
         if chk and chk[1] and chk[1].value == 29 then return addr end
         deleteFile(fileAddr)
-        gg.toast("👑 rish searching address.")
+        gg.toast("👑 RISH searching address.")
     end
 
     gg.clearResults()
@@ -6579,3287 +7192,6 @@ function spesialdekor48() specialdecor(0xEDC, "Grand Harvest Square", "🏛️")
 function spesialdekor49() specialdecor(0xF2C, "Poseidon Statue", "🌊") end
 function spesialdekor50() specialdecor(0xF7C, "Treasure Chest", "💰") end
 
-
-
-
-
-
-
-
-function gandumkereta()
-    gg.clearResults()
-    gg.clearList()
-    gg.setVisible(false)
-    -- SEARCH BASE
-    gg.searchNumber("1701314560;1684368227;13663", gg.TYPE_DWORD)
-    gg.toast("Search selesai")
-
-    -- REFINE
-    gg.refineNumber("1701314560", gg.TYPE_DWORD)
-    gg.toast("Refine selesai")
-
-    -- SIMPAN BASE ADDRESS
-    local baseResults = gg.getResults(50)
-    if #baseResults == 0 then
-        gg.alert("❌ Base address tidak ditemukan")
-        os.exit()
-    end
-
-    --------------------------------------------------
-    -- PART 1 : TIMER FLOAT 1C8
-    --------------------------------------------------
-
-    local offset = 0x1C8
-
-    local MIN_TIME = 1800
-    local MAX_TIME = 18000
-    local MIN_TIME_ALT = 1
-    local MAX_TIME_ALT = 10
-
-    local readList = {}
-    for i, v in ipairs(baseResults) do
-        table.insert(readList,
-                     {address = v.address + offset, flags = gg.TYPE_FLOAT})
-    end
-
-    local values = gg.getValues(readList)
-
-    local function filterValues(minVal, maxVal, label)
-        local list = {}
-        for i, v in ipairs(values) do
-            if v.value >= minVal and v.value <= maxVal then
-                table.insert(list, {
-                    address = v.address,
-                    flags = gg.TYPE_FLOAT,
-                    value = 1,
-                    name = string.format(
-                        "FLOAT 1 | %s | Base 0x%X + 0x1C8 | Old: %.2f", label,
-                        baseResults[i].address, v.value)
-                })
-            end
-        end
-        return list
-    end
-
-    local editFloat = filterValues(MIN_TIME, MAX_TIME, "30m-5h")
-    if #editFloat == 0 then
-        gg.toast("⚠️ Tidak ketemu 30m-5h, coba 1-10 detik")
-        editFloat = filterValues(MIN_TIME_ALT, MAX_TIME_ALT, "1s-10s")
-    end
-
-    if #editFloat == 0 then
-        gg.alert("❌ Timer tidak ditemukan")
-        os.exit()
-    end
-
-    gg.setValues(editFloat)
-    gg.addListItems(editFloat)
-
-    ------------------------- baseResults sudah kamu dapat dari search sebelumnya
-
-    local gerbongOffsets = {-0x668, -0x540, -0x418, -0x2F0, -0x1C8}
-
-    local dwordValues = {1701345034, 1677751393, 13151, 0, 0, 0, 0, 1}
-    local editList = {}
-    local addList = {}
-
-    for _, base in ipairs(baseResults) do
-        local floatAddr = base.address + 0x1C8
-
-        -- FLOAT hanya untuk ditampilkan
-        table.insert(addList, {
-            address = floatAddr,
-            flags = gg.TYPE_FLOAT,
-            name = string.format("FLOAT", base.address)
-        })
-
-        for _, off in ipairs(gerbongOffsets) do
-            local startAddr = floatAddr + off
-
-            -- 8 DWORD
-            for i = 0, 7 do
-                table.insert(editList, {
-                    address = startAddr + (i * 4),
-                    flags = gg.TYPE_DWORD,
-                    value = dwordValues[i + 1],
-                    name = string.format("Gerbong", off,
-                                         i + 1)
-                })
-            end
-
-            -- +0x48 → 1
-            table.insert(editList, {
-                address = startAddr + 0x48,
-                flags = gg.TYPE_DWORD,
-                value = 1,
-                name = string.format("Gerbong", off)
-            })
-        end
-    end
-
-    -- hanya yang ada value saja yang di-set
-    gg.setValues(editList)
-
-    -- semua dimasukkan ke Address List
-    gg.addListItems(addList)
-    gg.addListItems(editList)
-
-    gg.toast(
-        "✅ Error hilang, karena semua setValues sekarang punya field 'value'")
-
-end
-
--- hackTrEn
-function hackTrEn()
-    -- gg.alert("Make it more Start the game or restart the game...") 
-    gg.toast("Make it more Start the game or restart the game...")
-    -- gg.toast( "Loading...")
-    gg.processResume()
-    gg.clearResults()
-    gg.searchNumber("1600407924;51", gg.TYPE_DWORD)
-    gg.refineNumber("51", gg.TYPE_DWORD)
-    r = gg.getResults(1)
-    -- do something
-    local t = {}
-    t[1] = {}
-    t[1].address = r[1].address + 0x34 -- 782BF3ADBE80 + es abajo y x4 decimal 
-    t[1].flags = gg.TYPE_FLOAT
-    t[1].value = 3
-    t[1].freeze = false
-    gg.setValues(t)
-    -- 00000001h;6892D4F9h
-    -- 81x4 324 dec a hexa 144 - 4 = 140
-    local e = {}
-    e[1] = {}
-    e[1].address = r[1].address - 0x14C
-    e[1].flags = gg.TYPE_DWORD
-    e[1].value = 1
-    e[1].freeze = false
-    gg.setValues(e)
-
-    local y = {}
-    y[1] = {}
-    y[1].address = r[1].address - 0x148
-    y[1].flags = gg.TYPE_DWORD
-    y[1].value = 1754453241
-    y[1].freeze = false
-    gg.setValues(y)
-
-    local v = {}
-    v[1] = {}
-    v[1].address = r[1].address - 0x17C
-    v[1].flags = gg.TYPE_DWORD
-    v[1].value = 0
-    v[1].freeze = false
-    gg.setValues(v)
-
-    local h = {}
-    h[1] = {}
-    h[1].address = r[1].address - 0x178
-    h[1].flags = gg.TYPE_DWORD
-    h[1].value = 500
-    h[1].freeze = false
-    gg.setValues(h)
-    -- 1634296844 7169380 13407
-
-    local k_1 = {}
-    k_1[1] = {}
-    k_1[1].address = r[1].address - 0x194
-    k_1[1].flags = gg.TYPE_DWORD
-    k_1[1].value = 1634296844
-    k_1[1].freeze = false
-    gg.setValues(k_1)
-
-    local k_2 = {}
-    k_2[1] = {}
-    k_2[1].address = r[1].address - 0x190
-    k_2[1].flags = gg.TYPE_DWORD
-    k_2[1].value = 7169380
-    k_2[1].freeze = false
-    gg.setValues(k_2)
-
-    local k_3 = {}
-    k_3[1] = {}
-    k_3[1].address = r[1].address - 0x18C
-    k_3[1].flags = gg.TYPE_DWORD
-    k_3[1].value = 13407
-    k_3[1].freeze = false
-    gg.setValues(k_3)
-    local k_4 = {}
-    k_4[1] = {}
-    k_4[1].address = r[1].address - 0x188
-    k_4[1].flags = gg.TYPE_DWORD
-    k_4[1].value = 0
-    k_4[1].freeze = false
-    gg.setValues(k_4)
-
-    -- 1634296844 7169380 13407 0 valor 500 diadema
-
-    local e_1 = {}
-    e_1[1] = {}
-    e_1[1].address = r[1].address - 0x274
-    e_1[1].flags = gg.TYPE_DWORD
-    e_1[1].value = 1
-    e_1[1].freeze = false
-    gg.setValues(e_1)
-
-    local x_1 = {}
-    x_1[1] = {}
-    x_1[1].address = r[1].address - 0x270
-    x_1[1].flags = gg.TYPE_DWORD
-    x_1[1].value = 1754453241
-    x_1[1].freeze = false
-    gg.setValues(x_1)
-
-    local v_1 = {}
-    v_1[1] = {}
-    v_1[1].address = r[1].address - 0x2A4
-    v_1[1].flags = gg.TYPE_DWORD
-    v_1[1].value = 0
-    v_1[1].freeze = false
-    gg.setValues(v_1)
-
-    local w_1 = {}
-    w_1[1] = {}
-    w_1[1].address = r[1].address - 0x2A0
-    w_1[1].flags = gg.TYPE_DWORD
-    w_1[1].value = 500
-    w_1[1].freeze = false
-    gg.setValues(w_1)
-
-    ----1634296844 7169380 13407
-    local R_1 = {}
-    R_1[1] = {}
-    R_1[1].address = r[1].address - 0x2BC
-    R_1[1].flags = gg.TYPE_DWORD
-    R_1[1].value = 1634296844
-    R_1[1].freeze = false
-    gg.setValues(R_1)
-
-    local R_2 = {}
-    R_2[1] = {}
-    R_2[1].address = r[1].address - 0x2B8
-    R_2[1].flags = gg.TYPE_DWORD
-    R_2[1].value = 7169380
-    R_2[1].freeze = false
-    gg.setValues(R_2)
-
-    local R_3 = {}
-    R_3[1] = {}
-    R_3[1].address = r[1].address - 0x2B4
-    R_3[1].flags = gg.TYPE_DWORD
-    R_3[1].value = 13407
-    R_3[1].freeze = false
-    gg.setValues(R_3)
-
-    local R_4 = {}
-    R_4[1] = {}
-    R_4[1].address = r[1].address - 0x2B0
-    R_4[1].flags = gg.TYPE_DWORD
-    R_4[1].value = 0
-    R_4[1].freeze = false
-    gg.setValues(R_4)
-
-    --  
-
-    local e_2 = {}
-    e_2[1] = {}
-    e_2[1].address = r[1].address - 0x39C
-    e_2[1].flags = gg.TYPE_DWORD
-    e_2[1].value = 1
-    e_2[1].freeze = false
-    gg.setValues(e_2)
-
-    local x_2 = {}
-    x_2[1] = {}
-    x_2[1].address = r[1].address - 0x398
-    x_2[1].flags = gg.TYPE_DWORD
-    x_2[1].value = 1754453241
-    x_2[1].freeze = false
-    gg.setValues(x_2)
-
-    local v_2 = {}
-    v_2[1] = {}
-    v_2[1].address = r[1].address - 0x3CC
-    v_2[1].flags = gg.TYPE_DWORD
-    v_2[1].value = 0
-    v_2[1].freeze = false
-    gg.setValues(v_2)
-
-    local w_2 = {}
-    w_2[1] = {}
-    w_2[1].address = r[1].address - 0x3C8
-    w_2[1].flags = gg.TYPE_DWORD
-    w_2[1].value = 500
-    w_2[1].freeze = false
-    gg.setValues(w_2)
-    ----1634296844 7169380 13407
-    local H_1 = {}
-    H_1[1] = {}
-    H_1[1].address = r[1].address - 0x3E4
-    H_1[1].flags = gg.TYPE_DWORD
-    H_1[1].value = 1634296844
-    H_1[1].freeze = false
-    gg.setValues(H_1)
-
-    local H_2 = {}
-    H_2[1] = {}
-    H_2[1].address = r[1].address - 0x3E0
-    H_2[1].flags = gg.TYPE_DWORD
-    H_2[1].value = 7169380
-    H_2[1].freeze = false
-    gg.setValues(H_2)
-
-    local H_3 = {}
-    H_3[1] = {}
-    H_3[1].address = r[1].address - 0x3DC
-    H_3[1].flags = gg.TYPE_DWORD
-    H_3[1].value = 13407
-    H_3[1].freeze = false
-    gg.setValues(H_3)
-
-    local H_4 = {}
-    H_4[1] = {}
-    H_4[1].address = r[1].address - 0x3D8
-    H_4[1].flags = gg.TYPE_DWORD
-    H_4[1].value = 0
-    H_4[1].freeze = false
-    gg.setValues(R_4)
-
-    -- 1852404232 1953366119 7037696 1677747456 1694523753 28001 anillo 732 poner 550
-    local e_3 = {}
-    e_3[1] = {}
-    e_3[1].address = r[1].address - 0x4C4
-    e_3[1].flags = gg.TYPE_DWORD
-    e_3[1].value = 1
-    e_3[1].freeze = false
-    gg.setValues(e_3)
-
-    local x_3 = {}
-    x_3[1] = {}
-    x_3[1].address = r[1].address - 0x4C0
-    x_3[1].flags = gg.TYPE_DWORD
-    x_3[1].value = 1754453241
-    x_3[1].freeze = false
-    gg.setValues(x_3)
-
-    local v_3 = {}
-    v_3[1] = {}
-    v_3[1].address = r[1].address - 0x4F4
-    v_3[1].flags = gg.TYPE_DWORD
-    v_3[1].value = 0
-    v_3[1].freeze = false
-    gg.setValues(v_3)
-
-    local w_3 = {}
-    w_3[1] = {}
-    w_3[1].address = r[1].address - 0x4F0
-    w_3[1].flags = gg.TYPE_DWORD
-    w_3[1].value = 500
-    w_3[1].freeze = false
-    gg.setValues(w_3)
-    ------1634296844 7169380 13407
-    local Y_1 = {}
-    Y_1[1] = {}
-    Y_1[1].address = r[1].address - 0x50C
-    Y_1[1].flags = gg.TYPE_DWORD
-    Y_1[1].value = 1634296844
-    Y_1[1].freeze = false
-    gg.setValues(Y_1)
-
-    local Y_2 = {}
-    Y_2[1] = {}
-    Y_2[1].address = r[1].address - 0x508
-    Y_2[1].flags = gg.TYPE_DWORD
-    Y_2[1].value = 7169380
-    Y_2[1].freeze = false
-    gg.setValues(Y_2)
-
-    local Y_3 = {}
-    Y_3[1] = {}
-    Y_3[1].address = r[1].address - 0x504
-    Y_3[1].flags = gg.TYPE_DWORD
-    Y_3[1].value = 13407
-    Y_3[1].freeze = false
-    gg.setValues(Y_3)
-
-    local Y_4 = {}
-    Y_4[1] = {}
-    Y_4[1].address = r[1].address - 0x500
-    Y_4[1].flags = gg.TYPE_DWORD
-    Y_4[1].value = 0
-    Y_4[1].freeze = false
-    gg.setValues(Y_4)
-
-    local Y_5 = {}
-    Y_5[1] = {}
-    Y_5[1].address = r[1].address - 0x4FC
-    Y_5[1].flags = gg.TYPE_DWORD
-    Y_5[1].value = 0
-    Y_5[1].freeze = false
-    gg.setValues(Y_5)
-
-    local Y_6 = {}
-    Y_6[1] = {}
-    Y_6[1].address = r[1].address - 0x4F8
-    Y_6[1].flags = gg.TYPE_DWORD
-    Y_6[1].value = 0
-    Y_6[1].freeze = false
-    gg.setValues(Y_6)
-
-    --
-
-    local e_4 = {}
-    e_4[1] = {}
-    e_4[1].address = r[1].address - 0x5EC
-    e_4[1].flags = gg.TYPE_DWORD
-    e_4[1].value = 1
-    e_4[1].freeze = false
-    gg.setValues(e_4)
-
-    local x_4 = {}
-    x_4[1] = {}
-    x_4[1].address = r[1].address - 0x5E8
-    x_4[1].flags = gg.TYPE_DWORD
-    x_4[1].value = 1754453241
-    x_4[1].freeze = false
-    gg.setValues(x_4)
-
-    local v_4 = {}
-    v_4[1] = {}
-    v_4[1].address = r[1].address - 0x61C
-    v_4[1].flags = gg.TYPE_DWORD
-    v_4[1].value = 0
-    v_4[1].freeze = false
-    gg.setValues(v_4)
-
-    local w_4 = {}
-    w_4[1] = {}
-    w_4[1].address = r[1].address - 0x618
-    w_4[1].flags = gg.TYPE_DWORD
-    w_4[1].value = 500
-    w_4[1].freeze = false
-    gg.setValues(w_4)
-
-    ------1634296844 7169380 13407
-
-    local F_1 = {}
-    F_1[1] = {}
-    F_1[1].address = r[1].address - 0x634
-    F_1[1].flags = gg.TYPE_DWORD
-    F_1[1].value = 1634296844
-    F_1[1].freeze = false
-    gg.setValues(F_1)
-
-    local F_2 = {}
-    F_2[1] = {}
-    F_2[1].address = r[1].address - 0x630
-    F_2[1].flags = gg.TYPE_DWORD
-    F_2[1].value = 7169380
-    F_2[1].freeze = false
-    gg.setValues(F_2)
-
-    local F_3 = {}
-    F_3[1] = {}
-    F_3[1].address = r[1].address - 0x62C
-    F_3[1].flags = gg.TYPE_DWORD
-    F_3[1].value = 13407
-    F_3[1].freeze = false
-    gg.setValues(F_3)
-
-    local F_4 = {}
-    F_4[1] = {}
-    F_4[1].address = r[1].address - 0x628
-    F_4[1].flags = gg.TYPE_DWORD
-    F_4[1].value = 0
-    F_4[1].freeze = false
-    gg.setValues(F_4)
-
-    local F_5 = {}
-    F_5[1] = {}
-    F_5[1].address = r[1].address - 0x624
-    F_5[1].flags = gg.TYPE_DWORD
-    F_5[1].value = 0
-    F_5[1].freeze = false
-    gg.setValues(F_5)
-
-    local F_6 = {}
-    F_6[1] = {}
-    F_6[1].address = r[1].address - 0x620
-    F_6[1].flags = gg.TYPE_DWORD
-    F_6[1].value = 0
-    F_6[1].freeze = false
-    gg.setValues(F_6)
-
-    hackTrEn_XPUA()
-end
-
-function hackTrEn_XPUA()
-
-    -- gg.toast( "Cargando...")
-
-    r = gg.getResults(2)
-    -- do something
-    local t = {}
-    t[2] = {}
-    t[2].address = r[2].address + 0x34 -- 782BF3ADBE80 + es abajo y x4 decimal 
-    t[2].flags = gg.TYPE_FLOAT
-    t[2].value = 3
-    t[2].freeze = false
-    gg.setValues(t)
-    -- 00000001h;6892D4F9h
-    -- 81x4 324 dec a hexa 144 - 4 = 140
-    local e = {}
-    e[2] = {}
-    e[2].address = r[2].address - 0x14C
-    e[2].flags = gg.TYPE_DWORD
-    e[2].value = 1
-    e[2].freeze = false
-    gg.setValues(e)
-
-    local y = {}
-    y[2] = {}
-    y[2].address = r[2].address - 0x148
-    y[2].flags = gg.TYPE_DWORD
-    y[2].value = 1754453241
-    y[2].freeze = false
-    gg.setValues(y)
-
-    local v = {}
-    v[2] = {}
-    v[2].address = r[2].address - 0x17C
-    v[2].flags = gg.TYPE_DWORD
-    v[2].value = 0
-    v[2].freeze = false
-    gg.setValues(v)
-
-    local h = {}
-    h[2] = {}
-    h[2].address = r[2].address - 0x178
-    h[2].flags = gg.TYPE_DWORD
-    h[2].value = 500
-    h[2].freeze = false
-    gg.setValues(h)
-    -- 1634296844 7169380 13407
-
-    local k_1 = {}
-    k_1[2] = {}
-    k_1[2].address = r[2].address - 0x194
-    k_1[2].flags = gg.TYPE_DWORD
-    k_1[2].value = 1634296844
-    k_1[2].freeze = false
-    gg.setValues(k_1)
-
-    local k_2 = {}
-    k_2[2] = {}
-    k_2[2].address = r[2].address - 0x190
-    k_2[2].flags = gg.TYPE_DWORD
-    k_2[2].value = 7169380
-    k_2[2].freeze = false
-    gg.setValues(k_2)
-
-    local k_3 = {}
-    k_3[2] = {}
-    k_3[2].address = r[2].address - 0x18C
-    k_3[2].flags = gg.TYPE_DWORD
-    k_3[2].value = 13407
-    k_3[2].freeze = false
-    gg.setValues(k_3)
-    local k_4 = {}
-    k_4[2] = {}
-    k_4[2].address = r[2].address - 0x188
-    k_4[2].flags = gg.TYPE_DWORD
-    k_4[2].value = 0
-    k_4[2].freeze = false
-    gg.setValues(k_4)
-
-    -- 1634296844 7169380 13407 0 valor 500 diadema
-
-    local e_1 = {}
-    e_1[2] = {}
-    e_1[2].address = r[2].address - 0x274
-    e_1[2].flags = gg.TYPE_DWORD
-    e_1[2].value = 1
-    e_1[2].freeze = false
-    gg.setValues(e_1)
-
-    local x_1 = {}
-    x_1[2] = {}
-    x_1[2].address = r[2].address - 0x270
-    x_1[2].flags = gg.TYPE_DWORD
-    x_1[2].value = 1754453241
-    x_1[2].freeze = false
-    gg.setValues(x_1)
-
-    local v_1 = {}
-    v_1[2] = {}
-    v_1[2].address = r[2].address - 0x2A4
-    v_1[2].flags = gg.TYPE_DWORD
-    v_1[2].value = 0
-    v_1[2].freeze = false
-    gg.setValues(v_1)
-
-    local w_1 = {}
-    w_1[2] = {}
-    w_1[2].address = r[2].address - 0x2A0
-    w_1[2].flags = gg.TYPE_DWORD
-    w_1[2].value = 500
-    w_1[2].freeze = false
-    gg.setValues(w_1)
-
-    ----1634296844 7169380 13407
-    local R_1 = {}
-    R_1[2] = {}
-    R_1[2].address = r[2].address - 0x2BC
-    R_1[2].flags = gg.TYPE_DWORD
-    R_1[2].value = 1634296844
-    R_1[2].freeze = false
-    gg.setValues(R_1)
-
-    local R_2 = {}
-    R_2[2] = {}
-    R_2[2].address = r[2].address - 0x2B8
-    R_2[2].flags = gg.TYPE_DWORD
-    R_2[2].value = 7169380
-    R_2[2].freeze = false
-    gg.setValues(R_2)
-
-    local R_3 = {}
-    R_3[2] = {}
-    R_3[2].address = r[2].address - 0x2B4
-    R_3[2].flags = gg.TYPE_DWORD
-    R_3[2].value = 13407
-    R_3[2].freeze = false
-    gg.setValues(R_3)
-
-    local R_4 = {}
-    R_4[2] = {}
-    R_4[2].address = r[2].address - 0x2B0
-    R_4[2].flags = gg.TYPE_DWORD
-    R_4[2].value = 0
-    R_4[2].freeze = false
-    gg.setValues(R_4)
-
-    --  
-
-    local e_2 = {}
-    e_2[2] = {}
-    e_2[2].address = r[2].address - 0x39C
-    e_2[2].flags = gg.TYPE_DWORD
-    e_2[2].value = 1
-    e_2[2].freeze = false
-    gg.setValues(e_2)
-
-    local x_2 = {}
-    x_2[2] = {}
-    x_2[2].address = r[2].address - 0x398
-    x_2[2].flags = gg.TYPE_DWORD
-    x_2[2].value = 1754453241
-    x_2[2].freeze = false
-    gg.setValues(x_2)
-
-    local v_2 = {}
-    v_2[2] = {}
-    v_2[2].address = r[2].address - 0x3CC
-    v_2[2].flags = gg.TYPE_DWORD
-    v_2[2].value = 0
-    v_2[2].freeze = false
-    gg.setValues(v_2)
-
-    local w_2 = {}
-    w_2[2] = {}
-    w_2[2].address = r[2].address - 0x3C8
-    w_2[2].flags = gg.TYPE_DWORD
-    w_2[2].value = 500
-    w_2[2].freeze = false
-    gg.setValues(w_2)
-    ----1634296844 7169380 13407
-    local H_1 = {}
-    H_1[2] = {}
-    H_1[2].address = r[2].address - 0x3E4
-    H_1[2].flags = gg.TYPE_DWORD
-    H_1[2].value = 1634296844
-    H_1[2].freeze = false
-    gg.setValues(H_1)
-
-    local H_2 = {}
-    H_2[2] = {}
-    H_2[2].address = r[2].address - 0x3E0
-    H_2[2].flags = gg.TYPE_DWORD
-    H_2[2].value = 7169380
-    H_2[2].freeze = false
-    gg.setValues(H_2)
-
-    local H_3 = {}
-    H_3[2] = {}
-    H_3[2].address = r[2].address - 0x3DC
-    H_3[2].flags = gg.TYPE_DWORD
-    H_3[2].value = 13407
-    H_3[2].freeze = false
-    gg.setValues(H_3)
-
-    local H_4 = {}
-    H_4[2] = {}
-    H_4[2].address = r[2].address - 0x3D8
-    H_4[2].flags = gg.TYPE_DWORD
-    H_4[2].value = 0
-    H_4[2].freeze = false
-    gg.setValues(R_4)
-
-    -- 1852404232 1953366119 7037696 1677747456 1694523753 28001 anillo 732 poner 550
-    local e_3 = {}
-    e_3[2] = {}
-    e_3[2].address = r[2].address - 0x4C4
-    e_3[2].flags = gg.TYPE_DWORD
-    e_3[2].value = 1
-    e_3[2].freeze = false
-    gg.setValues(e_3)
-
-    local x_3 = {}
-    x_3[2] = {}
-    x_3[2].address = r[2].address - 0x4C0
-    x_3[2].flags = gg.TYPE_DWORD
-    x_3[2].value = 1754453241
-    x_3[2].freeze = false
-    gg.setValues(x_3)
-
-    local v_3 = {}
-    v_3[2] = {}
-    v_3[2].address = r[2].address - 0x4F4
-    v_3[2].flags = gg.TYPE_DWORD
-    v_3[2].value = 0
-    v_3[2].freeze = false
-    gg.setValues(v_3)
-
-    local w_3 = {}
-    w_3[2] = {}
-    w_3[2].address = r[2].address - 0x4F0
-    w_3[2].flags = gg.TYPE_DWORD
-    w_3[2].value = 500
-    w_3[2].freeze = false
-    gg.setValues(w_3)
-    ------1634296844 7169380 13407
-    local Y_1 = {}
-    Y_1[2] = {}
-    Y_1[2].address = r[2].address - 0x50C
-    Y_1[2].flags = gg.TYPE_DWORD
-    Y_1[2].value = 1634296844
-    Y_1[2].freeze = false
-    gg.setValues(Y_1)
-
-    local Y_2 = {}
-    Y_2[2] = {}
-    Y_2[2].address = r[2].address - 0x508
-    Y_2[2].flags = gg.TYPE_DWORD
-    Y_2[2].value = 7169380
-    Y_2[2].freeze = false
-    gg.setValues(Y_2)
-
-    local Y_3 = {}
-    Y_3[2] = {}
-    Y_3[2].address = r[2].address - 0x504
-    Y_3[2].flags = gg.TYPE_DWORD
-    Y_3[2].value = 13407
-    Y_3[2].freeze = false
-    gg.setValues(Y_3)
-
-    local Y_4 = {}
-    Y_4[2] = {}
-    Y_4[2].address = r[2].address - 0x500
-    Y_4[2].flags = gg.TYPE_DWORD
-    Y_4[2].value = 0
-    Y_4[2].freeze = false
-    gg.setValues(Y_4)
-
-    local Y_5 = {}
-    Y_5[2] = {}
-    Y_5[2].address = r[2].address - 0x4FC
-    Y_5[2].flags = gg.TYPE_DWORD
-    Y_5[2].value = 0
-    Y_5[2].freeze = false
-    gg.setValues(Y_5)
-
-    local Y_6 = {}
-    Y_6[2] = {}
-    Y_6[2].address = r[2].address - 0x4F8
-    Y_6[2].flags = gg.TYPE_DWORD
-    Y_6[2].value = 0
-    Y_6[2].freeze = false
-    gg.setValues(Y_6)
-
-    --
-
-    local e_4 = {}
-    e_4[2] = {}
-    e_4[2].address = r[2].address - 0x5EC
-    e_4[2].flags = gg.TYPE_DWORD
-    e_4[2].value = 1
-    e_4[2].freeze = false
-    gg.setValues(e_4)
-
-    local x_4 = {}
-    x_4[2] = {}
-    x_4[2].address = r[2].address - 0x5E8
-    x_4[2].flags = gg.TYPE_DWORD
-    x_4[2].value = 1754453241
-    x_4[2].freeze = false
-    gg.setValues(x_4)
-
-    local v_4 = {}
-    v_4[2] = {}
-    v_4[2].address = r[2].address - 0x61C
-    v_4[2].flags = gg.TYPE_DWORD
-    v_4[2].value = 0
-    v_4[2].freeze = false
-    gg.setValues(v_4)
-
-    local w_4 = {}
-    w_4[2] = {}
-    w_4[2].address = r[2].address - 0x618
-    w_4[2].flags = gg.TYPE_DWORD
-    w_4[2].value = 500
-    w_4[2].freeze = false
-    gg.setValues(w_4)
-
-    ------1634296844 7169380 13407
-
-    local F_1 = {}
-    F_1[2] = {}
-    F_1[2].address = r[2].address - 0x634
-    F_1[2].flags = gg.TYPE_DWORD
-    F_1[2].value = 1634296844
-    F_1[2].freeze = false
-    gg.setValues(F_1)
-
-    local F_2 = {}
-    F_2[2] = {}
-    F_2[2].address = r[2].address - 0x630
-    F_2[2].flags = gg.TYPE_DWORD
-    F_2[2].value = 7169380
-    F_2[2].freeze = false
-    gg.setValues(F_2)
-
-    local F_3 = {}
-    F_3[2] = {}
-    F_3[2].address = r[2].address - 0x62C
-    F_3[2].flags = gg.TYPE_DWORD
-    F_3[2].value = 13407
-    F_3[2].freeze = false
-    gg.setValues(F_3)
-
-    local F_4 = {}
-    F_4[2] = {}
-    F_4[2].address = r[2].address - 0x628
-    F_4[2].flags = gg.TYPE_DWORD
-    F_4[2].value = 0
-    F_4[2].freeze = false
-    gg.setValues(F_4)
-
-    local F_5 = {}
-    F_5[2] = {}
-    F_5[2].address = r[2].address - 0x624
-    F_5[2].flags = gg.TYPE_DWORD
-    F_5[2].value = 0
-    F_5[2].freeze = false
-    gg.setValues(F_5)
-
-    local F_6 = {}
-    F_6[2] = {}
-    F_6[2].address = r[2].address - 0x620
-    F_6[2].flags = gg.TYPE_DWORD
-    F_6[2].value = 0
-    F_6[2].freeze = false
-    gg.setValues(F_6)
-
-    -- gg.clearResults()
-    hackTrEn_XPES()
-end
-function hackTrEn_XPES()
-
-    -- gg.toast( "Cargando...")
-
-    r = gg.getResults(3)
-    -- do something
-    local t = {}
-    t[3] = {}
-    t[3].address = r[3].address + 0x34 -- 782BF3ADBE80 + es abajo y x4 decimal 
-    t[3].flags = gg.TYPE_FLOAT
-    t[3].value = 3
-    t[3].freeze = false
-    gg.setValues(t)
-    -- 00000001h;6892D4F9h
-    -- 81x4 324 dec a hexa 144 - 4 = 140
-    local e = {}
-    e[3] = {}
-    e[3].address = r[3].address - 0x14C
-    e[3].flags = gg.TYPE_DWORD
-    e[3].value = 1
-    e[3].freeze = false
-    gg.setValues(e)
-
-    local y = {}
-    y[3] = {}
-    y[3].address = r[3].address - 0x148
-    y[3].flags = gg.TYPE_DWORD
-    y[3].value = 1754453241
-    y[3].freeze = false
-    gg.setValues(y)
-
-    local v = {}
-    v[3] = {}
-    v[3].address = r[3].address - 0x17C
-    v[3].flags = gg.TYPE_DWORD
-    v[3].value = 0
-    v[3].freeze = false
-    gg.setValues(v)
-
-    local h = {}
-    h[3] = {}
-    h[3].address = r[3].address - 0x178
-    h[3].flags = gg.TYPE_DWORD
-    h[3].value = 500
-    h[3].freeze = false
-    gg.setValues(h)
-    -- 1634296844 7169380 13407
-
-    local k_1 = {}
-    k_1[3] = {}
-    k_1[3].address = r[3].address - 0x194
-    k_1[3].flags = gg.TYPE_DWORD
-    k_1[3].value = 1634296844
-    k_1[3].freeze = false
-    gg.setValues(k_1)
-
-    local k_2 = {}
-    k_2[3] = {}
-    k_2[3].address = r[3].address - 0x190
-    k_2[3].flags = gg.TYPE_DWORD
-    k_2[3].value = 7169380
-    k_2[3].freeze = false
-    gg.setValues(k_2)
-
-    local k_3 = {}
-    k_3[3] = {}
-    k_3[3].address = r[3].address - 0x18C
-    k_3[3].flags = gg.TYPE_DWORD
-    k_3[3].value = 13407
-    k_3[3].freeze = false
-    gg.setValues(k_3)
-    local k_4 = {}
-    k_4[3] = {}
-    k_4[3].address = r[3].address - 0x188
-    k_4[3].flags = gg.TYPE_DWORD
-    k_4[3].value = 0
-    k_4[3].freeze = false
-    gg.setValues(k_4)
-
-    -- 1634296844 7169380 13407 0 valor 500 diadema
-
-    local e_1 = {}
-    e_1[3] = {}
-    e_1[3].address = r[3].address - 0x274
-    e_1[3].flags = gg.TYPE_DWORD
-    e_1[3].value = 1
-    e_1[3].freeze = false
-    gg.setValues(e_1)
-
-    local x_1 = {}
-    x_1[3] = {}
-    x_1[3].address = r[3].address - 0x270
-    x_1[3].flags = gg.TYPE_DWORD
-    x_1[3].value = 1754453241
-    x_1[3].freeze = false
-    gg.setValues(x_1)
-
-    local v_1 = {}
-    v_1[3] = {}
-    v_1[3].address = r[3].address - 0x2A4
-    v_1[3].flags = gg.TYPE_DWORD
-    v_1[3].value = 0
-    v_1[3].freeze = false
-    gg.setValues(v_1)
-
-    local w_1 = {}
-    w_1[3] = {}
-    w_1[3].address = r[3].address - 0x2A0
-    w_1[3].flags = gg.TYPE_DWORD
-    w_1[3].value = 500
-    w_1[3].freeze = false
-    gg.setValues(w_1)
-
-    ----1634296844 7169380 13407
-    local R_1 = {}
-    R_1[3] = {}
-    R_1[3].address = r[3].address - 0x2BC
-    R_1[3].flags = gg.TYPE_DWORD
-    R_1[3].value = 1634296844
-    R_1[3].freeze = false
-    gg.setValues(R_1)
-
-    local R_2 = {}
-    R_2[3] = {}
-    R_2[3].address = r[3].address - 0x2B8
-    R_2[3].flags = gg.TYPE_DWORD
-    R_2[3].value = 7169380
-    R_2[3].freeze = false
-    gg.setValues(R_2)
-
-    local R_3 = {}
-    R_3[3] = {}
-    R_3[3].address = r[3].address - 0x2B4
-    R_3[3].flags = gg.TYPE_DWORD
-    R_3[3].value = 13407
-    R_3[3].freeze = false
-    gg.setValues(R_3)
-
-    local R_4 = {}
-    R_4[3] = {}
-    R_4[3].address = r[3].address - 0x2B0
-    R_4[3].flags = gg.TYPE_DWORD
-    R_4[3].value = 0
-    R_4[3].freeze = false
-    gg.setValues(R_4)
-
-    --  
-
-    local e_2 = {}
-    e_2[3] = {}
-    e_2[3].address = r[3].address - 0x39C
-    e_2[3].flags = gg.TYPE_DWORD
-    e_2[3].value = 1
-    e_2[3].freeze = false
-    gg.setValues(e_2)
-
-    local x_2 = {}
-    x_2[3] = {}
-    x_2[3].address = r[3].address - 0x398
-    x_2[3].flags = gg.TYPE_DWORD
-    x_2[3].value = 1754453241
-    x_2[3].freeze = false
-    gg.setValues(x_2)
-
-    local v_2 = {}
-    v_2[3] = {}
-    v_2[3].address = r[3].address - 0x3CC
-    v_2[3].flags = gg.TYPE_DWORD
-    v_2[3].value = 0
-    v_2[3].freeze = false
-    gg.setValues(v_2)
-
-    local w_2 = {}
-    w_2[3] = {}
-    w_2[3].address = r[3].address - 0x3C8
-    w_2[3].flags = gg.TYPE_DWORD
-    w_2[3].value = 500
-    w_2[3].freeze = false
-    gg.setValues(w_2)
-    ----1634296844 7169380 13407
-    local H_1 = {}
-    H_1[3] = {}
-    H_1[3].address = r[3].address - 0x3E4
-    H_1[3].flags = gg.TYPE_DWORD
-    H_1[3].value = 1634296844
-    H_1[3].freeze = false
-    gg.setValues(H_1)
-
-    local H_2 = {}
-    H_2[3] = {}
-    H_2[3].address = r[3].address - 0x3E0
-    H_2[3].flags = gg.TYPE_DWORD
-    H_2[3].value = 7169380
-    H_2[3].freeze = false
-    gg.setValues(H_2)
-
-    local H_3 = {}
-    H_3[3] = {}
-    H_3[3].address = r[3].address - 0x3DC
-    H_3[3].flags = gg.TYPE_DWORD
-    H_3[3].value = 13407
-    H_3[3].freeze = false
-    gg.setValues(H_3)
-
-    local H_4 = {}
-    H_4[3] = {}
-    H_4[3].address = r[3].address - 0x3D8
-    H_4[3].flags = gg.TYPE_DWORD
-    H_4[3].value = 0
-    H_4[3].freeze = false
-    gg.setValues(R_4)
-
-    -- 1852404232 1953366119 7037696 1677747456 1694523753 28001 anillo 732 poner 550
-    local e_3 = {}
-    e_3[3] = {}
-    e_3[3].address = r[3].address - 0x4C4
-    e_3[3].flags = gg.TYPE_DWORD
-    e_3[3].value = 1
-    e_3[3].freeze = false
-    gg.setValues(e_3)
-
-    local x_3 = {}
-    x_3[3] = {}
-    x_3[3].address = r[3].address - 0x4C0
-    x_3[3].flags = gg.TYPE_DWORD
-    x_3[3].value = 1754453241
-    x_3[3].freeze = false
-    gg.setValues(x_3)
-
-    local v_3 = {}
-    v_3[3] = {}
-    v_3[3].address = r[3].address - 0x4F4
-    v_3[3].flags = gg.TYPE_DWORD
-    v_3[3].value = 0
-    v_3[3].freeze = false
-    gg.setValues(v_3)
-
-    local w_3 = {}
-    w_3[3] = {}
-    w_3[3].address = r[3].address - 0x4F0
-    w_3[3].flags = gg.TYPE_DWORD
-    w_3[3].value = 500
-    w_3[3].freeze = false
-    gg.setValues(w_3)
-    ------1634296844 7169380 13407
-    local Y_1 = {}
-    Y_1[3] = {}
-    Y_1[3].address = r[3].address - 0x50C
-    Y_1[3].flags = gg.TYPE_DWORD
-    Y_1[3].value = 1634296844
-    Y_1[3].freeze = false
-    gg.setValues(Y_1)
-
-    local Y_2 = {}
-    Y_2[3] = {}
-    Y_2[3].address = r[3].address - 0x508
-    Y_2[3].flags = gg.TYPE_DWORD
-    Y_2[3].value = 7169380
-    Y_2[3].freeze = false
-    gg.setValues(Y_2)
-
-    local Y_3 = {}
-    Y_3[3] = {}
-    Y_3[3].address = r[3].address - 0x504
-    Y_3[3].flags = gg.TYPE_DWORD
-    Y_3[3].value = 13407
-    Y_3[3].freeze = false
-    gg.setValues(Y_3)
-
-    local Y_4 = {}
-    Y_4[3] = {}
-    Y_4[3].address = r[3].address - 0x500
-    Y_4[3].flags = gg.TYPE_DWORD
-    Y_4[3].value = 0
-    Y_4[3].freeze = false
-    gg.setValues(Y_4)
-
-    local Y_5 = {}
-    Y_5[3] = {}
-    Y_5[3].address = r[3].address - 0x4FC
-    Y_5[3].flags = gg.TYPE_DWORD
-    Y_5[3].value = 0
-    Y_5[3].freeze = false
-    gg.setValues(Y_5)
-
-    local Y_6 = {}
-    Y_6[3] = {}
-    Y_6[3].address = r[3].address - 0x4F8
-    Y_6[3].flags = gg.TYPE_DWORD
-    Y_6[3].value = 0
-    Y_6[3].freeze = false
-    gg.setValues(Y_6)
-
-    --
-
-    local e_4 = {}
-    e_4[3] = {}
-    e_4[3].address = r[3].address - 0x5EC
-    e_4[3].flags = gg.TYPE_DWORD
-    e_4[3].value = 1
-    e_4[3].freeze = false
-    gg.setValues(e_4)
-
-    local x_4 = {}
-    x_4[3] = {}
-    x_4[3].address = r[3].address - 0x5E8
-    x_4[3].flags = gg.TYPE_DWORD
-    x_4[3].value = 1754453241
-    x_4[3].freeze = false
-    gg.setValues(x_4)
-
-    local v_4 = {}
-    v_4[3] = {}
-    v_4[3].address = r[3].address - 0x61C
-    v_4[3].flags = gg.TYPE_DWORD
-    v_4[3].value = 0
-    v_4[3].freeze = false
-    gg.setValues(v_4)
-
-    local w_4 = {}
-    w_4[3] = {}
-    w_4[3].address = r[3].address - 0x618
-    w_4[3].flags = gg.TYPE_DWORD
-    w_4[3].value = 500
-    w_4[3].freeze = false
-    gg.setValues(w_4)
-
-    ------1634296844 7169380 13407
-
-    local F_1 = {}
-    F_1[3] = {}
-    F_1[3].address = r[3].address - 0x634
-    F_1[3].flags = gg.TYPE_DWORD
-    F_1[3].value = 1634296844
-    F_1[3].freeze = false
-    gg.setValues(F_1)
-
-    local F_2 = {}
-    F_2[3] = {}
-    F_2[3].address = r[3].address - 0x630
-    F_2[3].flags = gg.TYPE_DWORD
-    F_2[3].value = 7169380
-    F_2[3].freeze = false
-    gg.setValues(F_2)
-
-    local F_3 = {}
-    F_3[3] = {}
-    F_3[3].address = r[3].address - 0x62C
-    F_3[3].flags = gg.TYPE_DWORD
-    F_3[3].value = 13407
-    F_3[3].freeze = false
-    gg.setValues(F_3)
-
-    local F_4 = {}
-    F_4[3] = {}
-    F_4[3].address = r[3].address - 0x628
-    F_4[3].flags = gg.TYPE_DWORD
-    F_4[3].value = 0
-    F_4[3].freeze = false
-    gg.setValues(F_4)
-
-    local F_5 = {}
-    F_5[3] = {}
-    F_5[3].address = r[3].address - 0x624
-    F_5[3].flags = gg.TYPE_DWORD
-    F_5[3].value = 0
-    F_5[3].freeze = false
-    gg.setValues(F_5)
-
-    local F_6 = {}
-    F_6[3] = {}
-    F_6[3].address = r[3].address - 0x620
-    F_6[3].flags = gg.TYPE_DWORD
-    F_6[3].value = 0
-    F_6[3].freeze = false
-    gg.setValues(F_6)
-
-    -- gg.clearResults()
-
-end
-
-function hackTrEnNOOOOOO()
-    gg.alert("Make it more Start the game or restart the game...")
-    gg.toast("Make it more Start the game or restart the game...")
-    gg.toast("Loading...")
-    gg.processResume()
-    gg.clearResults()
-    gg.searchNumber("1600407924;51", gg.TYPE_DWORD)
-    gg.refineNumber("51", gg.TYPE_DWORD)
-    r = gg.getResults(1)
-    -- do something
-    local t = {}
-    t[1] = {}
-    t[1].address = r[1].address + 0x34 -- 782BF3ADBE80 + es abajo y x4 decimal 
-    t[1].flags = gg.TYPE_FLOAT
-    t[1].value = 3
-    t[1].freeze = false
-    gg.setValues(t)
-    -- 00000001h;6892D4F9h
-    -- 81x4 324 dec a hexa 144 - 4 = 140
-    local e = {}
-    e[1] = {}
-    e[1].address = r[1].address - 0x144
-    e[1].flags = gg.TYPE_DWORD
-    e[1].value = 1
-    e[1].freeze = false
-    gg.setValues(e)
-
-    local y = {}
-    y[1] = {}
-    y[1].address = r[1].address - 0x140
-    y[1].flags = gg.TYPE_DWORD
-    y[1].value = 1754453241
-    y[1].freeze = false
-    gg.setValues(y)
-
-    local v = {}
-    v[1] = {}
-    v[1].address = r[1].address - 0x174
-    v[1].flags = gg.TYPE_DWORD
-    v[1].value = 0
-    v[1].freeze = false
-    gg.setValues(v)
-
-    local h = {}
-    h[1] = {}
-    h[1].address = r[1].address - 0x170
-    h[1].flags = gg.TYPE_DWORD
-    h[1].value = 500
-    h[1].freeze = false
-    gg.setValues(h)
-
-    local k_1 = {}
-    k_1[1] = {}
-    k_1[1].address = r[1].address - 0x18C
-    k_1[1].flags = gg.TYPE_DWORD
-    k_1[1].value = 1918985488
-    k_1[1].freeze = false
-    gg.setValues(k_1)
-
-    local k_2 = {}
-    k_2[1] = {}
-    k_2[1].address = r[1].address - 0x188
-    k_2[1].flags = gg.TYPE_DWORD
-    k_2[1].value = 1735289202
-    k_2[1].freeze = false
-    gg.setValues(k_2)
-
-    local k_3 = {}
-    k_3[1] = {}
-    k_3[1].address = r[1].address - 0x184
-    k_3[1].flags = gg.TYPE_DWORD
-    k_3[1].value = 115
-    k_3[1].freeze = false
-    gg.setValues(k_3)
-    local k_4 = {}
-    k_4[1] = {}
-    k_4[1].address = r[1].address - 0x180
-    k_4[1].flags = gg.TYPE_DWORD
-    k_4[1].value = 0
-    k_4[1].freeze = false
-    gg.setValues(k_4)
-
-    -- 1634296844 7169380 13407 0 valor 500 diadema
-
-    local e_1 = {}
-    e_1[1] = {}
-    e_1[1].address = r[1].address - 0x264
-    e_1[1].flags = gg.TYPE_DWORD
-    e_1[1].value = 1
-    e_1[1].freeze = false
-    gg.setValues(e_1)
-
-    local x_1 = {}
-    x_1[1] = {}
-    x_1[1].address = r[1].address - 0x260
-    x_1[1].flags = gg.TYPE_DWORD
-    x_1[1].value = 1754453241
-    x_1[1].freeze = false
-    gg.setValues(x_1)
-
-    local v_1 = {}
-    v_1[1] = {}
-    v_1[1].address = r[1].address - 0x294
-    v_1[1].flags = gg.TYPE_DWORD
-    v_1[1].value = 0
-    v_1[1].freeze = false
-    gg.setValues(v_1)
-
-    local w_1 = {}
-    w_1[1] = {}
-    w_1[1].address = r[1].address - 0x290
-    w_1[1].flags = gg.TYPE_DWORD
-    w_1[1].value = 500
-    w_1[1].freeze = false
-    gg.setValues(w_1)
-
-    --
-    local R_1 = {}
-    R_1[1] = {}
-    R_1[1].address = r[1].address - 0x2AC
-    R_1[1].flags = gg.TYPE_DWORD
-    R_1[1].value = 1634296844
-    R_1[1].freeze = false
-    gg.setValues(R_1)
-
-    local R_2 = {}
-    R_2[1] = {}
-    R_2[1].address = r[1].address - 0x2A8
-    R_2[1].flags = gg.TYPE_DWORD
-    R_2[1].value = 7169380
-    R_2[1].freeze = false
-    gg.setValues(R_2)
-
-    local R_3 = {}
-    R_3[1] = {}
-    R_3[1].address = r[1].address - 0x2A4
-    R_3[1].flags = gg.TYPE_DWORD
-    R_3[1].value = 13407
-    R_3[1].freeze = false
-    gg.setValues(R_3)
-
-    local R_4 = {}
-    R_4[1] = {}
-    R_4[1].address = r[1].address - 0x2A0
-    R_4[1].flags = gg.TYPE_DWORD
-    R_4[1].value = 0
-    R_4[1].freeze = false
-    gg.setValues(R_4)
-
-    -- collar de perlas 800 = 1634037778 1701735538 27491 0
-
-    local e_2 = {}
-    e_2[1] = {}
-    e_2[1].address = r[1].address - 0x384
-    e_2[1].flags = gg.TYPE_DWORD
-    e_2[1].value = 1
-    e_2[1].freeze = false
-    gg.setValues(e_2)
-
-    local x_2 = {}
-    x_2[1] = {}
-    x_2[1].address = r[1].address - 0x380
-    x_2[1].flags = gg.TYPE_DWORD
-    x_2[1].value = 1754453241
-    x_2[1].freeze = false
-    gg.setValues(x_2)
-
-    local v_2 = {}
-    v_2[1] = {}
-    v_2[1].address = r[1].address - 0x3B4
-    v_2[1].flags = gg.TYPE_DWORD
-    v_2[1].value = 0
-    v_2[1].freeze = false
-    gg.setValues(v_2)
-
-    local w_2 = {}
-    w_2[1] = {}
-    w_2[1].address = r[1].address - 0x3B0
-    w_2[1].flags = gg.TYPE_DWORD
-    w_2[1].value = 800
-    w_2[1].freeze = false
-    gg.setValues(w_2)
-    --
-    local H_1 = {}
-    H_1[1] = {}
-    H_1[1].address = r[1].address - 0x3CC
-    H_1[1].flags = gg.TYPE_DWORD
-    H_1[1].value = 1634037778
-    H_1[1].freeze = false
-    gg.setValues(H_1)
-
-    local H_2 = {}
-    H_2[1] = {}
-    H_2[1].address = r[1].address - 0x3C8
-    H_2[1].flags = gg.TYPE_DWORD
-    H_2[1].value = 1701735538
-    H_2[1].freeze = false
-    gg.setValues(H_2)
-
-    local H_3 = {}
-    H_3[1] = {}
-    H_3[1].address = r[1].address - 0x3C4
-    H_3[1].flags = gg.TYPE_DWORD
-    H_3[1].value = 27491
-    H_3[1].freeze = false
-    gg.setValues(H_3)
-
-    local H_4 = {}
-    H_4[1] = {}
-    H_4[1].address = r[1].address - 0x3C0
-    H_4[1].flags = gg.TYPE_DWORD
-    H_4[1].value = 0
-    H_4[1].freeze = false
-    gg.setValues(R_4)
-
-    -- 1852404232 1953366119 7037696 1677747456 1694523753 28001 anillo 732 poner 550
-    local e_3 = {}
-    e_3[1] = {}
-    e_3[1].address = r[1].address - 0x4A4
-    e_3[1].flags = gg.TYPE_DWORD
-    e_3[1].value = 1
-    e_3[1].freeze = false
-    gg.setValues(e_3)
-
-    local x_3 = {}
-    x_3[1] = {}
-    x_3[1].address = r[1].address - 0x4A0
-    x_3[1].flags = gg.TYPE_DWORD
-    x_3[1].value = 1754453241
-    x_3[1].freeze = false
-    gg.setValues(x_3)
-
-    local v_3 = {}
-    v_3[1] = {}
-    v_3[1].address = r[1].address - 0x4D4
-    v_3[1].flags = gg.TYPE_DWORD
-    v_3[1].value = 0
-    v_3[1].freeze = false
-    gg.setValues(v_3)
-
-    local w_3 = {}
-    w_3[1] = {}
-    w_3[1].address = r[1].address - 0x4D0
-    w_3[1].flags = gg.TYPE_DWORD
-    w_3[1].value = 550
-    w_3[1].freeze = false
-    gg.setValues(w_3)
-    -- 1852404232 1953366119 7037696 1677747456 1694523753 28001 anillo 732 poner 550
-    local Y_1 = {}
-    Y_1[1] = {}
-    Y_1[1].address = r[1].address - 0x4EC
-    Y_1[1].flags = gg.TYPE_DWORD
-    Y_1[1].value = 1852404232
-    Y_1[1].freeze = false
-    gg.setValues(Y_1)
-
-    local Y_2 = {}
-    Y_2[1] = {}
-    Y_2[1].address = r[1].address - 0x4E8
-    Y_2[1].flags = gg.TYPE_DWORD
-    Y_2[1].value = 1953366119
-    Y_2[1].freeze = false
-    gg.setValues(Y_2)
-
-    local Y_3 = {}
-    Y_3[1] = {}
-    Y_3[1].address = r[1].address - 0x4E4
-    Y_3[1].flags = gg.TYPE_DWORD
-    Y_3[1].value = 7037696
-    Y_3[1].freeze = false
-    gg.setValues(Y_3)
-
-    local Y_4 = {}
-    Y_4[1] = {}
-    Y_4[1].address = r[1].address - 0x4E0
-    Y_4[1].flags = gg.TYPE_DWORD
-    Y_4[1].value = 1677747456
-    Y_4[1].freeze = false
-    gg.setValues(Y_4)
-
-    local Y_5 = {}
-    Y_5[1] = {}
-    Y_5[1].address = r[1].address - 0x4DC
-    Y_5[1].flags = gg.TYPE_DWORD
-    Y_5[1].value = 1694523753
-    Y_5[1].freeze = false
-    gg.setValues(Y_5)
-
-    local Y_6 = {}
-    Y_6[1] = {}
-    Y_6[1].address = r[1].address - 0x4D8
-    Y_6[1].flags = gg.TYPE_DWORD
-    Y_6[1].value = 28001
-    Y_6[1].freeze = false
-    gg.setValues(Y_6)
-
-    --
-
-    local e_4 = {}
-    e_4[1] = {}
-    e_4[1].address = r[1].address - 0x5C4
-    e_4[1].flags = gg.TYPE_DWORD
-    e_4[1].value = 1
-    e_4[1].freeze = false
-    gg.setValues(e_4)
-
-    local x_4 = {}
-    x_4[1] = {}
-    x_4[1].address = r[1].address - 0x5C0
-    x_4[1].flags = gg.TYPE_DWORD
-    x_4[1].value = 1754453241
-    x_4[1].freeze = false
-    gg.setValues(x_4)
-
-    local v_4 = {}
-    v_4[1] = {}
-    v_4[1].address = r[1].address - 0x5F4
-    v_4[1].flags = gg.TYPE_DWORD
-    v_4[1].value = 0
-    v_4[1].freeze = false
-    gg.setValues(v_4)
-
-    local w_4 = {}
-    w_4[1] = {}
-    w_4[1].address = r[1].address - 0x5F0
-    w_4[1].flags = gg.TYPE_DWORD
-    w_4[1].value = 800
-    w_4[1].freeze = false
-    gg.setValues(w_4)
-
-    -- pendiente de plata  800 = 1852141582 1953390948 12800 0
-
-    local F_1 = {}
-    F_1[1] = {}
-    F_1[1].address = r[1].address - 0x60C
-    F_1[1].flags = gg.TYPE_DWORD
-    F_1[1].value = 1852141582
-    F_1[1].freeze = false
-    gg.setValues(F_1)
-
-    local F_2 = {}
-    F_2[1] = {}
-    F_2[1].address = r[1].address - 0x608
-    F_2[1].flags = gg.TYPE_DWORD
-    F_2[1].value = 1953390948
-    F_2[1].freeze = false
-    gg.setValues(F_2)
-
-    local F_3 = {}
-    F_3[1] = {}
-    F_3[1].address = r[1].address - 0x604
-    F_3[1].flags = gg.TYPE_DWORD
-    F_3[1].value = 12800
-    F_3[1].freeze = false
-    gg.setValues(F_3)
-
-    local F_4 = {}
-    F_4[1] = {}
-    F_4[1].address = r[1].address - 0x600
-    F_4[1].flags = gg.TYPE_DWORD
-    F_4[1].value = 0
-    F_4[1].freeze = false
-    gg.setValues(F_4)
-
-    local F_5 = {}
-    F_5[1] = {}
-    F_5[1].address = r[1].address - 0x5FC
-    F_5[1].flags = gg.TYPE_DWORD
-    F_5[1].value = 0
-    F_5[1].freeze = false
-    gg.setValues(F_5)
-
-    local F_6 = {}
-    F_6[1] = {}
-    F_6[1].address = r[1].address - 0x5F8
-    F_6[1].flags = gg.TYPE_DWORD
-    F_6[1].value = 0
-    F_6[1].freeze = false
-    gg.setValues(F_6)
-
-    hackTrEn_XP_2()
-end
-
-function hackTrEn_XP_2()
-    gg.alert("Hacerlo mas Iniciar el juego o reiniciar el juego...")
-    gg.toast("Hacerlo mas Iniciar el juego o reiniciar el juego...")
-    gg.toast("Cargando...")
-
-    r = gg.getResults(2)
-    -- do something
-    local t = {}
-    t[2] = {}
-    t[2].address = r[2].address + 0x34 -- 782BF3ADBE80 + es abajo y x4 decimal 
-    t[2].flags = gg.TYPE_FLOAT
-    t[2].value = 3
-    t[2].freeze = false
-    gg.setValues(t)
-    -- 00000001h;6892D4F9h
-    -- 81x4 324 dec a hexa 144 - 4 = 140
-    local e = {}
-    e[2] = {}
-    e[2].address = r[2].address - 0x144
-    e[2].flags = gg.TYPE_DWORD
-    e[2].value = 1
-    e[2].freeze = false
-    gg.setValues(e)
-
-    local y = {}
-    y[2] = {}
-    y[2].address = r[2].address - 0x140
-    y[2].flags = gg.TYPE_DWORD
-    y[2].value = 1754453241
-    y[2].freeze = false
-    gg.setValues(y)
-
-    local v = {}
-    v[2] = {}
-    v[2].address = r[2].address - 0x174
-    v[2].flags = gg.TYPE_DWORD
-    v[2].value = 0
-    v[2].freeze = false
-    gg.setValues(v)
-
-    local h = {}
-    h[2] = {}
-    h[2].address = r[2].address - 0x170
-    h[2].flags = gg.TYPE_DWORD
-    h[2].value = 500
-    h[2].freeze = false
-    gg.setValues(h)
-    -- 1634296844 7169380 13407
-
-    local k_1 = {}
-    k_1[2] = {}
-    k_1[2].address = r[2].address - 0x18C
-    k_1[2].flags = gg.TYPE_DWORD
-    k_1[2].value = 1634296844
-    k_1[2].freeze = false
-    gg.setValues(k_1)
-
-    local k_2 = {}
-    k_2[2] = {}
-    k_2[2].address = r[2].address - 0x188
-    k_2[2].flags = gg.TYPE_DWORD
-    k_2[2].value = 7169380
-    k_2[2].freeze = false
-    gg.setValues(k_2)
-
-    local k_3 = {}
-    k_3[2] = {}
-    k_3[2].address = r[2].address - 0x184
-    k_3[2].flags = gg.TYPE_DWORD
-    k_3[2].value = 13407
-    k_3[2].freeze = false
-    gg.setValues(k_3)
-    local k_4 = {}
-    k_4[2] = {}
-    k_4[2].address = r[2].address - 0x180
-    k_4[2].flags = gg.TYPE_DWORD
-    k_4[2].value = 0
-    k_4[2].freeze = false
-    gg.setValues(k_4)
-
-    -- 1634296844 7169380 13407 0 valor 500 diadema
-
-    local e_1 = {}
-    e_1[2] = {}
-    e_1[2].address = r[2].address - 0x264
-    e_1[2].flags = gg.TYPE_DWORD
-    e_1[2].value = 1
-    e_1[2].freeze = false
-    gg.setValues(e_1)
-
-    local x_1 = {}
-    x_1[2] = {}
-    x_1[2].address = r[2].address - 0x260
-    x_1[2].flags = gg.TYPE_DWORD
-    x_1[2].value = 1754453241
-    x_1[2].freeze = false
-    gg.setValues(x_1)
-
-    local v_1 = {}
-    v_1[2] = {}
-    v_1[2].address = r[2].address - 0x294
-    v_1[2].flags = gg.TYPE_DWORD
-    v_1[2].value = 0
-    v_1[2].freeze = false
-    gg.setValues(v_1)
-
-    local w_1 = {}
-    w_1[2] = {}
-    w_1[2].address = r[2].address - 0x290
-    w_1[2].flags = gg.TYPE_DWORD
-    w_1[2].value = 500
-    w_1[2].freeze = false
-    gg.setValues(w_1)
-
-    ----1634296844 7169380 13407
-    local R_1 = {}
-    R_1[2] = {}
-    R_1[2].address = r[2].address - 0x2AC
-    R_1[2].flags = gg.TYPE_DWORD
-    R_1[2].value = 1634296844
-    R_1[2].freeze = false
-    gg.setValues(R_1)
-
-    local R_2 = {}
-    R_2[2] = {}
-    R_2[2].address = r[2].address - 0x2A8
-    R_2[2].flags = gg.TYPE_DWORD
-    R_2[2].value = 7169380
-    R_2[2].freeze = false
-    gg.setValues(R_2)
-
-    local R_3 = {}
-    R_3[2] = {}
-    R_3[2].address = r[2].address - 0x2A4
-    R_3[2].flags = gg.TYPE_DWORD
-    R_3[2].value = 13407
-    R_3[2].freeze = false
-    gg.setValues(R_3)
-
-    local R_4 = {}
-    R_4[2] = {}
-    R_4[2].address = r[2].address - 0x2A0
-    R_4[2].flags = gg.TYPE_DWORD
-    R_4[2].value = 0
-    R_4[2].freeze = false
-    gg.setValues(R_4)
-
-    --  
-
-    local e_2 = {}
-    e_2[2] = {}
-    e_2[2].address = r[2].address - 0x384
-    e_2[2].flags = gg.TYPE_DWORD
-    e_2[2].value = 1
-    e_2[2].freeze = false
-    gg.setValues(e_2)
-
-    local x_2 = {}
-    x_2[2] = {}
-    x_2[2].address = r[2].address - 0x380
-    x_2[2].flags = gg.TYPE_DWORD
-    x_2[2].value = 1754453241
-    x_2[2].freeze = false
-    gg.setValues(x_2)
-
-    local v_2 = {}
-    v_2[2] = {}
-    v_2[2].address = r[2].address - 0x3B4
-    v_2[2].flags = gg.TYPE_DWORD
-    v_2[2].value = 0
-    v_2[2].freeze = false
-    gg.setValues(v_2)
-
-    local w_2 = {}
-    w_2[2] = {}
-    w_2[2].address = r[2].address - 0x3B0
-    w_2[2].flags = gg.TYPE_DWORD
-    w_2[2].value = 500
-    w_2[2].freeze = false
-    gg.setValues(w_2)
-    ----1634296844 7169380 13407
-    local H_1 = {}
-    H_1[2] = {}
-    H_1[2].address = r[2].address - 0x3CC
-    H_1[2].flags = gg.TYPE_DWORD
-    H_1[2].value = 1634296844
-    H_1[2].freeze = false
-    gg.setValues(H_1)
-
-    local H_2 = {}
-    H_2[2] = {}
-    H_2[2].address = r[2].address - 0x3C8
-    H_2[2].flags = gg.TYPE_DWORD
-    H_2[2].value = 7169380
-    H_2[2].freeze = false
-    gg.setValues(H_2)
-
-    local H_3 = {}
-    H_3[2] = {}
-    H_3[2].address = r[2].address - 0x3C4
-    H_3[2].flags = gg.TYPE_DWORD
-    H_3[2].value = 13407
-    H_3[2].freeze = false
-    gg.setValues(H_3)
-
-    local H_4 = {}
-    H_4[2] = {}
-    H_4[2].address = r[2].address - 0x3C0
-    H_4[2].flags = gg.TYPE_DWORD
-    H_4[2].value = 0
-    H_4[2].freeze = false
-    gg.setValues(R_4)
-
-    -- 1852404232 1953366119 7037696 1677747456 1694523753 28001 anillo 732 poner 550
-    local e_3 = {}
-    e_3[2] = {}
-    e_3[2].address = r[2].address - 0x4A4
-    e_3[2].flags = gg.TYPE_DWORD
-    e_3[2].value = 1
-    e_3[2].freeze = false
-    gg.setValues(e_3)
-
-    local x_3 = {}
-    x_3[2] = {}
-    x_3[2].address = r[2].address - 0x4A0
-    x_3[2].flags = gg.TYPE_DWORD
-    x_3[2].value = 1754453241
-    x_3[2].freeze = false
-    gg.setValues(x_3)
-
-    local v_3 = {}
-    v_3[2] = {}
-    v_3[2].address = r[2].address - 0x4D4
-    v_3[2].flags = gg.TYPE_DWORD
-    v_3[2].value = 0
-    v_3[2].freeze = false
-    gg.setValues(v_3)
-
-    local w_3 = {}
-    w_3[2] = {}
-    w_3[2].address = r[2].address - 0x4D0
-    w_3[2].flags = gg.TYPE_DWORD
-    w_3[2].value = 500
-    w_3[2].freeze = false
-    gg.setValues(w_3)
-    ------1634296844 7169380 13407
-    local Y_1 = {}
-    Y_1[2] = {}
-    Y_1[2].address = r[2].address - 0x4EC
-    Y_1[2].flags = gg.TYPE_DWORD
-    Y_1[2].value = 1634296844
-    Y_1[2].freeze = false
-    gg.setValues(Y_1)
-
-    local Y_2 = {}
-    Y_2[2] = {}
-    Y_2[2].address = r[2].address - 0x4E8
-    Y_2[2].flags = gg.TYPE_DWORD
-    Y_2[2].value = 7169380
-    Y_2[2].freeze = false
-    gg.setValues(Y_2)
-
-    local Y_3 = {}
-    Y_3[2] = {}
-    Y_3[2].address = r[2].address - 0x4E4
-    Y_3[2].flags = gg.TYPE_DWORD
-    Y_3[2].value = 13407
-    Y_3[2].freeze = false
-    gg.setValues(Y_3)
-
-    local Y_4 = {}
-    Y_4[2] = {}
-    Y_4[2].address = r[2].address - 0x4E0
-    Y_4[2].flags = gg.TYPE_DWORD
-    Y_4[2].value = 0
-    Y_4[2].freeze = false
-    gg.setValues(Y_4)
-
-    local Y_5 = {}
-    Y_5[2] = {}
-    Y_5[2].address = r[2].address - 0x4DC
-    Y_5[2].flags = gg.TYPE_DWORD
-    Y_5[2].value = 0
-    Y_5[2].freeze = false
-    gg.setValues(Y_5)
-
-    local Y_6 = {}
-    Y_6[2] = {}
-    Y_6[2].address = r[2].address - 0x4D8
-    Y_6[2].flags = gg.TYPE_DWORD
-    Y_6[2].value = 0
-    Y_6[2].freeze = false
-    gg.setValues(Y_6)
-
-    --
-
-    local e_4 = {}
-    e_4[2] = {}
-    e_4[2].address = r[2].address - 0x5C4
-    e_4[2].flags = gg.TYPE_DWORD
-    e_4[2].value = 1
-    e_4[2].freeze = false
-    gg.setValues(e_4)
-
-    local x_4 = {}
-    x_4[2] = {}
-    x_4[2].address = r[2].address - 0x5C0
-    x_4[2].flags = gg.TYPE_DWORD
-    x_4[2].value = 1754453241
-    x_4[2].freeze = false
-    gg.setValues(x_4)
-
-    local v_4 = {}
-    v_4[2] = {}
-    v_4[2].address = r[2].address - 0x5F4
-    v_4[2].flags = gg.TYPE_DWORD
-    v_4[2].value = 0
-    v_4[2].freeze = false
-    gg.setValues(v_4)
-
-    local w_4 = {}
-    w_4[2] = {}
-    w_4[2].address = r[2].address - 0x5F0
-    w_4[2].flags = gg.TYPE_DWORD
-    w_4[2].value = 500
-    w_4[2].freeze = false
-    gg.setValues(w_4)
-
-    ------1634296844 7169380 13407
-
-    local F_1 = {}
-    F_1[2] = {}
-    F_1[2].address = r[2].address - 0x60C
-    F_1[2].flags = gg.TYPE_DWORD
-    F_1[2].value = 1634296844
-    F_1[2].freeze = false
-    gg.setValues(F_1)
-
-    local F_2 = {}
-    F_2[2] = {}
-    F_2[2].address = r[2].address - 0x608
-    F_2[2].flags = gg.TYPE_DWORD
-    F_2[2].value = 7169380
-    F_2[2].freeze = false
-    gg.setValues(F_2)
-
-    local F_3 = {}
-    F_3[2] = {}
-    F_3[2].address = r[2].address - 0x604
-    F_3[2].flags = gg.TYPE_DWORD
-    F_3[2].value = 13407
-    F_3[2].freeze = false
-    gg.setValues(F_3)
-
-    local F_4 = {}
-    F_4[2] = {}
-    F_4[2].address = r[2].address - 0x600
-    F_4[2].flags = gg.TYPE_DWORD
-    F_4[2].value = 0
-    F_4[2].freeze = false
-    gg.setValues(F_4)
-
-    local F_5 = {}
-    F_5[2] = {}
-    F_5[2].address = r[2].address - 0x5FC
-    F_5[2].flags = gg.TYPE_DWORD
-    F_5[2].value = 0
-    F_5[2].freeze = false
-    gg.setValues(F_5)
-
-    local F_6 = {}
-    F_6[2] = {}
-    F_6[2].address = r[2].address - 0x5F8
-    F_6[2].flags = gg.TYPE_DWORD
-    F_6[2].value = 0
-    F_6[2].freeze = false
-    gg.setValues(F_6)
-
-    -- gg.clearResults()
-    hackTrEn_3()
-end
-
-function hackTrEn_1()
-
-    gg.alert("Make it more Start the game or restart the game...")
-    gg.toast("Make it more Start the game or restart the game...")
-    gg.toast("Loading............ train 1")
-    gg.processResume()
-    gg.clearResults()
-    gg.searchNumber("1600407924;51", gg.TYPE_DWORD)
-    gg.refineNumber("51", gg.TYPE_DWORD)
-
-    r = gg.getResults(1)
-    -- do something
-    local t = {}
-    t[1] = {}
-    t[1].address = r[1].address + 0x34
-    t[1].flags = gg.TYPE_FLOAT
-    t[1].value = 3
-    t[1].freeze = false
-    gg.setValues(t)
-    -- 00000001h;6892D4F9h
-
-    local e = {}
-    e[1] = {}
-    e[1].address = r[1].address - 0x144
-    e[1].flags = gg.TYPE_DWORD
-    e[1].value = 1
-    e[1].freeze = false
-    gg.setValues(e)
-
-    local y = {}
-    y[1] = {}
-    y[1].address = r[1].address - 0x140
-    y[1].flags = gg.TYPE_DWORD
-    y[1].value = 1754453241
-    y[1].freeze = false
-    gg.setValues(y)
-
-    local v = {}
-    v[1] = {}
-    v[1].address = r[1].address - 0x174
-    v[1].flags = gg.TYPE_DWORD
-    v[1].value = 0
-    v[1].freeze = false
-    gg.setValues(v)
-
-    local h = {}
-    h[1] = {}
-    h[1].address = r[1].address - 0x170
-    h[1].flags = gg.TYPE_DWORD
-    h[1].value = 1
-    h[1].freeze = false
-    gg.setValues(h)
-
-    -- tren 1  trigo 1701345034 1677751393 13151
-    local k_1 = {}
-    k_1[1] = {}
-    k_1[1].address = r[1].address - 0x18C
-    k_1[1].flags = gg.TYPE_DWORD
-    k_1[1].value = 1701345034
-    k_1[1].freeze = false
-    gg.setValues(k_1)
-
-    local k_2 = {}
-    k_2[1] = {}
-    k_2[1].address = r[1].address - 0x188
-    k_2[1].flags = gg.TYPE_DWORD
-    k_2[1].value = 1677751393
-    k_2[1].freeze = false
-    gg.setValues(k_2)
-
-    local k_3 = {}
-    k_3[1] = {}
-    k_3[1].address = r[1].address - 0x184
-    k_3[1].flags = gg.TYPE_DWORD
-    k_3[1].value = 13151
-    k_3[1].freeze = false
-    gg.setValues(k_3)
-    local k_4 = {}
-    k_4[1] = {}
-    k_4[1].address = r[1].address - 0x180
-    k_4[1].flags = gg.TYPE_DWORD
-    k_4[1].value = 0
-    k_4[1].freeze = false
-    gg.setValues(k_4)
-
-    -- 1634296844 7169380 13407 0 valor 500 diadema
-
-    local e_1 = {}
-    e_1[1] = {}
-    e_1[1].address = r[1].address - 0x264
-    e_1[1].flags = gg.TYPE_DWORD
-    e_1[1].value = 1
-    e_1[1].freeze = false
-    gg.setValues(e_1)
-
-    local x_1 = {}
-    x_1[1] = {}
-    x_1[1].address = r[1].address - 0x260
-    x_1[1].flags = gg.TYPE_DWORD
-    x_1[1].value = 1754453241
-    x_1[1].freeze = false
-    gg.setValues(x_1)
-
-    local v_1 = {}
-    v_1[1] = {}
-    v_1[1].address = r[1].address - 0x294
-    v_1[1].flags = gg.TYPE_DWORD
-    v_1[1].value = 0
-    v_1[1].freeze = false
-    gg.setValues(v_1)
-
-    local w_1 = {}
-    w_1[1] = {}
-    w_1[1].address = r[1].address - 0x290
-    w_1[1].flags = gg.TYPE_DWORD
-    w_1[1].value = 1
-    w_1[1].freeze = false
-    gg.setValues(w_1)
-
-    -- tren 2  trigo 1701345034 1677751393 13151
-    local R_1 = {}
-    R_1[1] = {}
-    R_1[1].address = r[1].address - 0x2AC
-    R_1[1].flags = gg.TYPE_DWORD
-    R_1[1].value = 1701345034
-    R_1[1].freeze = false
-    gg.setValues(R_1)
-
-    local R_2 = {}
-    R_2[1] = {}
-    R_2[1].address = r[1].address - 0x2A8
-    R_2[1].flags = gg.TYPE_DWORD
-    R_2[1].value = 1677751393
-    R_2[1].freeze = false
-    gg.setValues(R_2)
-
-    local R_3 = {}
-    R_3[1] = {}
-    R_3[1].address = r[1].address - 0x2A4
-    R_3[1].flags = gg.TYPE_DWORD
-    R_3[1].value = 13151
-    R_3[1].freeze = false
-    gg.setValues(R_3)
-
-    local R_4 = {}
-    R_4[1] = {}
-    R_4[1].address = r[1].address - 0x2A0
-    R_4[1].flags = gg.TYPE_DWORD
-    R_4[1].value = 0
-    R_4[1].freeze = false
-    gg.setValues(R_4)
-
-    -- collar de perlas 800 = 1634037778 1701735538 27491 0
-
-    local e_2 = {}
-    e_2[1] = {}
-    e_2[1].address = r[1].address - 0x384
-    e_2[1].flags = gg.TYPE_DWORD
-    e_2[1].value = 1
-    e_2[1].freeze = false
-    gg.setValues(e_2)
-
-    local x_2 = {}
-    x_2[1] = {}
-    x_2[1].address = r[1].address - 0x380
-    x_2[1].flags = gg.TYPE_DWORD
-    x_2[1].value = 1754453241
-    x_2[1].freeze = false
-    gg.setValues(x_2)
-
-    local v_2 = {}
-    v_2[1] = {}
-    v_2[1].address = r[1].address - 0x3B4
-    v_2[1].flags = gg.TYPE_DWORD
-    v_2[1].value = 0
-    v_2[1].freeze = false
-    gg.setValues(v_2)
-
-    local w_2 = {}
-    w_2[1] = {}
-    w_2[1].address = r[1].address - 0x3B0
-    w_2[1].flags = gg.TYPE_DWORD
-    w_2[1].value = 1
-    w_2[1].freeze = false
-    gg.setValues(w_2)
-    -- tren 3  trigo 1701345034 1677751393 13151
-    local H_1 = {}
-    H_1[1] = {}
-    H_1[1].address = r[1].address - 0x3CC
-    H_1[1].flags = gg.TYPE_DWORD
-    H_1[1].value = 1701345034
-    H_1[1].freeze = false
-    gg.setValues(H_1)
-
-    local H_2 = {}
-    H_2[1] = {}
-    H_2[1].address = r[1].address - 0x3C8
-    H_2[1].flags = gg.TYPE_DWORD
-    H_2[1].value = 1677751393
-    H_2[1].freeze = false
-    gg.setValues(H_2)
-
-    local H_3 = {}
-    H_3[1] = {}
-    H_3[1].address = r[1].address - 0x3C4
-    H_3[1].flags = gg.TYPE_DWORD
-    H_3[1].value = 13151
-    H_3[1].freeze = false
-    gg.setValues(H_3)
-
-    local H_4 = {}
-    H_4[1] = {}
-    H_4[1].address = r[1].address - 0x3C0
-    H_4[1].flags = gg.TYPE_DWORD
-    H_4[1].value = 0
-    H_4[1].freeze = false
-    gg.setValues(R_4)
-
-    -- collar de plata  800 = 1852141582 1953390948 12800 0
-
-    local e_3 = {}
-    e_3[1] = {}
-    e_3[1].address = r[1].address - 0x4A4
-    e_3[1].flags = gg.TYPE_DWORD
-    e_3[1].value = 1
-    e_3[1].freeze = false
-    gg.setValues(e_3)
-
-    local x_3 = {}
-    x_3[1] = {}
-    x_3[1].address = r[1].address - 0x4A0
-    x_3[1].flags = gg.TYPE_DWORD
-    x_3[1].value = 1754453241
-    x_3[1].freeze = false
-    gg.setValues(x_3)
-
-    local v_3 = {}
-    v_3[1] = {}
-    v_3[1].address = r[1].address - 0x4D4
-    v_3[1].flags = gg.TYPE_DWORD
-    v_3[1].value = 0
-    v_3[1].freeze = false
-    gg.setValues(v_3)
-
-    local w_3 = {}
-    w_3[1] = {}
-    w_3[1].address = r[1].address - 0x4D0
-    w_3[1].flags = gg.TYPE_DWORD
-    w_3[1].value = 1
-    w_3[1].freeze = false
-    gg.setValues(w_3)
-    -- tren 4  trigo 1701345034 1677751393 13151
-    local Y_1 = {}
-    Y_1[1] = {}
-    Y_1[1].address = r[1].address - 0x4EC
-    Y_1[1].flags = gg.TYPE_DWORD
-    Y_1[1].value = 1701345034
-    Y_1[1].freeze = false
-    gg.setValues(Y_1)
-
-    local Y_2 = {}
-    Y_2[1] = {}
-    Y_2[1].address = r[1].address - 0x4E8
-    Y_2[1].flags = gg.TYPE_DWORD
-    Y_2[1].value = 1677751393
-    Y_2[1].freeze = false
-    gg.setValues(Y_2)
-
-    local Y_3 = {}
-    Y_3[1] = {}
-    Y_3[1].address = r[1].address - 0x4E4
-    Y_3[1].flags = gg.TYPE_DWORD
-    Y_3[1].value = 13151
-    Y_3[1].freeze = false
-    gg.setValues(Y_3)
-
-    local Y_4 = {}
-    Y_4[1] = {}
-    Y_4[1].address = r[1].address - 0x4E0
-    Y_4[1].flags = gg.TYPE_DWORD
-    Y_4[1].value = 0
-    Y_4[1].freeze = false
-    gg.setValues(Y_4)
-
-    -- Perfume          800 = 1919250458 1701672294 1953787714 25964
-
-    local e_4 = {}
-    e_4[1] = {}
-    e_4[1].address = r[1].address - 0x5C4
-    e_4[1].flags = gg.TYPE_DWORD
-    e_4[1].value = 1
-    e_4[1].freeze = false
-    gg.setValues(e_4)
-
-    local x_4 = {}
-    x_4[1] = {}
-    x_4[1].address = r[1].address - 0x5C0
-    x_4[1].flags = gg.TYPE_DWORD
-    x_4[1].value = 1754453241
-    x_4[1].freeze = false
-    gg.setValues(x_4)
-
-    local v_4 = {}
-    v_4[1] = {}
-    v_4[1].address = r[1].address - 0x5F4
-    v_4[1].flags = gg.TYPE_DWORD
-    v_4[1].value = 0
-    v_4[1].freeze = false
-    gg.setValues(v_4)
-
-    local w_4 = {}
-    w_4[1] = {}
-    w_4[1].address = r[1].address - 0x5F0
-    w_4[1].flags = gg.TYPE_DWORD
-    w_4[1].value = 1
-    w_4[1].freeze = false
-    gg.setValues(w_4)
-
-    -- tren 5  trigo 1701345034 1677751393 13151
-    local F_1 = {}
-    F_1[1] = {}
-    F_1[1].address = r[1].address - 0x60C
-    F_1[1].flags = gg.TYPE_DWORD
-    F_1[1].value = 1701345034
-    F_1[1].freeze = false
-    gg.setValues(F_1)
-
-    local F_2 = {}
-    F_2[1] = {}
-    F_2[1].address = r[1].address - 0x608
-    F_2[1].flags = gg.TYPE_DWORD
-    F_2[1].value = 1677751393
-    F_2[1].freeze = false
-    gg.setValues(F_2)
-
-    local F_3 = {}
-    F_3[1] = {}
-    F_3[1].address = r[1].address - 0x604
-    F_3[1].flags = gg.TYPE_DWORD
-    F_3[1].value = 13151
-    F_3[1].freeze = false
-    gg.setValues(F_3)
-
-    local F_4 = {}
-    F_4[1] = {}
-    F_4[1].address = r[1].address - 0x600
-    F_4[1].flags = gg.TYPE_DWORD
-    F_4[1].value = 0
-    F_4[1].freeze = false
-    gg.setValues(F_4)
-
-    hackTrEn_2()
-end
-
-function hackTrEn_2()
-
-    gg.toast("Loading............ train 2")
-    -- gg.processResume()
-    -- gg.clearResults()
-    -- gg.searchNumber("1600407924;51", gg.TYPE_DWORD ) 
-    -- gg.refineNumber("51", gg.TYPE_DWORD )
-
-    r = gg.getResults(2)
-    -- do something
-    local t = {}
-    t[2] = {}
-    t[2].address = r[2].address + 0x34
-    t[2].flags = gg.TYPE_FLOAT
-    t[2].value = 3
-    t[2].freeze = false
-    gg.setValues(t)
-    -- 00000001h;6892D4F9h
-    -- 81x4 324 dec a hexa 144 - 4 = 140
-    local e = {}
-    e[2] = {}
-    e[2].address = r[2].address - 0x144
-    e[2].flags = gg.TYPE_DWORD
-    e[2].value = 1
-    e[2].freeze = false
-    gg.setValues(e)
-
-    local y = {}
-    y[2] = {}
-    y[2].address = r[2].address - 0x140
-    y[2].flags = gg.TYPE_DWORD
-    y[2].value = 1754453241
-    y[2].freeze = false
-    gg.setValues(y)
-
-    local v = {}
-    v[2] = {}
-    v[2].address = r[2].address - 0x174
-    v[2].flags = gg.TYPE_DWORD
-    v[2].value = 0
-    v[2].freeze = false
-    gg.setValues(v)
-
-    local h = {}
-    h[2] = {}
-    h[2].address = r[2].address - 0x170
-    h[2].flags = gg.TYPE_DWORD
-    h[2].value = 1
-    h[2].freeze = false
-    gg.setValues(h)
-
-    -- tren 1  trigo 1701345034 1677751393 13151
-    local k_1 = {}
-    k_1[2] = {}
-    k_1[2].address = r[2].address - 0x18C
-    k_1[2].flags = gg.TYPE_DWORD
-    k_1[2].value = 1701345034
-    k_1[2].freeze = false
-    gg.setValues(k_1)
-
-    local k_2 = {}
-    k_2[2] = {}
-    k_2[2].address = r[2].address - 0x188
-    k_2[2].flags = gg.TYPE_DWORD
-    k_2[2].value = 1677751393
-    k_2[2].freeze = false
-    gg.setValues(k_2)
-
-    local k_3 = {}
-    k_3[2] = {}
-    k_3[2].address = r[2].address - 0x184
-    k_3[2].flags = gg.TYPE_DWORD
-    k_3[2].value = 13151
-    k_3[2].freeze = false
-    gg.setValues(k_3)
-    local k_4 = {}
-    k_4[2] = {}
-    k_4[2].address = r[2].address - 0x180
-    k_4[2].flags = gg.TYPE_DWORD
-    k_4[2].value = 0
-    k_4[2].freeze = false
-    gg.setValues(k_4)
-
-    -- 1634296844 7169380 13407 0 valor 500 diadema
-
-    local e_1 = {}
-    e_1[2] = {}
-    e_1[2].address = r[2].address - 0x264
-    e_1[2].flags = gg.TYPE_DWORD
-    e_1[2].value = 1
-    e_1[2].freeze = false
-    gg.setValues(e_1)
-
-    local x_1 = {}
-    x_1[2] = {}
-    x_1[2].address = r[2].address - 0x260
-    x_1[2].flags = gg.TYPE_DWORD
-    x_1[2].value = 1754453241
-    x_1[2].freeze = false
-    gg.setValues(x_1)
-
-    local v_1 = {}
-    v_1[2] = {}
-    v_1[2].address = r[2].address - 0x294
-    v_1[2].flags = gg.TYPE_DWORD
-    v_1[2].value = 0
-    v_1[2].freeze = false
-    gg.setValues(v_1)
-
-    local w_1 = {}
-    w_1[2] = {}
-    w_1[2].address = r[2].address - 0x290
-    w_1[2].flags = gg.TYPE_DWORD
-    w_1[2].value = 1
-    w_1[2].freeze = false
-    gg.setValues(w_1)
-
-    -- tren 2  tirgo 1701345034 1677751393 13151
-    local R_1 = {}
-    R_1[2] = {}
-    R_1[2].address = r[2].address - 0x2AC
-    R_1[2].flags = gg.TYPE_DWORD
-    R_1[2].value = 1701345034
-    R_1[2].freeze = false
-    gg.setValues(R_1)
-
-    local R_2 = {}
-    R_2[2] = {}
-    R_2[2].address = r[2].address - 0x2A8
-    R_2[2].flags = gg.TYPE_DWORD
-    R_2[2].value = 1677751393
-    R_2[2].freeze = false
-    gg.setValues(R_2)
-
-    local R_3 = {}
-    R_3[2] = {}
-    R_3[2].address = r[2].address - 0x2A4
-    R_3[2].flags = gg.TYPE_DWORD
-    R_3[2].value = 13151
-    R_3[2].freeze = false
-    gg.setValues(R_3)
-
-    local R_4 = {}
-    R_4[2] = {}
-    R_4[2].address = r[2].address - 0x2A0
-    R_4[2].flags = gg.TYPE_DWORD
-    R_4[2].value = 0
-    R_4[2].freeze = false
-    gg.setValues(R_4)
-
-    -- collar de perlas 800 = 1634037778 1701735538 27491 0
-
-    local e_2 = {}
-    e_2[2] = {}
-    e_2[2].address = r[2].address - 0x384
-    e_2[2].flags = gg.TYPE_DWORD
-    e_2[2].value = 1
-    e_2[2].freeze = false
-    gg.setValues(e_2)
-
-    local x_2 = {}
-    x_2[2] = {}
-    x_2[2].address = r[2].address - 0x380
-    x_2[2].flags = gg.TYPE_DWORD
-    x_2[2].value = 1754453241
-    x_2[2].freeze = false
-    gg.setValues(x_2)
-
-    local v_2 = {}
-    v_2[2] = {}
-    v_2[2].address = r[2].address - 0x3B4
-    v_2[2].flags = gg.TYPE_DWORD
-    v_2[2].value = 0
-    v_2[2].freeze = false
-    gg.setValues(v_2)
-
-    local w_2 = {}
-    w_2[2] = {}
-    w_2[2].address = r[2].address - 0x3B0
-    w_2[2].flags = gg.TYPE_DWORD
-    w_2[2].value = 1
-    w_2[2].freeze = false
-    gg.setValues(w_2)
-    -- tren 3  trigo 1701345034 1677751393 13151
-    local H_1 = {}
-    H_1[2] = {}
-    H_1[2].address = r[2].address - 0x3CC
-    H_1[2].flags = gg.TYPE_DWORD
-    H_1[2].value = 1701345034
-    H_1[2].freeze = false
-    gg.setValues(H_1)
-
-    local H_2 = {}
-    H_2[2] = {}
-    H_2[2].address = r[2].address - 0x3C8
-    H_2[2].flags = gg.TYPE_DWORD
-    H_2[2].value = 1677751393
-    H_2[2].freeze = false
-    gg.setValues(H_2)
-
-    local H_3 = {}
-    H_3[2] = {}
-    H_3[2].address = r[2].address - 0x3C4
-    H_3[2].flags = gg.TYPE_DWORD
-    H_3[2].value = 13151
-    H_3[2].freeze = false
-    gg.setValues(H_3)
-
-    local H_4 = {}
-    H_4[2] = {}
-    H_4[2].address = r[2].address - 0x3C0
-    H_4[2].flags = gg.TYPE_DWORD
-    H_4[2].value = 0
-    H_4[2].freeze = false
-    gg.setValues(R_4)
-
-    -- collar de plata  800 = 1852141582 1953390948 12800 0
-
-    local e_3 = {}
-    e_3[2] = {}
-    e_3[2].address = r[2].address - 0x4A4
-    e_3[2].flags = gg.TYPE_DWORD
-    e_3[2].value = 1
-    e_3[2].freeze = false
-    gg.setValues(e_3)
-
-    local x_3 = {}
-    x_3[2] = {}
-    x_3[2].address = r[2].address - 0x4A0
-    x_3[2].flags = gg.TYPE_DWORD
-    x_3[2].value = 1754453241
-    x_3[2].freeze = false
-    gg.setValues(x_3)
-
-    local v_3 = {}
-    v_3[2] = {}
-    v_3[2].address = r[2].address - 0x4D4
-    v_3[2].flags = gg.TYPE_DWORD
-    v_3[2].value = 0
-    v_3[2].freeze = false
-    gg.setValues(v_3)
-
-    local w_3 = {}
-    w_3[2] = {}
-    w_3[2].address = r[2].address - 0x4D0
-    w_3[2].flags = gg.TYPE_DWORD
-    w_3[2].value = 1
-    w_3[2].freeze = false
-    gg.setValues(w_3)
-    -- tren 4  trigo 1701345034 1677751393 13151
-    local Y_1 = {}
-    Y_1[2] = {}
-    Y_1[2].address = r[2].address - 0x4EC
-    Y_1[2].flags = gg.TYPE_DWORD
-    Y_1[2].value = 1701345034
-    Y_1[2].freeze = false
-    gg.setValues(Y_1)
-
-    local Y_2 = {}
-    Y_2[2] = {}
-    Y_2[2].address = r[2].address - 0x4E8
-    Y_2[2].flags = gg.TYPE_DWORD
-    Y_2[2].value = 1677751393
-    Y_2[2].freeze = false
-    gg.setValues(Y_2)
-
-    local Y_3 = {}
-    Y_3[2] = {}
-    Y_3[2].address = r[2].address - 0x4E4
-    Y_3[2].flags = gg.TYPE_DWORD
-    Y_3[2].value = 13151
-    Y_3[2].freeze = false
-    gg.setValues(Y_3)
-
-    local Y_4 = {}
-    Y_4[2] = {}
-    Y_4[2].address = r[2].address - 0x4E0
-    Y_4[2].flags = gg.TYPE_DWORD
-    Y_4[2].value = 0
-    Y_4[2].freeze = false
-    gg.setValues(Y_4)
-
-    -- Perfume          800 = 1919250458 1701672294 1953787714 25964
-
-    local e_4 = {}
-    e_4[2] = {}
-    e_4[2].address = r[2].address - 0x5C4
-    e_4[2].flags = gg.TYPE_DWORD
-    e_4[2].value = 1
-    e_4[2].freeze = false
-    gg.setValues(e_4)
-
-    local x_4 = {}
-    x_4[2] = {}
-    x_4[2].address = r[2].address - 0x5C0
-    x_4[2].flags = gg.TYPE_DWORD
-    x_4[2].value = 1754453241
-    x_4[2].freeze = false
-    gg.setValues(x_4)
-
-    local v_4 = {}
-    v_4[2] = {}
-    v_4[2].address = r[2].address - 0x5F4
-    v_4[2].flags = gg.TYPE_DWORD
-    v_4[2].value = 0
-    v_4[2].freeze = false
-    gg.setValues(v_4)
-
-    local w_4 = {}
-    w_4[2] = {}
-    w_4[2].address = r[2].address - 0x5F0
-    w_4[2].flags = gg.TYPE_DWORD
-    w_4[2].value = 1
-    w_4[2].freeze = false
-    gg.setValues(w_4)
-
-    -- tren 5  trigo 1701345034 1677751393 13151
-    local F_1 = {}
-    F_1[2] = {}
-    F_1[2].address = r[2].address - 0x60C
-    F_1[2].flags = gg.TYPE_DWORD
-    F_1[2].value = 1701345034
-    F_1[2].freeze = false
-    gg.setValues(F_1)
-
-    local F_2 = {}
-    F_2[2] = {}
-    F_2[2].address = r[2].address - 0x608
-    F_2[2].flags = gg.TYPE_DWORD
-    F_2[2].value = 1677751393
-    F_2[2].freeze = false
-    gg.setValues(F_2)
-
-    local F_3 = {}
-    F_3[2] = {}
-    F_3[2].address = r[2].address - 0x604
-    F_3[2].flags = gg.TYPE_DWORD
-    F_3[2].value = 13151
-    F_3[2].freeze = false
-    gg.setValues(F_3)
-
-    local F_4 = {}
-    F_4[2] = {}
-    F_4[2].address = r[2].address - 0x600
-    F_4[2].flags = gg.TYPE_DWORD
-    F_4[2].value = 0
-    F_4[2].freeze = false
-    gg.setValues(F_4)
-
-    hackTrEn_3()
-
-end
-
-function hackTrEn_3()
-
-    gg.toast("Loading............ train 3")
-    -- gg.processResume()
-    -- gg.clearResults()
-    -- gg.searchNumber("1600407924;51", gg.TYPE_DWORD ) 
-    -- gg.refineNumber("51", gg.TYPE_DWORD )
-
-    r = gg.getResults(3)
-    -- do something
-    local t = {}
-    t[3] = {}
-    t[3].address = r[3].address + 0x34
-    t[3].flags = gg.TYPE_FLOAT
-    t[3].value = 3
-    t[3].freeze = false
-    gg.setValues(t)
-    -- 00000001h;6892D4F9h
-    -- 81x4 324 dec a hexa 144 - 4 = 140
-    local e = {}
-    e[3] = {}
-    e[3].address = r[3].address - 0x144
-    e[3].flags = gg.TYPE_DWORD
-    e[3].value = 1
-    e[3].freeze = false
-    gg.setValues(e)
-
-    local y = {}
-    y[3] = {}
-    y[3].address = r[3].address - 0x140
-    y[3].flags = gg.TYPE_DWORD
-    y[3].value = 1754453241
-    y[3].freeze = false
-    gg.setValues(y)
-
-    local v = {}
-    v[3] = {}
-    v[3].address = r[3].address - 0x174
-    v[3].flags = gg.TYPE_DWORD
-    v[3].value = 0
-    v[3].freeze = false
-    gg.setValues(v)
-
-    local h = {}
-    h[3] = {}
-    h[3].address = r[3].address - 0x170
-    h[3].flags = gg.TYPE_DWORD
-    h[3].value = 1
-    h[3].freeze = false
-    gg.setValues(h)
-
-    -- tren 1  trigo 1701345034 1677751393 13151
-    local k_1 = {}
-    k_1[3] = {}
-    k_1[3].address = r[3].address - 0x18C
-    k_1[3].flags = gg.TYPE_DWORD
-    k_1[3].value = 1701345034
-    k_1[3].freeze = false
-    gg.setValues(k_1)
-
-    local k_2 = {}
-    k_2[3] = {}
-    k_2[3].address = r[3].address - 0x188
-    k_2[3].flags = gg.TYPE_DWORD
-    k_2[3].value = 1677751393
-    k_2[3].freeze = false
-    gg.setValues(k_2)
-
-    local k_3 = {}
-    k_3[3] = {}
-    k_3[3].address = r[3].address - 0x184
-    k_3[3].flags = gg.TYPE_DWORD
-    k_3[3].value = 13151
-    k_3[3].freeze = false
-    gg.setValues(k_3)
-    local k_4 = {}
-    k_4[3] = {}
-    k_4[3].address = r[3].address - 0x180
-    k_4[3].flags = gg.TYPE_DWORD
-    k_4[3].value = 0
-    k_4[3].freeze = false
-    gg.setValues(k_4)
-
-    -- 1634296844 7169380 13407 0 valor 500 diadema
-
-    local e_1 = {}
-    e_1[3] = {}
-    e_1[3].address = r[3].address - 0x264
-    e_1[3].flags = gg.TYPE_DWORD
-    e_1[3].value = 1
-    e_1[3].freeze = false
-    gg.setValues(e_1)
-
-    local x_1 = {}
-    x_1[3] = {}
-    x_1[3].address = r[3].address - 0x260
-    x_1[3].flags = gg.TYPE_DWORD
-    x_1[3].value = 1754453241
-    x_1[3].freeze = false
-    gg.setValues(x_1)
-
-    local v_1 = {}
-    v_1[3] = {}
-    v_1[3].address = r[3].address - 0x294
-    v_1[3].flags = gg.TYPE_DWORD
-    v_1[3].value = 0
-    v_1[3].freeze = false
-    gg.setValues(v_1)
-
-    local w_1 = {}
-    w_1[3] = {}
-    w_1[3].address = r[3].address - 0x290
-    w_1[3].flags = gg.TYPE_DWORD
-    w_1[3].value = 1
-    w_1[3].freeze = false
-    gg.setValues(w_1)
-
-    -- tren 2  trigo 1701345034 1677751393 13151
-    local R_1 = {}
-    R_1[3] = {}
-    R_1[3].address = r[3].address - 0x2AC
-    R_1[3].flags = gg.TYPE_DWORD
-    R_1[3].value = 1701345034
-    R_1[3].freeze = false
-    gg.setValues(R_1)
-
-    local R_2 = {}
-    R_2[3] = {}
-    R_2[3].address = r[3].address - 0x2A8
-    R_2[3].flags = gg.TYPE_DWORD
-    R_2[3].value = 1677751393
-    R_2[3].freeze = false
-    gg.setValues(R_2)
-
-    local R_3 = {}
-    R_3[3] = {}
-    R_3[3].address = r[3].address - 0x2A4
-    R_3[3].flags = gg.TYPE_DWORD
-    R_3[3].value = 13151
-    R_3[3].freeze = false
-    gg.setValues(R_3)
-
-    local R_4 = {}
-    R_4[3] = {}
-    R_4[3].address = r[3].address - 0x2A0
-    R_4[3].flags = gg.TYPE_DWORD
-    R_4[3].value = 0
-    R_4[3].freeze = false
-    gg.setValues(R_4)
-
-    -- collar de perlas 800 = 1634037778 1701735538 27491 0
-
-    local e_2 = {}
-    e_2[3] = {}
-    e_2[3].address = r[3].address - 0x384
-    e_2[3].flags = gg.TYPE_DWORD
-    e_2[3].value = 1
-    e_2[3].freeze = false
-    gg.setValues(e_2)
-
-    local x_2 = {}
-    x_2[3] = {}
-    x_2[3].address = r[3].address - 0x380
-    x_2[3].flags = gg.TYPE_DWORD
-    x_2[3].value = 1754453241
-    x_2[3].freeze = false
-    gg.setValues(x_2)
-
-    local v_2 = {}
-    v_2[3] = {}
-    v_2[3].address = r[3].address - 0x3B4
-    v_2[3].flags = gg.TYPE_DWORD
-    v_2[3].value = 0
-    v_2[3].freeze = false
-    gg.setValues(v_2)
-
-    local w_2 = {}
-    w_2[3] = {}
-    w_2[3].address = r[3].address - 0x3B0
-    w_2[3].flags = gg.TYPE_DWORD
-    w_2[3].value = 1
-    w_2[3].freeze = false
-    gg.setValues(w_2)
-    -- tren 3  trigo 1701345034 1677751393 13151
-    local H_1 = {}
-    H_1[3] = {}
-    H_1[3].address = r[3].address - 0x3CC
-    H_1[3].flags = gg.TYPE_DWORD
-    H_1[3].value = 1701345034
-    H_1[3].freeze = false
-    gg.setValues(H_1)
-
-    local H_2 = {}
-    H_2[3] = {}
-    H_2[3].address = r[3].address - 0x3C8
-    H_2[3].flags = gg.TYPE_DWORD
-    H_2[3].value = 1677751393
-    H_2[3].freeze = false
-    gg.setValues(H_2)
-
-    local H_3 = {}
-    H_3[3] = {}
-    H_3[3].address = r[3].address - 0x3C4
-    H_3[3].flags = gg.TYPE_DWORD
-    H_3[3].value = 13151
-    H_3[3].freeze = false
-    gg.setValues(H_3)
-
-    local H_4 = {}
-    H_4[3] = {}
-    H_4[3].address = r[3].address - 0x3C0
-    H_4[3].flags = gg.TYPE_DWORD
-    H_4[3].value = 0
-    H_4[3].freeze = false
-    gg.setValues(R_4)
-
-    -- collar de plata  800 = 1852141582 1953390948 12800 0
-
-    local e_3 = {}
-    e_3[3] = {}
-    e_3[3].address = r[3].address - 0x4A4
-    e_3[3].flags = gg.TYPE_DWORD
-    e_3[3].value = 1
-    e_3[3].freeze = false
-    gg.setValues(e_3)
-
-    local x_3 = {}
-    x_3[3] = {}
-    x_3[3].address = r[3].address - 0x4A0
-    x_3[3].flags = gg.TYPE_DWORD
-    x_3[3].value = 1754453241
-    x_3[3].freeze = false
-    gg.setValues(x_3)
-
-    local v_3 = {}
-    v_3[3] = {}
-    v_3[3].address = r[3].address - 0x4D4
-    v_3[3].flags = gg.TYPE_DWORD
-    v_3[3].value = 0
-    v_3[3].freeze = false
-    gg.setValues(v_3)
-
-    local w_3 = {}
-    w_3[3] = {}
-    w_3[3].address = r[3].address - 0x4D0
-    w_3[3].flags = gg.TYPE_DWORD
-    w_3[3].value = 1
-    w_3[3].freeze = false
-    gg.setValues(w_3)
-    -- tren 4  trigo 1701345034 1677751393 13151
-    local Y_1 = {}
-    Y_1[3] = {}
-    Y_1[3].address = r[3].address - 0x4EC
-    Y_1[3].flags = gg.TYPE_DWORD
-    Y_1[3].value = 1701345034
-    Y_1[3].freeze = false
-    gg.setValues(Y_1)
-
-    local Y_2 = {}
-    Y_2[3] = {}
-    Y_2[3].address = r[3].address - 0x4E8
-    Y_2[3].flags = gg.TYPE_DWORD
-    Y_2[3].value = 1677751393
-    Y_2[3].freeze = false
-    gg.setValues(Y_2)
-
-    local Y_3 = {}
-    Y_3[3] = {}
-    Y_3[3].address = r[3].address - 0x4E4
-    Y_3[3].flags = gg.TYPE_DWORD
-    Y_3[3].value = 13151
-    Y_3[3].freeze = false
-    gg.setValues(Y_3)
-
-    local Y_4 = {}
-    Y_4[3] = {}
-    Y_4[3].address = r[3].address - 0x4E0
-    Y_4[3].flags = gg.TYPE_DWORD
-    Y_4[3].value = 0
-    Y_4[3].freeze = false
-    gg.setValues(Y_4)
-
-    -- Perfume          800 = 1919250458 1701672294 1953787714 25964
-
-    local e_4 = {}
-    e_4[3] = {}
-    e_4[3].address = r[3].address - 0x5C4
-    e_4[3].flags = gg.TYPE_DWORD
-    e_4[3].value = 1
-    e_4[3].freeze = false
-    gg.setValues(e_4)
-
-    local x_4 = {}
-    x_4[3] = {}
-    x_4[3].address = r[3].address - 0x5C0
-    x_4[3].flags = gg.TYPE_DWORD
-    x_4[3].value = 1754453241
-    x_4[3].freeze = false
-    gg.setValues(x_4)
-
-    local v_4 = {}
-    v_4[3] = {}
-    v_4[3].address = r[3].address - 0x5F4
-    v_4[3].flags = gg.TYPE_DWORD
-    v_4[3].value = 0
-    v_4[3].freeze = false
-    gg.setValues(v_4)
-
-    local w_4 = {}
-    w_4[3] = {}
-    w_4[3].address = r[3].address - 0x5F0
-    w_4[3].flags = gg.TYPE_DWORD
-    w_4[3].value = 1
-    w_4[3].freeze = false
-    gg.setValues(w_4)
-
-    -- tren 5  trigo 1701345034 1677751393 13151
-    local F_1 = {}
-    F_1[3] = {}
-    F_1[3].address = r[3].address - 0x60C
-    F_1[3].flags = gg.TYPE_DWORD
-    F_1[3].value = 1701345034
-    F_1[3].freeze = false
-    gg.setValues(F_1)
-
-    local F_2 = {}
-    F_2[3] = {}
-    F_2[3].address = r[3].address - 0x608
-    F_2[3].flags = gg.TYPE_DWORD
-    F_2[3].value = 1677751393
-    F_2[3].freeze = false
-    gg.setValues(F_2)
-
-    local F_3 = {}
-    F_3[3] = {}
-    F_3[3].address = r[3].address - 0x604
-    F_3[3].flags = gg.TYPE_DWORD
-    F_3[3].value = 13151
-    F_3[3].freeze = false
-    gg.setValues(F_3)
-
-    local F_4 = {}
-    F_4[3] = {}
-    F_4[3].address = r[3].address - 0x600
-    F_4[3].flags = gg.TYPE_DWORD
-    F_4[3].value = 0
-    F_4[3].freeze = false
-    gg.setValues(F_4)
-
-    gg.clearResults()
-end
-
-function hackTrEnTrebol_1()
-
-    --  gg.alert("Hacerlo mas Iniciar el juego o reiniciar el juego...") 
-    --  gg.toast( "Hacerlo mas Iniciar el juego o reiniciar el juego...")  
-    gg.toast("Loading............ clover 1")
-    gg.processResume()
-    gg.clearResults()
-    gg.searchNumber("1600407924;51", gg.TYPE_DWORD)
-    gg.refineNumber("51", gg.TYPE_DWORD)
-
-    r = gg.getResults(1)
-    -- do something
-    local t = {}
-    t[1] = {}
-    t[1].address = r[1].address - 0xCC
-    t[1].flags = gg.TYPE_DWORD
-    t[1].value = 0
-    t[1].freeze = true
-    gg.setValues(t)
-    gg.addListItems(t)
-    -- 00000001h;6892D4F9h
-
-    local e = {}
-    e[1] = {}
-    e[1].address = r[1].address - 0x1EC
-    e[1].flags = gg.TYPE_DWORD
-    e[1].value = 0
-    e[1].freeze = true
-    gg.setValues(e)
-    gg.addListItems(e)
-
-    local y = {}
-    y[1] = {}
-    y[1].address = r[1].address - 0x30C
-    y[1].flags = gg.TYPE_DWORD
-    y[1].value = 0
-    y[1].freeze = true
-    gg.setValues(y)
-    gg.addListItems(y)
-
-    local v = {}
-    v[1] = {}
-    v[1].address = r[1].address - 0x42C
-    v[1].flags = gg.TYPE_DWORD
-    v[1].value = 0
-    v[1].freeze = true
-    gg.setValues(v)
-    gg.addListItems(v)
-
-    local h = {}
-    h[1] = {}
-    h[1].address = r[1].address - 0x54C
-    h[1].flags = gg.TYPE_DWORD
-    h[1].value = 0
-    h[1].freeze = true
-    gg.setValues(h)
-    gg.addListItems(h)
-
-    hackTrEnTrebol_2()
-end
-function hackTrEnTrebol_2()
-
-    --  gg.alert("Hacerlo mas Iniciar el juego o reiniciar el juego...") 
-    --  gg.toast( "Hacerlo mas Iniciar el juego o reiniciar el juego...")  
-    gg.toast("Loading............ clover 2")
-    -- gg.processResume()
-    -- gg.clearResults()
-    -- gg.searchNumber("1600407924;51", gg.TYPE_DWORD ) 
-    -- gg.refineNumber("51", gg.TYPE_DWORD )
-
-    r = gg.getResults(2)
-    -- do something
-    local t = {}
-    t[2] = {}
-    t[2].address = r[2].address - 0xCC
-    t[2].flags = gg.TYPE_DWORD
-    t[2].value = 0
-    t[2].freeze = true
-    gg.setValues(t)
-    gg.addListItems(t)
-    -- 00000001h;6892D4F9h
-
-    local e = {}
-    e[2] = {}
-    e[2].address = r[2].address - 0x1EC
-    e[2].flags = gg.TYPE_DWORD
-    e[2].value = 0
-    e[2].freeze = true
-    gg.setValues(e)
-    gg.addListItems(e)
-
-    local y = {}
-    y[2] = {}
-    y[2].address = r[2].address - 0x30C
-    y[2].flags = gg.TYPE_DWORD
-    y[2].value = 0
-    y[2].freeze = true
-    gg.setValues(y)
-    gg.addListItems(y)
-
-    local v = {}
-    v[2] = {}
-    v[2].address = r[2].address - 0x42C
-    v[2].flags = gg.TYPE_DWORD
-    v[2].value = 0
-    v[2].freeze = true
-    gg.setValues(v)
-    gg.addListItems(v)
-
-    local h = {}
-    h[2] = {}
-    h[2].address = r[2].address - 0x54C
-    h[2].flags = gg.TYPE_DWORD
-    h[2].value = 0
-    h[2].freeze = true
-    gg.setValues(h)
-    gg.addListItems(h)
-
-    hackTrEnTrebol_3()
-end
-function hackTrEnTrebol_3()
-
-    --  gg.alert("Hacerlo mas Iniciar el juego o reiniciar el juego...") 
-    --  gg.toast( "Hacerlo mas Iniciar el juego o reiniciar el juego...")  
-    gg.toast("Loading............ clover 3")
-    -- gg.processResume()
-    -- gg.clearResults()
-    -- gg.searchNumber("1600407924;51", gg.TYPE_DWORD ) 
-    -- gg.refineNumber("51", gg.TYPE_DWORD )
-
-    r = gg.getResults(3)
-    -- do something
-    local t = {}
-    t[3] = {}
-    t[3].address = r[3].address - 0xCC
-    t[3].flags = gg.TYPE_DWORD
-    t[3].value = 0
-    t[3].freeze = true
-    gg.setValues(t)
-    gg.addListItems(t)
-    -- 00000001h;6892D4F9h
-
-    local e = {}
-    e[3] = {}
-    e[3].address = r[3].address - 0x1EC
-    e[3].flags = gg.TYPE_DWORD
-    e[3].value = 0
-    e[3].freeze = true
-    gg.setValues(e)
-    gg.addListItems(e)
-
-    local y = {}
-    y[3] = {}
-    y[3].address = r[3].address - 0x30C
-    y[3].flags = gg.TYPE_DWORD
-    y[3].value = 0
-    y[3].freeze = true
-    gg.setValues(y)
-    gg.addListItems(y)
-
-    local v = {}
-    v[3] = {}
-    v[3].address = r[3].address - 0x42C
-    v[3].flags = gg.TYPE_DWORD
-    v[3].value = 0
-    v[3].freeze = true
-    gg.setValues(v)
-    gg.addListItems(v)
-
-    local h = {}
-    h[3] = {}
-    h[3].address = r[3].address - 0x54C
-    h[3].flags = gg.TYPE_DWORD
-    h[3].value = 0
-    h[3].freeze = true
-    gg.setValues(h)
-    gg.addListItems(h)
-
-end
-
-
 function randecor2()
     while true do
         gg.setVisible(false)
@@ -9937,7 +7269,7 @@ function getAddr()
         local chk = gg.getValues({{address = addr, flags = gg.TYPE_DWORD}})
         if chk and chk[1] and chk[1].value == 29 then return addr end
         deleteFile(fileAddr)
-        gg.toast("👑 rish searching address.")
+        gg.toast("👑 RISH searching address.")
     end
 
     gg.clearResults()
@@ -10123,7 +7455,7 @@ function getAddr()
         local chk = gg.getValues({{address = addr, flags = gg.TYPE_DWORD}})
         if chk and chk[1] and chk[1].value == 29 then return addr end
         deleteFile(fileAddr)
-        gg.toast("👑 rish searching address.")
+        gg.toast("👑 RISH searching address.")
     end
 
     gg.clearResults()
@@ -10325,7 +7657,7 @@ function getAddr()
         local chk = gg.getValues({{address = addr, flags = gg.TYPE_DWORD}})
         if chk and chk[1] and chk[1].value == 29 then return addr end
         deleteFile(fileAddr)
-        gg.toast("👑 rish searching address.")
+        gg.toast("👑 RISH searching address.")
     end
 
     gg.clearResults()
@@ -10513,7 +7845,7 @@ function getAddr()
         local chk = gg.getValues({{address = addr, flags = gg.TYPE_DWORD}})
         if chk and chk[1] and chk[1].value == 29 then return addr end
         deleteFile(fileAddr)
-        gg.toast("👑 rish searching address.")
+        gg.toast("👑 RISH searching address.")
     end
 
     gg.clearResults()
@@ -10708,7 +8040,7 @@ function getAddr()
         local chk = gg.getValues({{address = addr, flags = gg.TYPE_DWORD}})
         if chk and chk[1] and chk[1].value == 29 then return addr end
         deleteFile(fileAddr)
-        gg.toast("👑 rish searching address.")
+        gg.toast("👑 RISH searching address.")
     end
 
     gg.clearResults()
@@ -10881,20 +8213,21 @@ function colek1()
             "🌊 • Underwater Palace", "🏴‍☠️ • Pirate Helipad",
             "🎄 • Festive Helipad", "💃 • Ballroom Helipad",
             "🚀 • Astro Helipad", "🎸 • Rock n Roll Helipad",
-            "🎅 • Christmas Helipad", "❌ • Go Back"
+            "🎅 • Christmas Helipad", "🌸 • Spring Helipad",
+            "❌ • Go Back"
         }
 
         local choice = gg.multiChoice(skins, nil, indev)
         if not choice then return end
 
         -- 🔙 Back
-        if choice[22] then
+        if choice[23] then
             if type(kums1) == "function" then kums1() end
             return
         end
 
         -- 🔁 Apply per pilihan
-        for i = 1, 21 do
+        for i = 1, 22 do
             if choice[i] then
                 helipadskin(i)
                 gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
@@ -11095,12 +8428,21 @@ local helipadSkin = {
             1852402515, 1818576991, 1886348137, 1349674356, 1701011820,
             1919443807, 1836348265, 912225121, 55, 0, -2137646496, 112
         }
+    },
+    [22] = {
+        offset0 = 49,
+        offset8 = 33,
+        values8 = {
+            1852402515, 1818576991, 1886348137, 1349674356, 1701011820,
+            1953849951, 1718773108, 929003884, 49, 0, 0, 0
+        }
     }
 }
 
 function helipadskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = helipadSkin[index]
     if not data then
@@ -11145,6 +8487,7 @@ function helipadskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -11204,6 +8547,7 @@ function helipadskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -11250,20 +8594,21 @@ function colek2()
             "🎄 • Festive Helicopter", "💃 • Ballroom Helicopter",
             "🚀 • Astro Helicopter",
             "🎸 • Rock ’n’ Roll Helicopter",
-            "🎅 • Christmas Helicopter", "❌ • Go Back"
+            "🎅 • Christmas Helicopter", "🌸 • Spring Helicopter",
+            "❌ • Go Back"
         }
 
         local choice = gg.multiChoice(skins, nil, indev)
         if not choice then return end
 
         -- 🔙 Back
-        if choice[22] then
+        if choice[23] then
             if type(kums1) == "function" then kums1() end
             return
         end
 
         -- 🔁 Apply per pilihan
-        for i = 1, 21 do
+        for i = 1, 22 do
             if choice[i] then
                 helicopterskin(i)
                 gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
@@ -11439,12 +8784,21 @@ local helicopterSkin = {
             1634563187, 926310259, 0, 1852402515, 1919895135, 1936028276,
             1749245811
         }
+    },
+    [22] = {
+        offset0 = 49,
+        offset8 = 28,
+        values8 = {
+            1852402515, 1818576991, 1886348137, 1601332596, 1953789282,
+            1818653285, 825712505, 0, -1244080528, 112, -1244080416, 112
+        }
     }
 }
 
 function helicopterskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = helicopterSkin[index]
     if not data then
@@ -11489,6 +8843,7 @@ function helicopterskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -11548,6 +8903,7 @@ function helicopterskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -11734,6 +9090,7 @@ local airportSkin = {
 function airportskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = airportSkin[index]
     if not data then
@@ -11778,6 +9135,7 @@ function airportskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -11837,6 +9195,7 @@ function airportskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -11922,7 +9281,7 @@ local planeSkin = {
         offset0 = 49,
         offset8 = 27,
         values8 = {
-            1852402515, 1919500639, 1851878512, 1634230117, 2003956,
+            1852402515, 1919500639, 1851878512, 1634230117, 2003790956,
             846095717, 3224112, 536883254, 1869767700, 1952661872, 6649449, 0
         }
     },
@@ -12029,6 +9388,7 @@ local planeSkin = {
 function planeskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = planeSkin[index]
     if not data then
@@ -12073,6 +9433,7 @@ function planeskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -12132,6 +9493,7 @@ function planeskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -12362,6 +9724,7 @@ local stationtrainSkin = {
 function stationtrainskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = stationtrainSkin[index]
     if not data then
@@ -12406,6 +9769,7 @@ function stationtrainskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -12465,6 +9829,7 @@ function stationtrainskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -12636,6 +10001,7 @@ local trainSkin = {
 function trainskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = trainSkin[index]
     if not data then
@@ -12680,6 +10046,7 @@ function trainskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -12739,6 +10106,7 @@ function trainskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -12782,20 +10150,20 @@ function colek7()
             "🍬 • Candy Port", "🕌 • Egyptian-Themed Port",
             "❄️ • Arctic Port", "🧳 • Vacation Port",
             "🍣 • Japanese Port", "⚔️ • Knight Port",
-            "🎭 • Broadway Port", "❌ • Go Back"
+            "🎭 • Broadway Port", "🐰 • Easter Port", "❌ • Go Back"
         }
 
         local choice = gg.multiChoice(skins, nil, indev)
         if not choice then return end
 
         -- 🔙 Back
-        if choice[20] then
+        if choice[21] then
             if type(kums1) == "function" then kums1() end
             return
         end
 
         -- 🔁 Apply per pilihan
-        for i = 1, 19 do
+        for i = 1, 20 do
             if choice[i] then
                 portskin(i)
                 gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
@@ -12912,12 +10280,19 @@ local portSkin = {
             1852402515, 1918978143, 1601335138, 1634693730, 2036430692, 3749471,
             0, 0, 1852402515, 1919895135, 1936028276, 1749245811
         }
+    },
+    [20] = {
+        patch = {
+            1768641322, 1632132974, 1919902322, 1935762783, 1601332596, 12855,
+            0, 1
+        }
     }
 }
 
 function portskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = portSkin[index]
     if not data then
@@ -12962,6 +10337,7 @@ function portskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -13021,6 +10397,7 @@ function portskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -13064,20 +10441,20 @@ function colek8()
             "🍬 • Sweet Boat", "🕌 • Egyptian-Themed Ship",
             "❄️ • Arctic Ship", "🧳 • Vacation Ship",
             "🍣 • Japanese Ship", "⚔️ • Knight Ship",
-            "🎭 • Broadway Ship", "❌ • Go Back"
+            "🎭 • Broadway Ship", "🐰 • Easter Ship", "❌ • Go Back"
         }
 
         local choice = gg.multiChoice(skins, nil, indev)
         if not choice then return end
 
         -- 🔙 Back
-        if choice[20] then
+        if choice[21] then
             if type(kums1) == "function" then kums1() end
             return
         end
 
         -- 🔁 Apply per pilihan
-        for i = 1, 19 do
+        for i = 1, 20 do
             if choice[i] then
                 boatskin(i)
                 gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
@@ -13172,12 +10549,18 @@ local boatSkin = {
             1768641322, 1750294382, 1650421865, 1684107122, 1601790327, 14646,
             0, 1
         }
+    },
+    [20] = {
+        patch = {
+            1768641318, 1750294382, 1700753513, 1702130529, 842489714, 0, 0, 1
+        }
     }
 }
 
 function boatskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = boatSkin[index]
     if not data then
@@ -13222,6 +10605,7 @@ function boatskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -13281,6 +10665,7 @@ function boatskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -13457,6 +10842,7 @@ local islandSkin = {
 function islandskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = islandSkin[index]
     if not data then
@@ -13501,6 +10887,7 @@ function islandskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -13560,6 +10947,7 @@ function islandskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -13719,6 +11107,7 @@ local cowSkin = {
 function cowskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = cowSkin[index]
     if not data then
@@ -13763,6 +11152,7 @@ function cowskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -13822,6 +11212,7 @@ function cowskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -13865,20 +11256,21 @@ function colek11()
             "🎃 • Halloween Chicken", "🧧 • Festive Lunar Chicken",
             "🎸 • Rock ’n’ Roll Shades Chicken",
             "🎸 • Rock ’n’ Roll Chicken", "🚀 • Astro Chicken",
-            "🎭 • Broadway Chicken", "❌ • Go Back"
+            "🎭 • Broadway Chicken", "🐰 • Easter Chicken",
+            "❌ • Go Back"
         }
 
         local choice = gg.multiChoice(skins, nil, indev)
         if not choice then return end
 
         -- 🔙 Back
-        if choice[19] then
+        if choice[20] then
             if type(kums1) == "function" then kums1() end
             return
         end
 
         -- 🔁 Apply per pilihan
-        for i = 1, 18 do
+        for i = 1, 19 do
             if choice[i] then
                 chickenskin(i)
                 gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
@@ -14017,12 +11409,19 @@ local chickenSkin = {
             959864697, -1705097216, 112, 1869116186, 1382959479, 1918990181,
             29540
         }
+    },
+    [19] = {
+        patch = {
+            1768641324, 1749245806, 1701536617, 1634033518, 1919251571, 3290975,
+            0, 1
+        }
     }
 }
 
 function chickenskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = chickenSkin[index]
     if not data then
@@ -14067,6 +11466,7 @@ function chickenskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -14126,6 +11526,7 @@ function chickenskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -14170,20 +11571,20 @@ function colek12()
             "🎅 • Christmas Sheep", "🕺 • Ballroom Sheep",
             "🎸 • Rock ’n’ Roll Shader Sheep", "🎸 • Rocker Sheep",
             "🐉 • Mythic Sheep", "🧳 • Vacation Sheep",
-            "❌ • Go Back"
+            "🌸 • Spring Sheep", "❌ • Go Back"
         }
 
         local choice = gg.multiChoice(skins, nil, indev)
         if not choice then return end
 
         -- 🔙 Back
-        if choice[21] then
+        if choice[22] then
             if type(kums1) == "function" then kums1() end
             return
         end
 
         -- 🔁 Apply per pilihan
-        for i = 1, 20 do
+        for i = 1, 21 do
             if choice[i] then
                 sheepskin(i)
                 gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
@@ -14323,12 +11724,21 @@ local sheepSkin = {
             1852402515, 1701335903, 1633644645, 1852402796, 1937075299,
             845510249, 3486256, 112, 5779456, 0, -1704931362, 112
         }
+    },
+    [21] = {
+        offset0 = 49,
+        offset8 = 23,
+        values8 = {
+            1852402515, 1701335903, 1650421861, 1702130805, 2037147250, 3225439,
+            -1244079648, 112, -1237959823, 112, -1237959817, 112
+        }
     }
 }
 
 function sheepskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = sheepSkin[index]
     if not data then
@@ -14373,6 +11783,7 @@ function sheepskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -14432,6 +11843,7 @@ function sheepskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -14507,6 +11919,7 @@ local pigSkin = {
 function pigskin(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = pigSkin[index]
     if not data then
@@ -14551,6 +11964,7 @@ function pigskin(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -14610,6 +12024,7 @@ function pigskin(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -14878,6 +12293,7 @@ local oldSign = {
 function oldsign(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = oldSign[index]
     if not data then
@@ -14922,6 +12338,7 @@ function oldsign(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -14981,6 +12398,7 @@ function oldsign(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -15091,6 +12509,7 @@ local regattaSign = {
 function regattasign(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = regattaSign[index]
     if not data then
@@ -15135,6 +12554,7 @@ function regattasign(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -15194,6 +12614,7 @@ function regattasign(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -15365,6 +12786,7 @@ local expeSign = {
 function expesign(index)
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     local data = expeSign[index]
     if not data then
@@ -15409,6 +12831,7 @@ function expesign(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -15468,6 +12891,7 @@ function expesign(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -15605,80 +13029,144 @@ end
 -------------------------------------------------
 
 function kums4()
-  while true do
-    gg.setVisible(false)
-    gg.clearResults()
-    local indev = dev
-    local skins = {
-      "🌸 • Pink Frame",
-      "🌸 • Pink Name",
-      "✨ • Sparkling Purple Frame",
-      "❄️ • Ice Frame",
-      "🐉 • CNY Frame",
-      "❌ • Go Back"
-    }
+    local title = banner
+    local menu = gg.choice({
+        "🖼️ • Frame Style", "📛 • Name Style", "❌ • Go Back"
+    }, nil, title)
 
-    local choice = gg.multiChoice(skins, nil, indev)
-    if not choice then return end
-
-    -- 🔙 Back
-    if choice[6] then
-      if type(gp3) == "function" then gp3() end
-      return
+    if menu == nil then
+        return
+    elseif menu == 1 then
+        framename1()
+    elseif menu == 2 then
+        framename2()
+    elseif menu == 3 then
+        gp3()
     end
+end
 
-    -- 🔁 Apply per pilihan
-    for i = 1, 5 do
-      if choice[i] then
-        framestyle(i)
-        gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
-
-        repeat
-          gg.sleep(500)
-        until gg.isVisible(true)
+function framename1()
+    while true do
         gg.setVisible(false)
-      end
+        gg.clearResults()
+        local indev = dev
+        local skins = {
+            "🌸 • Festival Frame", "✨ • Starlight Frame",
+            "❄️ • Frozen Frame", "🐉 • Ornamental Frame",
+            "🦋 • Spring Frame", "🖌️ • Easter Frame",
+            "🔥 • Fire Frame", "❌ • Go Back"
+        }
+
+        local choice = gg.multiChoice(skins, nil, indev)
+        if not choice then return end
+
+        -- 🔙 Back
+        if choice[8] then
+            if type(kums4) == "function" then kums4() end
+            return
+        end
+
+        -- 🔁 Apply per pilihan
+        for i = 1, 7 do
+            if choice[i] then
+                framestyle(i)
+                gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
+
+                repeat gg.sleep(500) until gg.isVisible(true)
+                gg.setVisible(false)
+            end
+        end
     end
-  end
 end
 
 -- 🔐 Cache (reset jika game restart)
-local cache = {
-  copied = {},
-  sourceBase = nil,
-  target = nil
-}
+local cache = {copied = {}, sourceBase = nil, target = nil}
 
 local frameStyle = {
-  [1]  = {offset0 = 49, offset8 = 24, values8 = {1348423763,1768320882,1917216108,1600482657,1953719654,1818326633,808534528,1110454853,2051542784,112,9,0}},
-  [2] = {offset0 = 49, offset8 = 24, values8 = {1348423763,1768320882,1951622508,1600482425,1953719654,1818326633,980641024,56,0,0,436207655,113}},
-  [3]  = {offset0 = 49, offset8 = 24, values8 = {1348423763,1768320882,1917216108;1600482657,1835102822,825253733,0,0,1852402515;1919895135;1936028276;1749245811}},
-  [4] = {offset0 = 49, offset8 = 24, values8 = {1348423763,1768320882,1917216108;1600482657,1835102822,842030949,0,0,1852402515;1919895135;1936028276;1749245811}},
-  [5]  = {offset0 = 49, offset8 = 24, values8 = {1348423763,1768320882,1917216108;1600482657,1835102822,858808165,0,0,1852402515;1919895135;1936028276;1749245811}}}
+    [1] = {
+        offset0 = 49,
+        offset8 = 24,
+        values8 = {
+            1348423763, 1768320882, 1917216108, 1600482657, 1953719654,
+            1818326633, 808534528, 1110454853, 2051542784, 112, 9, 0
+        }
+    },
+    [2] = {
+        offset0 = 49,
+        offset8 = 24,
+        values8 = {
+            1348423763, 1768320882, 1917216108, 1600482657, 1835102822,
+            825253733, 0, 0, 1852402515, 1919895135, 1936028276, 1749245811
+        }
+    },
+    [3] = {
+        offset0 = 49,
+        offset8 = 24,
+        values8 = {
+            1348423763, 1768320882, 1917216108, 1600482657, 1835102822,
+            842030949, 0, 0, 1852402515, 1919895135, 1936028276, 1749245811
+        }
+    },
+    [4] = {
+        offset0 = 49,
+        offset8 = 24,
+        values8 = {
+            1348423763, 1768320882, 1917216108, 1600482657, 1835102822,
+            858808165, 0, 0, 1852402515, 1919895135, 1936028276, 1749245811
+        }
+    },
+    [5] = {
+        offset0 = 49,
+        offset8 = 24,
+        values8 = {
+            1348423763, 1768320882, 1917216108, 1600482657, 1835102822,
+            875585381, 0, 0, 1852402515, 1919895135, 1936028276, 1749245811
+        }
+    },
+    [6] = {
+        offset0 = 49,
+        offset8 = 24,
+        values8 = {
+            1348423763, 1768320882, 1917216108, 1600482657, 1835102822,
+            892362597, 0, 0, 1852402515, 1919895135, 1936028276, 1749245811
+        }
+    },
+    [7] = {
+        offset0 = 49,
+        offset8 = 24,
+        values8 = {
+            1348423763, 1768320882, 1917216108, 1600482657, 1835102822,
+            909139813, 0, 0, 1852402515, 1919895135, 1936028276, 1749245811
+        }
+    }
+}
 
 function framestyle(index)
-  gg.setVisible(false)
-  gg.clearResults()
+    gg.setVisible(false)
+    gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
-  local data = frameStyle[index]
-  if not data then
-    gg.alert("⛔ Frame Style "..index.." not found!\n\n" ..
-      "📢 Please restart the game and try again.")
-    return
-  end
-
-  -- ===============================
-  -- 📍 TARGET (sekali)
-  -- ===============================
-  if not cache.target then
-    gg.searchNumber("2581275344925", gg.TYPE_QWORD)
-    local t = gg.getResults(1)
-    if #t == 0 then
-      gg.alert("⛔ Frame Style source not found!\n\n📢 Please restart the game and try again.")
-      return
+    local data = frameStyle[index]
+    if not data then
+        gg.alert("⛔ Frame Style " .. index .. " not found!\n\n" ..
+                     "📢 Please restart the game and try again.")
+        return
     end
-    cache.target = t[1].address - 0x270
-  end
+
+    -- ===============================
+    -- 📍 TARGET (sekali)
+    -- ===============================
+    if not cache.target then
+        gg.searchNumber("2581275344925", gg.TYPE_QWORD)
+        local t = gg.getResults(1)
+        if #t == 0 then
+            gg.alert(
+                "⛔ Frame Style source not found!\n\n📢 Please restart the game and try again.")
+            return
+        end
+        cache.target = t[1].address - 0x270
+    end
+
     -- ===============================
     -- 🚀 MODE PATCH LANGSUNG
     -- ===============================
@@ -15701,6 +13189,7 @@ function framestyle(index)
     -- ===============================
     if not cache.sourceBase then
         gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
         gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
         local r = gg.getResults(1)
         if #r == 0 then
@@ -15760,6 +13249,7 @@ function framestyle(index)
     }
 
     gg.setValues(edits)
+    gg.clearResults()
 
     -- ===============================
     -- 🔗 POINTER
@@ -15774,7 +13264,7 @@ function framestyle(index)
     -- 🧩 VALUES8
     -- ===============================
     local final = {}
-    for i = 0, 7 do
+    for i = 0, 11 do
         final[#final + 1] = {
             address = ptr + i * 4,
             value = data.values8[i + 1],
@@ -15784,6 +13274,205 @@ function framestyle(index)
 
     gg.setValues(final)
     gg.toast("✅ Frame Style " .. index .. " applied!")
+end
+
+-------------------------------------------------
+
+function framename2()
+    while true do
+        gg.setVisible(false)
+        gg.clearResults()
+        local indev = dev
+        local skins = {
+            "🌸 • Festival Style", "🐰 • Easter Style",
+            "🔥 • Fire Style", "❌ • Go Back"
+        }
+
+        local choice = gg.multiChoice(skins, nil, indev)
+        if not choice then return end
+
+        -- 🔙 Back
+        if choice[4] then
+            if type(kums4) == "function" then kums4() end
+            return
+        end
+
+        -- 🔁 Apply per pilihan
+        for i = 1, 3 do
+            if choice[i] then
+                namestyle(i)
+                gg.toast(skins[i] .. " applied\n👉 Claim in freeze reward!")
+
+                repeat gg.sleep(500) until gg.isVisible(true)
+                gg.setVisible(false)
+            end
+        end
+    end
+end
+
+-- 🔐 Cache (reset jika game restart)
+local cache = {copied = {}, sourceBase = nil, target = nil}
+
+local nameStyle = {
+    [1] = {
+        offset0 = 49,
+        offset8 = 24,
+        values8 = {
+            1348423763, 1768320882, 1951622508, 1600482425, 1953719654,
+            1818326633, 980641024, 56, 0, 0, 436207655, 113
+        }
+    },
+    [2] = {
+        offset0 = 25,
+        offset8 = 22,
+        values8 = {
+            1348423763, 1768320882, 1951622508, 1600482425, 1953718629,
+            774795877, 980641024, 56, 0, 0, 436207655, 113
+        }
+    },
+    [3] = {
+        offset0 = 25,
+        offset8 = 23,
+        values8 = {
+            1348423763, 1768320882, 1951622508, 1600482425, 1802465123,
+            778530409, 980641024, 56, 0, 0, 436207655, 113
+        }
+    }
+}
+
+function namestyle(index)
+    gg.setVisible(false)
+    gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
+
+    local data = nameStyle[index]
+    if not data then
+        gg.alert("⛔ Name Style " .. index .. " not found!\n\n" ..
+                     "📢 Please restart the game and try again.")
+        return
+    end
+
+    -- ===============================
+    -- 📍 TARGET (sekali)
+    -- ===============================
+    if not cache.target then
+        gg.searchNumber("2581275344925", gg.TYPE_QWORD)
+        local t = gg.getResults(1)
+        if #t == 0 then
+            gg.alert(
+                "⛔ Name Style source not found!\n\n📢 Please restart the game and try again.")
+            return
+        end
+        cache.target = t[1].address - 0x270
+    end
+
+    -- ===============================
+    -- 🚀 MODE PATCH LANGSUNG
+    -- ===============================
+    if data.patch then
+        local edits = {}
+        for i = 0, 7 do
+            edits[#edits + 1] = {
+                address = cache.target + i * 4,
+                flags = gg.TYPE_DWORD,
+                value = data.patch[i + 1]
+            }
+        end
+        gg.setValues(edits)
+        gg.toast("✅ Name Style " .. index .. " applied!")
+        return
+    end
+
+    -- ===============================
+    -- 🔍 SOURCE (sekali)
+    -- ===============================
+    if not cache.sourceBase then
+        gg.clearResults()
+        gg.setRanges(gg.REGION_C_ALLOC)
+        gg.searchNumber("7021767231079972979", gg.TYPE_QWORD)
+        local r = gg.getResults(1)
+        if #r == 0 then
+            gg.alert(
+                "❌ Name Style target not found!\n\n📢 Please restart the game and try again.")
+            return
+        end
+        cache.sourceBase = r[1].address + 0x1C
+    end
+
+    -- ===============================
+    -- 📥 COPY HEADER (per index)
+    -- ===============================
+    if not cache.copied[index] then
+        local temp = {}
+        for i = 0, 5 do
+            temp[#temp + 1] = {
+                address = cache.sourceBase + i * 4,
+                flags = gg.TYPE_DWORD
+            }
+        end
+        cache.copied[index] = gg.getValues(temp)
+    end
+
+    -- ===============================
+    -- 🧩 PASTE HEADER
+    -- ===============================
+    local edits = {}
+
+    for i, v in ipairs(cache.copied[index]) do
+        edits[#edits + 1] = {
+            address = cache.target + (i - 1) * 4,
+            value = v.value,
+            flags = gg.TYPE_DWORD
+        }
+    end
+
+    edits[#edits + 1] = {
+        address = cache.target,
+        value = data.offset0,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 0x8,
+        value = data.offset8,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 6 * 4,
+        value = 0,
+        flags = gg.TYPE_DWORD
+    }
+    edits[#edits + 1] = {
+        address = cache.target + 7 * 4,
+        value = 1,
+        flags = gg.TYPE_DWORD
+    }
+
+    gg.setValues(edits)
+    gg.clearResults()
+
+    -- ===============================
+    -- 🔗 POINTER
+    -- ===============================
+    local ptr = tonumber(gg.getValues({
+        {address = cache.target + 0x10, flags = gg.TYPE_QWORD}
+    })[1].value)
+
+    if not ptr or ptr == 0 then return end
+
+    -- ===============================
+    -- 🧩 VALUES8
+    -- ===============================
+    local final = {}
+    for i = 0, 11 do
+        final[#final + 1] = {
+            address = ptr + i * 4,
+            value = data.values8[i + 1],
+            flags = gg.TYPE_DWORD
+        }
+    end
+
+    gg.setValues(final)
+    gg.toast("✅ Name Style " .. index .. " applied!")
 end
 
 -------------------------------------------------
@@ -16994,11 +14683,13 @@ function kums6()
         gg.clearResults()
         local indev = dev
         local skins = {
-            "🌃 • Town Badge", "👑 • Legendary Town Badge",
-            "🏠 • City Badge",
-            "🏛️ • Legendary City Badge", "🔔 • Winter Badge",
+            "🌃 • City Badge", "👑 • Legendary Town Badge",
+            "🏠 • Mayors Yellow House Badge",
+            "🏛️ • Purple House Badge", "🔔 • Winter Badge",
             "❄️ • Legendary Winter Badge", "🧭 • Journey Badge",
-            "🗺️ • Legendary Journey Badge", "❌ • Go Back"
+            "🗺️ • Legendary Journey Badge", "🌼 • Spring Badge",
+            "🌸 • Legendary Spring Badge", "🌶️ • Culinery Badge",
+            "🌶️ • Legendary Culinery Badge", "❌ • Go Back"
         }
 
         local choice = gg.multiChoice(skins, nil, indev)
@@ -17069,7 +14760,7 @@ end
 function badgecollect1()
     applybBadge({
         0x6461621A, 0x305F6567, 0x61625F31, 0x00006573, 0x00000000, 0x00000000
-    }, "🌃", "Town Badge")
+    }, "🌃", "City Badge")
 end
 
 function badgecollect2()
@@ -17081,13 +14772,13 @@ end
 function badgecollect3()
     applybBadge({
         0x64616220, 0x305F6567, 0x32765F31, 0x7361625F, 0x00000065, 0x00000000
-    }, "🏠", "City Badge")
+    }, "🏠", "Mayors Yellow House Badge")
 end
 
 function badgecollect4()
     applybBadge({
         0x64616222, 0x305F6567, 0x32765F31, 0x6172675F, 0x1900646E, 0x00000000
-    }, "🏛️", "Legendary City Badge")
+    }, "🏛️", "Purple House Badge")
 end
 
 function badgecollect5()
@@ -17112,6 +14803,161 @@ function badgecollect8()
     applybBadge({
         0x6461621C, 0x305F6567, 0x72675F33, 0x00646E61, 0x00000000, 0x00000000
     }, "🗺️", "Legendary Journey Badge")
+end
+
+function badgecollect9()
+    applybBadge({
+        0x6461621A, 0x305F6567, 0x61625F34, 0x00006573, 0x00000000, 0x00000000
+    }, "🌼", "Spring Badge")
+end
+
+function badgecollect10()
+    applybBadge({
+        0x6461621C, 0x305F6567, 0x72675F34, 0x00646E61, 0x00000000, 0x00000000
+    }, "🌸", "Legendary Spring Badge")
+end
+
+function badgecollect11()
+    applybBadge({
+        0x6461621A, 0x305F6567, 0x61625F35, 0x00006573, 0x00000000, 0x00000000
+    }, "🌶️", "Culinery Badge")
+end
+
+function badgecollect12()
+    applybBadge({
+        0x6461621C, 0x305F6567, 0x72675F35, 0x00646E61, 0x00000000, 0x00000000
+    }, "🌶️", "Legendary Culinery Badge")
+end
+
+-------------------------------------------------
+
+function kums7()
+    while true do
+        gg.setVisible(false)
+        gg.clearResults()
+        local indev = dev
+        local skins = {
+            "🦎 • Temple of Living Water Expedition",
+            "🦎 • Temple of Living Water Expedition II",
+            "⛵ • Secret of the Past Expedition",
+            "⛵ • Secret of the Past Expedition II",
+            "⚔️ • Scourge of the Season Expedition",
+            "⚔️ • Scourge of the Season Expedition II",
+            "🦇 • Legends of Transylvania Expedition",
+            "🦇 • Legends of Transylvania Expedition II", "❌ • Go Back"
+        }
+
+        local choice = gg.multiChoice(skins, nil, indev)
+        if not choice then return end
+
+        -- 🔙 Back option (selalu terakhir)
+        if choice[#skins] then
+            if type(kums7) == "function" then
+                gp3()
+            else
+            end
+            return
+        end
+
+        local processed = false
+        -- 🔁 Jalankan fungsi badge berdasarkan pilihan
+        for i = 1, #skins - 1 do
+            if choice[i] then
+                local func = _G["titlecollect" .. i]
+                if type(func) == "function" then
+                    func()
+                    gg.toast("✅ " .. skins[i] ..
+                                 " applied.\n👉 Claim it in-freeze reward!")
+
+                    -- ⏸️ Tunggu user tekan ikon GG sebelum lanjut
+                    repeat gg.sleep(500) until gg.isVisible(true)
+                    gg.setVisible(false)
+
+                    processed = true
+                else
+                    gg.alert("❌ Function titlecollect" .. i .. "() not found!")
+                end
+            end
+        end
+
+        if processed then
+            gg.toast("🎉 All selected Title have been successfully claimed!")
+        end
+        -- 🔄 Setelah selesai → balik ke menu lagi
+    end
+end
+
+-- Fungsi utama untuk menerapkan badge
+function applybTitle(hex, emoji, name)
+    local addr = getAddr()
+    if not addr then
+        gg.alert("❌ No matching value found.\n" .. name ..
+                     " could not be applied.\nPlease try again or restart the game!")
+        return
+    end
+
+    local patch = {
+        {address = addr + 0x10, flags = gg.TYPE_DWORD, value = hex[1]},
+        {address = addr + 0x14, flags = gg.TYPE_DWORD, value = hex[2]},
+        {address = addr + 0x18, flags = gg.TYPE_DWORD, value = hex[3]},
+        {address = addr + 0x1C, flags = gg.TYPE_DWORD, value = hex[4]},
+        {address = addr + 0x20, flags = gg.TYPE_DWORD, value = hex[5]},
+        {address = addr + 0x24, flags = gg.TYPE_DWORD, value = hex[6]},
+        {address = addr + 0x28, flags = gg.TYPE_DWORD, value = 0},
+        {address = addr + 0x2C, flags = gg.TYPE_DWORD, value = 1}
+    }
+
+    gg.setValues(patch)
+    gg.toast("✅ " .. emoji .. " " .. name .. " applied!")
+end
+
+-- Kumpulan badge
+function titlecollect1()
+    applybBadge({
+        0x50584520, 0x6E61525F, 0x37345F6B, 0x7361625F, 0x00000065, 0x00000000
+    }, "🦎", "Temple of Living Water Expedition")
+end
+
+function titlecollect2()
+    applybBadge({
+        0x50584522, 0x6E61525F, 0x37345F6B, 0x6172675F, 0x0000646E, 0x00000000
+    }, "🦎", "Temple of Living Water Expedition II")
+end
+
+function titlecollect3()
+    applybBadge({
+        0x50584520, 0x6E61525F, 0x36345F6B, 0x7361625F, 0x00000065, 0x00000000
+    }, "⛵", "Secret of the Past Expedition")
+end
+
+function titlecollect4()
+    applybBadge({
+        0x50584522, 0x6E61525F, 0x36345F6B, 0x6172675F, 0x0000646E, 0x00000000
+    }, "⛵", "Secret of the Past Expedition II")
+end
+
+function titlecollect5()
+    applybBadge({
+        0x50584520, 0x6E61525F, 0x39345F6B, 0x7361625F, 0x00000065, 0x00000000
+    }, "⚔️", "Scourge of the Season Expedition")
+end
+
+function titlecollect6()
+    applybBadge({
+        0x50584522, 0x6E61525F, 0x39345F6B, 0x6172675F, 0x0000646E, 0x00000000
+    }, "⚔️", "Scourge of the Season Expedition II")
+end
+
+function titlecollect7()
+    applybBadge({
+        0x50584520, 0x6E61525F, 0x38345F6B, 0x7361625F, 0x00000065, 0x00000000
+    }, "🦇", "Legends of Transylvania Expedition")
+end
+
+function titlecollect8()
+    applybBadge({
+        0x50584522, 0x6E61525F, 0x38345F6B, 0x6172675F, 0x0000646E, 0x00000000
+    }, "🦇", "Legends of Transylvania Expedition II")
 end
 
 -------------------------------------------------
@@ -17153,6 +14999,7 @@ end
 function ms1()
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     -- 📥 Pilih jumlah poin
     local poinChoice = gg.choice({
@@ -17220,6 +15067,7 @@ end
 function ms2()
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     -- 🔍 Cari QWORD utama
     gg.searchNumber("65540", gg.TYPE_QWORD)
@@ -17269,6 +15117,7 @@ end
 function ms3()
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_C_ALLOC)
 
     -- 💬 Pilihan poin
     local pilihan = gg.choice({_("edit150"), _("edit200"), _("edit300")}, nil,
@@ -17327,8 +15176,7 @@ function menu2()
         _("menu2_levelup_puzzle"), _("menu2_weekly_contest"),
         _("menu2_erni_cup"), _("menu2_ruler_the_mine"),
         _("menu2_treasure_pirate"), _("menu2_send_goldcard"),
-        _("menu2_duplicate_card"), _("menu2_frozen_poin"),
-        _("menu_back_menuipen")
+        _("menu2_duplicate_card"), _("menu_back_menuipen")
     }, nil, title)
 
     if menu == nil then
@@ -17349,8 +15197,6 @@ function menu2()
     elseif menu == 7 then
         ipen7()
     elseif menu == 8 then
-        ipen8()
-    elseif menu == 9 then
         Main()
         return -- stop loop kalau balik ke menu utama
     else
@@ -17379,7 +15225,7 @@ function ipen1()
     -- ===============================
     -- 🔍 SEARCH PERTAMA (131074) - FAST FILTER
     -- ===============================
-    gg.searchNumber("306", gg.TYPE_DWORD)
+    gg.searchNumber("311", gg.TYPE_DWORD)
     local r = gg.getResults(100000)
 
     if #r == 0 then
@@ -17654,7 +15500,7 @@ function ipen6()
     gg.setVisible(false)
     gg.clearResults()
 
-    gg.searchNumber("97059372622158", gg.TYPE_QWORD)
+    gg.searchNumber("7738150958661921096", gg.TYPE_QWORD)
     local hasil1 = gg.getResults(5000)
 
     if #hasil1 == 0 then
@@ -17819,83 +15665,6 @@ function ipen7()
     gg.setValues(edits)
     a2()
     gg.toast(_("duplikat_success") .. newCount)
-end
-
-function ipen8()
-    gg.setVisible(false)
-    gg.clearResults()
-    gg.setRanges(gg.REGION_C_ALLOC)
-
-    -- 🏁 Input poin
-    local input = gg.prompt({_("menu2_input")}, {5}, {"number"})
-
-    local val = tonumber(input and input[1])
-    if not val then return end
-
-    if val < 5 or val > 55000 then
-        gg.alert(_("menu2_invalid"))
-        return
-    end
-
-    -- 🔍 Cari base
-    gg.searchNumber("1986947350", gg.TYPE_DWORD)
-    local results = gg.getResults(200)
-    if #results == 0 then
-        gg.alert(_("menu2_notfound"))
-        return
-    end
-
-    -- 🔎 Filter berantai
-    local validBase = {}
-
-    for i = 1, #results do
-        local addr = results[i].address
-
-        local v1 =
-            gg.getValues({{address = addr - 0x64, flags = gg.TYPE_DWORD}})[1]
-                .value
-        local v2 =
-            gg.getValues({{address = addr - 0x60, flags = gg.TYPE_DWORD}})[1]
-                .value
-        local v3 =
-            gg.getValues({{address = addr - 0x5C, flags = gg.TYPE_DWORD}})[1]
-                .value
-
-        if v1 == val and v2 == val and v3 == val then
-            table.insert(validBase, results[i])
-        end
-    end
-
-    if #validBase == 0 then
-        gg.alert(_("menu2_novalid"))
-        return
-    end
-
-    -- ✏️ Edit poin
-    local setval = {}
-    for i = 1, #validBase do
-        local addr = validBase[i].address
-        setval[#setval + 1] = {
-            address = addr - 0x64,
-            flags = gg.TYPE_DWORD,
-            value = 55000
-        }
-        setval[#setval + 1] = {
-            address = addr - 0x60,
-            flags = gg.TYPE_DWORD,
-            value = 55000
-        }
-        setval[#setval + 1] = {
-            address = addr - 0x5C,
-            flags = gg.TYPE_DWORD,
-            value = 55000
-        }
-    end
-
-    gg.setValues(setval)
-    gg.clearResults()
-    gg.toast(_("menu2_success"))
-    a2()
 end
 
 function menu7()
@@ -18615,9 +16384,8 @@ end
 function menumarketplace()
     local title = banner
     local menu = gg.choice({
-        _("market_quantity_marketplace"), _("market_unlim_marketplace"),
-        _("no_dealer_rest_marketplace"), _("dealer_rent_marketplace"),
-        _("back_main_menu_spesial")
+        _("market_unlim_marketplace"), _("no_dealer_rest_marketplace"),
+        _("dealer_rent_marketplace"), _("back_main_menu_spesial")
     }, nil, title)
 
     if menu == nil then
@@ -18629,8 +16397,6 @@ function menumarketplace()
     elseif menu == 3 then
         cmarket3()
     elseif menu == 4 then
-        cmarket4()
-    elseif menu == 5 then
         Main()
         return
     else
@@ -18650,107 +16416,37 @@ end
 function cmarket1()
     gg.setVisible(false)
 
-    -- ✏️ Input manual jumlah produk
-    local input = gg.prompt({_("quantityproduk_input")}, {50}, {"number"})
-    if not input then return end
+    -- ⏳ Pilih jumlah box
+    local durMenu = gg.choice({
+        _("pasar_500_box"), _("pasar_1000_box"), _("pasar_2000_box")
+    }, nil, _("pasar_jumlah_title"))
 
-    local quantityamount = tonumber(input[1])
-    if not quantityamount or quantityamount < 50 or quantityamount > 1000 then
-        gg.alert(_("quantityproduk_invalid"))
-        return
-    end
+    if not durMenu then return end
+
+    local seconds = {[1] = 500, [2] = 1000, [3] = 2000}
+
+    local selectedTime = seconds[durMenu]
 
     gg.clearResults()
 
-    -- 🔍 Cari data Dealer
-    gg.searchNumber("6072", gg.TYPE_DWORD)
+    -- 🔍 Cari nilai awal
+    gg.searchNumber("1953063702", gg.TYPE_DWORD)
     local results = gg.getResults(100)
+
     if #results == 0 then
-        gg.alert(_("quantityproduk_not_found"))
-        return
-    end
-
-    local valid = {}
-
-    -- 🔎 Validasi signature
-    for _, v in ipairs(results) do
-        local val = gg.getValues({
-            {address = v.address - 0x4, flags = gg.TYPE_DWORD}
-        })
-        if val[1].value == 1149804544 then table.insert(valid, v) end
-    end
-
-    if #valid == 0 then
-        gg.alert(_("quantityproduk_not_valid"))
-        return
-    end
-
-    -- 🛠 Edit + ❄️ Freeze
-    local edits = {}
-    for _, v in ipairs(valid) do
-        table.insert(edits, {
-            address = v.address + 0x2C,
-            flags = gg.TYPE_DWORD,
-            value = 0,
-            freeze = true
-        })
-        table.insert(edits, {
-            address = v.address + 0x30,
-            flags = gg.TYPE_DWORD,
-            value = quantityamount,
-            freeze = true
-        })
-        table.insert(edits, {
-            address = v.address + 0x34,
-            flags = gg.TYPE_DWORD,
-            value = 0,
-            freeze = true
-        })
-        table.insert(edits, {
-            address = v.address + 0x38,
-            flags = gg.TYPE_DWORD,
-            value = 1,
-            freeze = true
-        })
-    end
-
-    gg.setValues(edits)
-    gg.addListItems(edits)
-    gg.clearResults()
-
-    a2()
-    gg.toast(_("quantityproduk_success"))
-end
-
-function cmarket2()
-    gg.setVisible(false)
-
-    -- ?? Prompt input awal
-    local i = gg.prompt({_("prompt_market_boxes")}, {"10"}, {"number"})
-    if not i then return end
-
-    local count = tonumber(i[1])
-    if not count or count < 10 or count > 2000 then
-        gg.alert(_("invalid_input_market"))
-        return
-    end
-
-    gg.clearResults()
-    gg.searchNumber("7020372369389216534", gg.TYPE_QWORD)
-
-    local hasil = gg.getResults(100)
-    if #hasil == 0 then
         gg.alert(_("data_not_found_market"))
         return
     end
 
-    -- 🔍 Filter hasil dengan offset +48 = 1185464320
     local valid = {}
-    for _, v in ipairs(hasil) do
-        local check = gg.getValues({
-            {address = v.address + 0x48, flags = gg.TYPE_DWORD}
-        })
-        if check[1].value == 1185464320 then table.insert(valid, v) end
+
+    -- 🔎 Validasi offset +0x48
+    for _, v in ipairs(results) do
+        local check = {{address = v.address + 0x48, flags = gg.TYPE_DWORD}}
+
+        local val = gg.getValues(check)
+
+        if val[1].value == 1185464320 then table.insert(valid, v) end
     end
 
     if #valid == 0 then
@@ -18758,26 +16454,27 @@ function cmarket2()
         return
     end
 
-    -- ✏️ Edit nilai pada offset +0x1B8 dari hasil valid
+    -- 🛠 Edit hanya address valid
     local edits = {}
     for _, v in ipairs(valid) do
         table.insert(edits, {
             address = v.address - 0x38,
-            value = count,
-            flags = gg.TYPE_DWORD
+            flags = gg.TYPE_DWORD,
+            value = selectedTime
         })
     end
 
     gg.setValues(edits)
     gg.clearResults()
-    a2()
 
-    -- 🎯 Notifikasi
-    gg.toast(_("toast_success_market") .. count)
-    gg.alert(_("alert_success_market_1") .. count .. _("alert_success_market_2"))
+    -- tampilkan jumlah pilihan user (500/1000/2000)
+    gg.toast(_("toast_success_market") .. " " .. selectedTime)
+
+    gg.alert(_("alert_success_market_1") .. selectedTime ..
+                 _("alert_success_market_2"))
 end
 
-function cmarket3()
+function cmarket2()
     gg.setVisible(false)
     gg.clearResults()
 
@@ -18830,7 +16527,7 @@ function cmarket3()
     gg.alert(_("dealer_cd_freeze_success"))
 end
 
-function cmarket4()
+function cmarket3()
     gg.setVisible(false)
 
     -- ⏳ Pilih durasi di awal
@@ -18863,7 +16560,7 @@ function cmarket4()
 
     -- 🔎 Validasi offset +0x110 == 10704
     for _, v in ipairs(results) do
-        local check = {{address = v.address + 0x110, flags = gg.TYPE_DWORD}}
+        local check = {{address = v.address + 0x50, flags = gg.TYPE_DWORD}}
         local val = gg.getValues(check)
         if val[1].value == 10704 then table.insert(valid, v) end
     end
@@ -18877,22 +16574,22 @@ function cmarket4()
     local edits = {}
     for _, v in ipairs(valid) do
         table.insert(edits, {
-            address = v.address + 0x68,
+            address = v.address - 0x58,
             flags = gg.TYPE_DWORD,
             value = 0
         })
         table.insert(edits, {
-            address = v.address + 0x6C,
+            address = v.address - 0x54,
             flags = gg.TYPE_DWORD,
             value = 1
         })
         table.insert(edits, {
-            address = v.address + 0x70,
+            address = v.address - 0x50,
             flags = gg.TYPE_DWORD,
             value = 0
         })
         table.insert(edits, {
-            address = v.address + 0x74,
+            address = v.address - 0x4C,
             flags = gg.TYPE_DWORD,
             value = selectedTime
         })
@@ -18910,13 +16607,10 @@ end
 function menu4()
     local title = banner
     local menu = gg.choice({
-        _("industry_boost_gamragam"),
-        _("heli_tcash_gamragam"),
-        _("wheat_exp_menupenambah"),
-        _("free_boxes_gamragam"),
-        _("build_no_tools_gamragam"),
-        _("freeze_expansion_gamragam"),
-        _("back_gamragam")
+        _("industry_boost_gamragam"), _("heli_tcash_gamragam"),
+        _("wheat_exp_menupenambah"), _("free_boxes_gamragam"),
+        _("build_no_tools_gamragam"), _("freeze_expansion_gamragam"),
+        _("unlimited_likes"), _("back_gamragam")
     }, nil, title)
 
     if menu == nil then
@@ -18935,13 +16629,15 @@ function menu4()
     elseif menu == 6 then
         other6()
     elseif menu == 7 then
+        other7()
+    elseif menu == 8 then
         Main()
     else
         return
     end
 
     -- 🔄 Balik ke menu kecuali saat ke Main()
-    if menu ~= 7 then
+    if menu ~= 8 then
         while true do
             if gg.isVisible(true) then
                 gg.setVisible(false)
@@ -19043,7 +16739,7 @@ function other2(caller)
     end
 
     -- 🔍 Cari base
-    gg.searchNumber("1703939", gg.TYPE_DWORD)
+    gg.searchNumber("1572867", gg.TYPE_DWORD)
     local hasil = gg.getResults(500)
 
     if #hasil == 0 then return gg.alert(_("retashelidata_tidak_ditemukan")) end
@@ -19053,11 +16749,13 @@ function other2(caller)
     -- 🔎 Validasi struktur
     for _, v in ipairs(hasil) do
         local cek = gg.getValues({
-            {address = v.address + 0xF8, flags = gg.TYPE_DWORD},
-            {address = v.address + 0x100, flags = gg.TYPE_DWORD}
+            {address = v.address + 0x28, flags = gg.TYPE_DWORD},
+            {address = v.address + 0x108, flags = gg.TYPE_DWORD},
+            {address = v.address + 0x110, flags = gg.TYPE_DWORD}
         })
 
-        if cek[1].value == 1065353216 and cek[2].value == 1065353216 then
+        if cek[1].value == 2 and cek[2].value == 1065353216 and cek[3].value ==
+            1065353216 then
             base = v.address
             break
         end
@@ -19305,6 +17003,7 @@ end
 function other7()
     gg.setVisible(false)
     gg.clearResults()
+    gg.setRanges(gg.REGION_OTHER)
 
     -- 🔍 Cari base Boom Like (QWORD)
     gg.searchNumber("8391162090120890396", gg.TYPE_QWORD)
@@ -19348,26 +17047,22 @@ end
 function menu6()
     local title = abouts
     local menu = gg.choice({
-        "♻️ • Reset Data",
-        _("about_script"),
-        _("contact_dev"),
-        _("change_lang"),
-        _("rangememory"),
-        _("go_back")   -- ✅ TETAP ADA
+        "♻️ • Reset Data", _("about_script"), _("contact_dev"),
+        _("reset_default"), _("change_lang"), _("rangememory"), _("go_back")
     }, nil, title)
 
     if not menu then return end
 
     if menu == 1 then
-        Main()
-
+        resetDataWithCode()
     elseif menu == 2 then
         about1()
-
     elseif menu == 3 then
         about2()
-
     elseif menu == 4 then
+        resetMode()
+        menuRunning = false
+    elseif menu == 5 then
         local langList = {
             "🇺🇸 English" .. (lang == "en" and "  ✓" or ""),
             "🇮🇩 Indonesia" .. (lang == "id" and "  ✓" or "")
@@ -19382,36 +17077,46 @@ function menu6()
         end
         saveLang()
         menu6()
-
-    elseif menu == 5 then
+    elseif menu == 6 then
         pilihRanges()
         menu6()
-
-    elseif menu == 6 then
-       Main()
+    elseif menu == 7 then
+        if menuMode == "free" then
+            freekey()
+        else
+            Main()
+        end
     end
 end
 
+local function getResetCode()
+    local path = "/sdcard/android/media/.com.android.sistem/.bin_xv"
+    local f = io.open(path, "r")
+    if not f then return nil end
+    local code = f:read("*l") -- baca 1 baris
+    f:close()
+    return code
+end
 
 function resetDataWithCode()
     gg.setVisible(false)
 
-    -- 🔐 Kode yang diizinkan
-    local VALID_CODE = "RishScript4826" -- ← ganti sesuai keinginanmu
+    -- 🔐 Ambil kode valid dari file
+    local VALID_CODE = getResetCode()
+    if not VALID_CODE or VALID_CODE == "" then return end
 
-    -- 📥 Input kode
+    -- 📥 Input kode dari user
     local input = gg.prompt({"🔑 Enter the reset code:"}, nil, {"text"})
 
-    -- Jika user cancel
     if not input then return end
 
-    -- Validasi kode
+    -- ❌ Validasi kode
     if input[1] ~= VALID_CODE then
         gg.alert("⛔ Incorrect code!")
         return
     end
 
-    -- 🧹 Daftar file yang akan dihapus
+    -- 🧹 File yang akan dihapus
     local files = {
         "/sdcard/android/media/.com.android.sistem/.bin_xv",
         "/sdcard/android/media/.com.android.sistem/.cachemap_v7",
@@ -19423,7 +17128,7 @@ function resetDataWithCode()
         "/sdcard/.syscfg.lib/.userlog", "/sdcard/.tempdate.bin/.langmode"
     }
 
-    -- 🗑️ Proses hapus
+    -- 🗑️ Hapus file
     for _, path in ipairs(files) do os.remove(path) end
 
     gg.alert("✅ Reset successful!\n\n📂 All data has been deleted.")
@@ -19453,11 +17158,11 @@ function showContactMenu(backFunc)
             backFunc() -- balik ke menu yang dikirim
         end
     elseif pilihan == 2 then
-        gg.copyText("https://t.me/@Rish_07")
+        gg.copyText("https://t.me/@azka_arh")
         gg.toast(_ "toast_tele")
         if type(backFunc) == "function" then backFunc() end
     elseif pilihan == 3 then
-        gg.copyText("https://t.me/Rish_07")
+        gg.copyText("https://t.me/arhtownship")
         gg.toast(_ "toast_wa")
         if type(backFunc) == "function" then backFunc() end
     end
@@ -19495,287 +17200,6 @@ function a2()
     -- Run it
     progressBarLoading()
 end
--- 🧹 Hapus file-file tertentu
-
-function Regata()
-
-    function lompat()
-        gg.setVisible(false)
-        gg.timeJump("00:01:00:00:00")
-
-    end
-    lompat()
-
-    gg.setVisible(false)
-    gg.clearResults()
-
-    function hilangkanTask2()
-
-        gg.searchNumber("1633121097", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
-
-        local res2 = gg.getResults(9999)
-        if #res2 > 0 then
-            for i, v in ipairs(res2) do
-                v.value = 0
-                v.freeze = true
-                v.flags = gg.TYPE_DWORD
-            end
-            gg.setValues(res2)
-            -- gg.addListItems(res2)
-        else
-            gg.toast("Tidak ada hasil untuk pencarian kedua.")
-        end
-
-        gg.clearResults()
-        -- 🔎 Bagian pertama
-        local searchString = "1701536084;1935758446;29547;10"
-        gg.searchNumber(searchString, gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
-        if gg.getResultCount() == 0 then
-            gg.toast("Tidak ada hasil pencarian awal.")
-        else
-            gg.refineNumber("1701536084", gg.TYPE_DWORD)
-            local results = gg.getResults(9999)
-
-            if #results > 0 then
-                local checkAddr = {}
-                for i, res in ipairs(results) do
-                    table.insert(checkAddr, {
-                        address = res.address - 0x4,
-                        flags = gg.TYPE_DWORD
-                    })
-                end
-                checkAddr = gg.getValues(checkAddr)
-
-                local edits = {}
-                for i, res in ipairs(results) do
-                    if checkAddr[i].value == 10 then
-                        table.insert(edits, {
-                            address = res.address,
-                            flags = gg.TYPE_DWORD,
-                            value = 0,
-                            freeze = true
-                        })
-                    end
-                end
-
-                if #edits > 0 then
-                    gg.setValues(edits)
-                    -- gg.addListItems(edits)
-                else
-                    gg.toast("Tidak ada hasil cocok (bagian pertama).")
-                end
-            end
-        end
-
-    end
-
-    local pilihanAktif = nil
-    local lastVisibleTime = 0
-
-   function HOME()
-    if pilihanAktif ~= nil then
-        matchXorAll(pilihanAktif)
-        return
-    end
-
-    local choice = gg.choice(
-        {"Points 150", "Points 250", "Points 300", "❌ Exit"},
-        nil,
-        "🔥 HACK BY RISH\nSilakan pilih jumlah points"
-    )
-
-    if choice == nil then return end
-
-    if choice == 1 then
-        pilihanAktif = 150
-        matchXorAll(pilihanAktif)
-        pilihanAktif = nil
-
-    elseif choice == 2 then
-        pilihanAktif = 250
-        matchXorAll(pilihanAktif)
-        pilihanAktif = nil
-
-    elseif choice == 3 then
-        pilihanAktif = 300
-        matchXorAll(pilihanAktif)
-        pilihanAktif = nil
-
-    elseif choice == 4 then
-        gg.toast("Keluar...")
-        gg.clearList()
-        gg.clearResults()
-        os.exit()
-    end
-end
-
-    function matchXorAll(target_value)
-
-        gg.clearResults()
-        gg.setRanges(gg.REGION_C_ALLOC)
-
-        -- Langkah 1: Search & Refine
-        gg.searchNumber("1702257942;1868526702;1919247474", gg.TYPE_DWORD)
-        gg.refineNumber("1702257942", gg.TYPE_DWORD)
-
-        local results = gg.getResults(9999)
-        local validResults = {}
-        local addList = {}
-        local editList = {}
-
-        -- Nilai valid untuk offset +0x30
-        local validOffset30 = {
-            [1952533772] = true,
-            [1886930198] = true,
-            [1919241496] = true
-        }
-
-        -- Nilai XOR yang dianggap valid
-        local validPoints = {}
-
-        -- Tambahkan angka dari 1 sampai 100
-        for i = 1, 100 do validPoints[i] = true end
-
-        -- Tambahkan angka dari 100 sampai 2000
-        for i = 100, 2000 do validPoints[i] = true end
-
-        -- Tambahkan angka-angka lainnya secara manual
-        local extraPoints = {
-            110, 120, 125, 130, 140, 150, 170, 300, 400, 500, 600, 700, 800,
-            900, 1000, 1100, 1150
-        }
-
-        for _, v in ipairs(extraPoints) do validPoints[v] = true end
-
-        for i, res in ipairs(results) do
-            local base = res.address
-
-            -- Ambil nilai dari offset +0x30
-            local val30 = gg.getValues({
-                {address = base + 0x30, flags = gg.TYPE_DWORD}
-            })[1].value
-
-            if validOffset30[val30] then
-                -- Lanjutkan proses XOR di offset +0x68 dan +0x6C
-                local offsets = {
-                    {address = base + 0x98, flags = gg.TYPE_DWORD},
-                    {address = base + 0x9C, flags = gg.TYPE_DWORD}
-                }
-
-                local values = gg.getValues(offsets)
-                local val1 = values[1].value
-                local val2 = values[2].value
-                local xorResult = bit32.bxor(val1, val2)
-
-                if validPoints[xorResult] then
-                    table.insert(validResults, res)
-
-                    -- table.insert(addList, {
-                    --     address = base + 0x98,
-                    --     flags = gg.TYPE_DWORD,
-                    --     value = val1,
-                    --     name = "Offset +98"
-                    -- })
-                    -- table.insert(addList, {
-                    --     address = base + 0x9C,
-                    --     flags = gg.TYPE_DWORD,
-                    --     value = val2,
-                    --     name = "Offset +9C"
-                    -- })
-
-                    table.insert(editList, {
-                        address = base + 0x98,
-                        flags = gg.TYPE_DWORD,
-                        value = 0
-                    })
-                    table.insert(editList, {
-                        address = base + 0x9C,
-                        flags = gg.TYPE_DWORD,
-                        value = 0
-                    })
-                end
-
-                -------------------------------------
-                -- BAGIAN 2: TAMBAHAN CEK POINTER +D8 --
-                -------------------------------------
-
-                local PointsRegata = {
-                    [50] = true,
-                    [70] = true,
-                    [75] = true,
-                    [80] = true,
-                    [85] = true,
-                    [90] = true,
-                    [95] = true,
-                    [100] = true,
-                    [105] = true,
-                    [110] = true,
-                    [115] = true,
-                    [120] = true,
-                    [125] = true,
-                    [130] = true,
-                    [135] = true,
-                    [140] = true,
-                    [150] = true
-                }
-
-                local pointerAddr = base + 0x120
-                local pointerData = gg.getValues({
-                    {address = pointerAddr, flags = gg.TYPE_QWORD}
-                })
-                local pointerValue = pointerData[1].value
-
-                if pointerValue ~= 0 and pointerValue > 0x10000 then
-                    local success, values =
-                        pcall(gg.getValues, {
-                            {address = pointerValue, flags = gg.TYPE_DWORD},
-                            {address = pointerValue + 4, flags = gg.TYPE_DWORD}
-                        })
-
-                    if success then
-                        local pval1 = values[1].value
-                        local pval2 = values[2].value
-                        local pxor = pval1 ~ pval2
-
-                        if PointsRegata[pxor] then
-                            table.insert(editList, {
-                                address = pointerValue,
-                                flags = gg.TYPE_DWORD,
-                                value = 0
-                            })
-                            table.insert(editList, {
-                                address = pointerValue + 4,
-                                flags = gg.TYPE_DWORD,
-                                value = target_value -- POINT REGATA
-                            })
-
-                        else
-
-                        end
-                    else
-
-                    end
-                else
-
-                end
-
-            end
-        end
-
-        if #validResults > 0 then
-            gg.loadResults(validResults)
-            gg.addListItems(addList)
-            gg.setValues(editList)
-            -- Jika ingin langsung ubah nilainya:
-            -- gg.setValues(editList)
-
-        else
-
-        end
-    end
-    HOME()
-end
-
 
 function exit()
     gg.clearResults()
@@ -19783,8 +17207,9 @@ function exit()
     gg.alert(_("thank_you_exit"))
     print(
         "⟣═─═─═─═─═─═─═─═─═─═─═─═─═⟢")
-    print("✨ Script by : Rish Gaming ✨")
-    print("💬 Telegram Channel : @Rish_07")
+    print("✨ Script by : Azka Raditya Hermawan ✨")
+    print("💬 Telegram Channel : @arhtownship")
+    print("▶️ YouTube Channel : @arhtownship")
     print("🙏 Thanks for your support!")
     print(
         "⟣═─═─═─═─═─═─═─═─═─═─═─═─═⟢")
